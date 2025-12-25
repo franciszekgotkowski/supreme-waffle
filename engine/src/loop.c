@@ -9,13 +9,13 @@
 i32 windowWidth = 800;
 i32 windowHeight = 600;
 
-extern 
+extern
 
 void checkExit(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
-} 
+}
 
 int loop()
 {

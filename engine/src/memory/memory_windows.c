@@ -1,5 +1,6 @@
+#include <memoryapi.h>
 #include <stdio.h>
-#include <sys/mman.h>
+#include <windows.h>
 
 #include <engine/memory.h>
 #include <engine/typedefs.h>
@@ -15,13 +16,19 @@ inline void* mem_alloc(u64 size) {
         size += 4*KB;
         printf("mapping %ld instead of %ld\n", size, oldsize);
     }
-    void* ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    // void* ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    void* ptr = VirtualAlloc(
+            NULL,                       // Let OS choose address
+            size,                       // Size in bytes
+            MEM_RESERVE | MEM_COMMIT,   // Reserve + commit
+            PAGE_READWRITE);             // Read/write access
+
     assert(ptr);
     return ptr;
 }
 
 inline void mem_dealloc(void* ptr, u64 size) {
     assert(ptr != NULL);
-    munmap(ptr, size);
+    VirtualFree(ptr, 0, size);
 }
 
