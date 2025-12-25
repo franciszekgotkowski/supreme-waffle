@@ -1,15 +1,13 @@
 add_library(engine STATIC)
 
 set(ENGINE_SOURCES
-	# src/engine.c
-	# src/renderer.c
-	src/print.c
 	src/main.c
 )
 
 if(UNIX)
-	list(APPEND ENGINE_SOURCES
-	# src/platform/platform_linux.c
+	list(APPEND 
+        ENGINE_SOURCES
+	    src/memory/memory_linux.c
 )
 elseif(WIN32)
 	list(APPEND ENGINE_SOURCES

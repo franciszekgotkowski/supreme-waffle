@@ -4,9 +4,18 @@
 #include <engine/typedefs.h>
 
 #include <stdio.h>
+#include <stdbool.h>
 
 i32 windowWidth = 800;
 i32 windowHeight = 600;
+
+extern 
+
+void checkExit(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+} 
 
 int loop()
 {
@@ -38,17 +47,14 @@ int loop()
     glViewport(0, 0, windowWidth, windowHeight);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-
-    /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
+        checkExit(window);
+
         glClear(GL_COLOR_BUFFER_BIT);
 
-        /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
-        /* Poll for and process events */
         glfwPollEvents();
     }
 
