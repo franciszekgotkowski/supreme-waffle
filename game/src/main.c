@@ -1,10 +1,13 @@
-#include "../../engine/headers/internal/print.h"
+#include <engine/print.h>
+#include <engine/range.h>
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {
-    print(67);
+    print(69);
 
-    for (int i = 0; i < argc; i++) {
+    for range(i, argc){
         printf("%s\n", argv[i]);
     }
+
+    loop();
 }

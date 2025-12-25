@@ -1,15 +1,23 @@
 add_executable(game)
 
 target_sources(game PRIVATE
-    src/main.c
-    # src/game.c
+	src/main.c
+	# src/game.c
 )
 
-target_include_directories(game
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
+target_include_directories(game PRIVATE
+	${CMAKE_HOME_DIRECTORY}/engine/headers
+	${CMAKE_HOME_DIRECTORY}/headers
 )
+
+target_link_directories(game PRIVATE
+	${CMAKE_CURRENT_SOURCE_DIR}/libs/dynamic
+	${CMAKE_CURRENT_SOURCE_DIR}/libs/static
+	${CMAKE_HOME_DIRECTORY}/engine/libs/static
+)
+
 
 target_link_libraries(game
-    PRIVATE engine
+	PRIVATE engine
 )
+
