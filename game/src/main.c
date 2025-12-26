@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <engine/print.h>
 #include <engine/range.h>
 #include <engine/memory.h>
@@ -5,9 +6,10 @@
 
 int main(int argc, char *argv[]) {
 
-    u64 alloc_size = 5*GB;
+    u64 alloc_size = 500*MB;
 
     i32* mem = mem_alloc(alloc_size);
+    assert(mem);
 
     for range(i, alloc_size/4) {
         mem[i] = i;

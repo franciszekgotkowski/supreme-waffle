@@ -2,9 +2,11 @@
 #include <external/glfw3.h>
 
 #include <engine/typedefs.h>
+#include <engine/measure_time.h>
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 i32 windowWidth = 800;
 i32 windowHeight = 600;
@@ -47,8 +49,9 @@ int loop()
     glViewport(0, 0, windowWidth, windowHeight);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-    while (!glfwWindowShouldClose(window))
-    {
+    printf("sizeof of timespec: %lu\n", sizeof(struct timespec));
+    while (!glfwWindowShouldClose(window)) {
+        timestamp t = make_stamp();
         checkExit(window);
 
         glClear(GL_COLOR_BUFFER_BIT);
@@ -56,6 +59,7 @@ int loop()
         glfwSwapBuffers(window);
 
         glfwPollEvents();
+        printf("time elapsed: %fms\n", 1000*time_elapsed(&t));
     }
 
     glfwTerminate();
