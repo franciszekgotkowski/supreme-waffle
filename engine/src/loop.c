@@ -1,4 +1,3 @@
-#include <bemapiset.h>
 #include <external/glad/glad.h>
 #include <external/glfw3.h>
 
@@ -7,7 +6,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <windows.h>
+#include <time.h>
 
 i32 windowWidth = 800;
 i32 windowHeight = 600;
@@ -52,6 +51,8 @@ int loop() {
 
     timestamp stamp = make_stamp();
     u32 frame = 0;
+    timestamp startstamp = make_stamp();
+    timestamp cp = make_stamp();
     while (!glfwWindowShouldClose(window)) {
         checkExit(window);
 
@@ -59,13 +60,14 @@ int loop() {
 
         glfwSwapBuffers(window);
         glfwPollEvents();
+        printf("frame: %d\t timediff: %fms\n", ++frame, elapsed_time(&stamp));
+        wait_for_frame(&stamp, 60.0);
         elapsed_time(&stamp);
-        printf("frame: %d\t", ++frame);
-        printf("timediff: %fms\n", read_elapsed_time(&stamp));
-        // wait_for_frame(&stamp, 60.0);
-        // if (frame >= 60*5) {
-        //     return 0;
-        // }
+        if (elapsed_time(&startstamp) > 5.0*1000.0) {
+            printf("ending with %f\n", read_elapsed_time(&startstamp));
+            return 0;
+        }
+        startstamp = cp;
     }
 
     glfwTerminate();

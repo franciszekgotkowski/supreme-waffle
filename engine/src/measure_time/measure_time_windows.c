@@ -10,7 +10,7 @@ typedef struct {
     LARGE_INTEGER now;
     f64 diff; // is filled when time_elapsed is run so that wait_for_frame does not have to calculate diff again
 } win_stamp;
-_Static_assert(sizeof(win_stamp)==sizeof(timestamp));
+_Static_assert(sizeof(win_stamp)==sizeof(timestamp), "lin_stamp has different size from timestamp");
 
 inline timestamp make_stamp() {
     /*
