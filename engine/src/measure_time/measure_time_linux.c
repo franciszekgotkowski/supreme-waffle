@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <time.h>
+#include <stdbool.h>
 
 typedef struct timespec timespec;
 
@@ -11,7 +12,7 @@ typedef struct timestamp_linux {
     timespec stop;
 }timestamp_linux;
 
-_Static_assert(sizeof(timestamp_linux) <= sizeof(timestamp), "timestamp storage too small");
+_Static_assert(sizeof(timestamp_linux) == sizeof(timestamp), "timestamp storage too small");
 
 inline timestamp make_stamp(bool initialization){
     timestamp_linux stamp = {};
@@ -21,7 +22,7 @@ inline timestamp make_stamp(bool initialization){
     return  t;
 }
 
-inline f64 time_elapsed(timestamp* ptr) {
+inline f64 elapsed_time(timestamp* ptr) {
     timestamp_linux* stamp_ptr = (timestamp_linux*)ptr;
     clock_gettime(CLOCK_MONOTONIC, &(stamp_ptr->stop));
     timespec diffspec = {

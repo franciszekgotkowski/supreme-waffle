@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <bemapiset.h>
 #include <external/glad/glad.h>
 #include <external/glfw3.h>
@@ -8,10 +7,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <time.h>
 #include <windows.h>
-
-#include <winnt.h>
 
 i32 windowWidth = 800;
 i32 windowHeight = 600;
@@ -43,7 +39,7 @@ int loop() {
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(0);
+    glfwSwapInterval(1);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         printf("Failed to initialize GLAD\n");
@@ -54,7 +50,7 @@ int loop() {
     glViewport(0, 0, windowWidth, windowHeight);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-    timestamp stamp = make_stamp(NULL);
+    timestamp stamp = make_stamp();
     u32 frame = 0;
     while (!glfwWindowShouldClose(window)) {
         checkExit(window);
@@ -62,10 +58,14 @@ int loop() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         glfwSwapBuffers(window);
-
         glfwPollEvents();
-        printf("frame: %d", frame++);
-        wait_for_frame(&stamp, 60.0);
+        elapsed_time(&stamp);
+        printf("frame: %d\t", ++frame);
+        printf("timediff: %fms\n", read_elapsed_time(&stamp));
+        // wait_for_frame(&stamp, 60.0);
+        // if (frame >= 60*5) {
+        //     return 0;
+        // }
     }
 
     glfwTerminate();

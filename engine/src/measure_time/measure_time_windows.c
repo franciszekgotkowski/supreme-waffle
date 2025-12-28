@@ -1,58 +1,58 @@
+#include <stdio.h>
 #include <engine/measure_time.h>
 #include <engine/typedefs.h>
-#include <time.h>
-#include <windows.h>
-#include <assert.h>
-#include <stdio.h>
 
-timestamp make_stamp(timestamp* ptr) {
+#include <windows.h>
+
+typedef struct {
+    LARGE_INTEGER frequency;
+    LARGE_INTEGER then;
+    LARGE_INTEGER now;
+    f64 diff; // is filled when time_elapsed is run so that wait_for_frame does not have to calculate diff again
+} win_stamp;
+_Static_assert(sizeof(win_stamp)==sizeof(timestamp));
+
+inline timestamp make_stamp() {
     /*
     timestamp:
     [8bit] - frequency
-    [8bit] - start
-    [8bit] - stop
-    [8bit] - filler
+    [8bit] - then
+    [8bit] - now
+    [8bit] - diff
     */
 
-    timestamp t = {0};
-
-    LARGE_INTEGER* freq = (LARGE_INTEGER*)&t;
-    LARGE_INTEGER* laststamp = freq+1;
-
-    if (ptr == NULL) {
-        QueryPerformanceFrequency(freq);
-    } else {
-        LARGE_INTEGER* tfreq = (LARGE_INTEGER*)&ptr;
-        *freq = *tfreq;
-    }
-
-    QueryPerformanceCounter(laststamp);
+    win_stamp stamp = {0};
+    QueryPerformanceFrequency(&(stamp.frequency));
+    QueryPerformanceCounter(&(stamp.now));
+    timestamp t;
+    memcpy(&t, &stamp, sizeof(stamp));
     return t;
 }
 
-f64 time_elapsed(timestamp *ptr) {
-    assert(ptr);
-
-    LARGE_INTEGER* freq = (LARGE_INTEGER*)&ptr;
-    LARGE_INTEGER* laststamp = freq+1;
-
-    LARGE_INTEGER now;
-    QueryPerformanceCounter(&now);
-
-    f64 tickDiff = (f64)(laststamp->QuadPart - now.QuadPart);
-    f64 frequency = (f64)(freq->QuadPart);
-
-    f64 timeDiff = tickDiff / frequency;
-    laststamp->QuadPart = now.QuadPart;
-    printf("time elapsed: %fms\n", timeDiff*1000.0);
-    return timeDiff;
+// returns time difference in miliseconds
+inline static f64 time_diff(LARGE_INTEGER then, LARGE_INTEGER now, LARGE_INTEGER freq) {
+    return (1000.0*(f64)(now.QuadPart - then.QuadPart))/(f64)freq.QuadPart;
 }
 
-void wait_for_frame(timestamp* ptr, f64 fps) {
-    f64 frametime = 1000.0 / fps; // ms
-    f64 elapsed = 1000.0 * time_elapsed(ptr);
+inline f64 elapsed_time(timestamp *ptr) {
+    win_stamp* stamp = (win_stamp*)ptr;
 
-    f64 timeToWait = frametime - elapsed;
-    if (timeToWait < 0) { timeToWait = 0.0; }
+    stamp->then = stamp->now;
+    QueryPerformanceCounter(&(stamp->now));
+    stamp->diff = time_diff(stamp->then, stamp->now, stamp->frequency);
+    return stamp->diff;
+}
+
+inline f64 read_elapsed_time(timestamp* ptr) {
+    win_stamp* stamp = (win_stamp*)ptr;
+    return stamp->diff;
+}
+
+inline void wait_for_frame(timestamp* ptr, f64 fps) {
+    win_stamp* stamp = (win_stamp*)ptr;
+
+    f64 timePerFrame = 1000.0/fps;
+    f64 timeToWait = timePerFrame - stamp->diff;
+    if (timeToWait < 0) { timeToWait = 0; }
     Sleep((u64)timeToWait);
 }

@@ -38,9 +38,14 @@ target_link_libraries(engine
 )
 
 if(UNIX)
-	target_link_libraries(engine PRIVATE m dl)
+	target_link_libraries(engine PRIVATE
+			m
+			dl
+	)
 elseif(WIN32)
-	target_link_libraries(engine PRIVATE opengl32)
+	target_link_libraries(engine PRIVATE
+			opengl32
+	)
 endif()
 
 add_library(glad STATIC ${CMAKE_CURRENT_SOURCE_DIR}/libs/src/glad/glad.c)
