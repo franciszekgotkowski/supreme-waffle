@@ -54,13 +54,8 @@ int loop() {
     glViewport(0, 0, windowWidth, windowHeight);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-    // printf("sizeof LARGE_INTEGER = %llu\n", sizeof(LARGE_INTEGER));
-    // timestamp t = make_stamp(NULL);
-    LARGE_INTEGER lastTime, nowTime, freq;
-    QueryPerformanceCounter(&lastTime);
-    QueryPerformanceFrequency(&freq);
-    f64 fulltime = 0.0;
-    i32 frameNum = 0;
+    timestamp stamp = make_stamp(NULL);
+    u32 frame = 0;
     while (!glfwWindowShouldClose(window)) {
         checkExit(window);
 
@@ -69,22 +64,8 @@ int loop() {
         glfwSwapBuffers(window);
 
         glfwPollEvents();
-        // printf("time elapsed: %fms\n", 1000 * time_elapsed(&t));
-        // wait_for_frame(&t, 60.0);
-        // t = make_stamp(&t);
-        QueryPerformanceCounter(&nowTime);
-        f64 tickDiff = (f64)(nowTime.QuadPart - lastTime.QuadPart);
-        f64 timeDiff = (f64)(tickDiff/(f64)freq.QuadPart);
-        fulltime += timeDiff;
-        frameNum += 1;
-        printf("frame: %d\ttime elapsed %f\tfulltime: %f\n", frameNum, timeDiff*1000.0, fulltime);
-        lastTime = nowTime;
-        assert(fulltime < 5.0);
-        f64 sleepMs = 1000.0/60.0;
-        sleepMs -= timeDiff*1000.0;
-        if (sleepMs < 0) { sleepMs = 0.0; }
-        Sleep(sleepMs);
-
+        printf("frame: %d", frame++);
+        wait_for_frame(&stamp, 60.0);
     }
 
     glfwTerminate();

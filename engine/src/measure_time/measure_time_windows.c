@@ -1,6 +1,9 @@
 #include <engine/measure_time.h>
 #include <engine/typedefs.h>
+#include <time.h>
 #include <windows.h>
+#include <assert.h>
+#include <stdio.h>
 
 timestamp make_stamp(timestamp* ptr) {
     /*
@@ -12,34 +15,44 @@ timestamp make_stamp(timestamp* ptr) {
     */
 
     timestamp t = {0};
-    u64 *val = (u64 *) &t;
-    if (!ptr) {
-        QueryPerformanceFrequency((LARGE_INTEGER *) val);
+
+    LARGE_INTEGER* freq = (LARGE_INTEGER*)&t;
+    LARGE_INTEGER* laststamp = freq+1;
+
+    if (ptr == NULL) {
+        QueryPerformanceFrequency(freq);
     } else {
-        t.arr[0] = ptr->arr[0];
+        LARGE_INTEGER* tfreq = (LARGE_INTEGER*)&ptr;
+        *freq = *tfreq;
     }
-    QueryPerformanceCounter((LARGE_INTEGER *) (val + 1));
+
+    QueryPerformanceCounter(laststamp);
     return t;
 }
 
 f64 time_elapsed(timestamp *ptr) {
-    u64 *val = (u64 *) ptr;
-    QueryPerformanceCounter((LARGE_INTEGER *) (val + 2));
-    LARGE_INTEGER freq, start, end;
-    memcpy(&freq, (LARGE_INTEGER *) val, sizeof(LARGE_INTEGER));
-    memcpy(&start, (LARGE_INTEGER *) (val + 1), sizeof(LARGE_INTEGER));
-    memcpy(&end, (LARGE_INTEGER *) (val + 2), sizeof(LARGE_INTEGER));
-    double elapsed =
-            (double) (end.QuadPart - start.QuadPart) /
-            (double) freq.QuadPart;
-    return elapsed;
+    assert(ptr);
+
+    LARGE_INTEGER* freq = (LARGE_INTEGER*)&ptr;
+    LARGE_INTEGER* laststamp = freq+1;
+
+    LARGE_INTEGER now;
+    QueryPerformanceCounter(&now);
+
+    f64 tickDiff = (f64)(laststamp->QuadPart - now.QuadPart);
+    f64 frequency = (f64)(freq->QuadPart);
+
+    f64 timeDiff = tickDiff / frequency;
+    laststamp->QuadPart = now.QuadPart;
+    printf("time elapsed: %fms\n", timeDiff*1000.0);
+    return timeDiff;
 }
 
 void wait_for_frame(timestamp* ptr, f64 fps) {
-    f64 target = 1.0 / fps;
-    double dt = time_elapsed(ptr);
-    double remaining = target - dt;
-    if (remaining > 0.0) {
-        Sleep((DWORD)(remaining * 1000.0));
-    }
+    f64 frametime = 1000.0 / fps; // ms
+    f64 elapsed = 1000.0 * time_elapsed(ptr);
+
+    f64 timeToWait = frametime - elapsed;
+    if (timeToWait < 0) { timeToWait = 0.0; }
+    Sleep((u64)timeToWait);
 }
