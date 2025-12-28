@@ -11,14 +11,14 @@ typedef struct timestamp_linux {
     timespec stop;
 }timestamp_linux;
 
-_Static_assert(sizeof(timestamp_linux) == sizeof(timestamp), "timestamp storage too small");
+_Static_assert(sizeof(timestamp_linux) <= sizeof(timestamp), "timestamp storage too small");
 
-inline timestamp make_stamp(){
+inline timestamp make_stamp(bool initialization){
     timestamp_linux stamp = {};
     timestamp t = {};
     clock_gettime(CLOCK_MONOTONIC, &(stamp.start));
     memcpy(&t, &stamp, sizeof(stamp));
-    return  t;;
+    return  t;
 }
 
 inline f64 time_elapsed(timestamp* ptr) {
