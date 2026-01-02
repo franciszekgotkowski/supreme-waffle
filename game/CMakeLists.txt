@@ -2,12 +2,12 @@ add_executable(game)
 
 target_sources(game PRIVATE
 	src/main.c
-	# src/game.c
+	src/memory_pool.c
 )
 
 target_include_directories(game PRIVATE
 	${CMAKE_HOME_DIRECTORY}/engine/headers
-	${CMAKE_HOME_DIRECTORY}/headers
+	${CMAKE_CURRENT_SOURCE_DIR}/headers
 )
 
 target_link_directories(game PRIVATE

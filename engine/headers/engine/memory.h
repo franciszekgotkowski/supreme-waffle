@@ -8,7 +8,7 @@
 
 #define page 64*KB
 
-// allocates memory via mmap of the size given size size will be rounded to multiples of 4KB
+// allocates memory via system calls. Size will be rounded to multiples of 4KB
 void* mem_alloc(u64 size);
 void mem_dealloc(void* ptr, u64 size);
 

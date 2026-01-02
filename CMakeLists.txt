@@ -5,18 +5,21 @@ project(MyGame C)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CONFIGURATION_TYPES
-    Debug
-    Release
-    Benchmark
-    DebugBenchmark
-    CACHE STRING "Available build types"
+				Debug
+				Release
+				# Benchmark
+				# DebugBenchmark
+				# CACHE STRING "Available build types"
 )
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+set(CMAKE_C_FLAGS_DEBUG "-g")
+set(CMAKE_C_FLAGS_Release "-O3")
+set(CMAKE_BUILD_TYPE Debug)
 
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type")
-endif()
+# if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+#     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type")
+# endif()
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)

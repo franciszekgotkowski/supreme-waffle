@@ -51,8 +51,6 @@ int loop() {
 
     timestamp stamp = make_stamp();
     u32 frame = 0;
-    timestamp startstamp = make_stamp();
-    timestamp cp = make_stamp();
     while (!glfwWindowShouldClose(window)) {
         checkExit(window);
 
@@ -61,13 +59,6 @@ int loop() {
         glfwSwapBuffers(window);
         glfwPollEvents();
         printf("frame: %d\t timediff: %fms\n", ++frame, elapsed_time(&stamp));
-        wait_for_frame(&stamp, 60.0);
-        elapsed_time(&stamp);
-        if (elapsed_time(&startstamp) > 5.0*1000.0) {
-            printf("ending with %f\n", read_elapsed_time(&startstamp));
-            return 0;
-        }
-        startstamp = cp;
     }
 
     glfwTerminate();
