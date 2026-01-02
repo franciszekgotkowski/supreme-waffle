@@ -2,7 +2,6 @@ add_executable(game)
 
 target_sources(game PRIVATE
 	src/main.c
-	src/memory_pool.c
 )
 
 target_include_directories(game PRIVATE

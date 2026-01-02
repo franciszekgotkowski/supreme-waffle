@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <sys/mman.h>
 
-#include <engine/memory.h>
+#include <engine/memory_allocations.h>
 #include <engine/typedefs.h>
 #include <stddef.h>
 #include <assert.h>

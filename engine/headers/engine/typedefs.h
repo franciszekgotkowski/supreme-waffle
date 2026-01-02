@@ -17,3 +17,22 @@ typedef double f64;
 
 typedef const char* str;
 typedef char* mstr;
+
+typedef union {
+    f32 arr[3];
+    struct {
+        f32 x;
+        f32 y;
+        f32 z;
+    };
+} v3;
+
+typedef union {
+    f32 arr[4];
+    struct {
+        f32 x;
+        f32 y;
+        f32 z;
+        f32 w;
+    };
+} v4;

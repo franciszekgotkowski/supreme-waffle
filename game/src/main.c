@@ -1,13 +1,10 @@
-#include "internal/window_data.h"
-#include <engine/print.h>
-#include <engine/range.h>
-#include <engine/memory.h>
-
-#include <internal/memory_pool.h>
+#include <engine/memory_allocations.h>
+#include <engine/memory_pool.h>
+#include <engine/window_data.h>
 
 #include <stdbool.h>
-#include <stddef.h>
 #include <stdio.h>
+#include <string.h>
 
 bool WindowShouldClose = false;
 PointerTable* GameMemory = NULL;
@@ -16,12 +13,13 @@ int main(int argc, char *argv[]) {
 
 	GameMemory = InitializePool();
 
-	*((WindowData*)GameMemory->regions[WINDOW_DATA].ptr) = (WindowData){0};
-	*((WindowData*)GameMemory->regions[WINDOW_DATA].ptr) = (WindowData){0};
+    InitializeWindow(GameMemory, 800, 600, 144, true, (v4){.arr = {0.18f, 0.20f, 0.25f, 1.0f}}, "Der Spiel!", GLFW_CURSOR_NORMAL);
 
-	printf("amount of element in enum %d\n", ENUM_COUNT);
+    GameLoop(GameMemory);
+
+	printf("amount of region elements in enum %d\n", ENUM_COUNT);
 	// InitializeWindow();
-	// InitializeGameState();
+	// InitializeGameState()
 	// LoadSceneFromDisk();
 
 	// while (!WindowShouldClose) {

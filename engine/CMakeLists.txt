@@ -2,13 +2,15 @@ add_library(engine STATIC)
 
 set(ENGINE_SOURCES
 		src/loop.c
+        src/window.c
+		src/memory_pool.c
 )
 
 if(UNIX)
 	list(APPEND
 			ENGINE_SOURCES
-			src/memory/memory_linux.c
-			src/measure_time/measure_time_linux.c
+			src/platform/memory/memory_linux.c
+			src/platform/measure_time/measure_time_linux.c
 	)
 	target_link_directories(engine PUBLIC
 			${CMAKE_CURRENT_SOURCE_DIR}/libs/linux/dynamic
@@ -17,8 +19,8 @@ if(UNIX)
 elseif(WIN32)
 	list(APPEND
 			ENGINE_SOURCES
-			src/memory/memory_windows.c
-			src/measure_time/measure_time_windows.c
+			src/platform/memory/memory_windows.c
+			src/platform/measure_time/measure_time_windows.c
 	)
 	target_link_directories(engine PUBLIC
 			${CMAKE_CURRENT_SOURCE_DIR}/libs/windows/dynamic

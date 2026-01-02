@@ -1,10 +1,10 @@
 #include <assert.h>
 
-#include <engine/memory.h>
+#include <engine/memory_allocations.h>
 
-#include <internal/memory_pool.h>
-#include <internal/input_data.h>
-#include <internal/window_data.h>
+#include <engine/memory_pool.h>
+#include <../headers/engine/input_data.h>
+#include <engine/window_data.h>
 #include <stdio.h>
 
 PointerTable* InitializePool() {
