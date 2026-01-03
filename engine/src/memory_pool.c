@@ -10,7 +10,7 @@
 PointerTable* InitializePool() {
 
 	u64 poolSize = sizeof(PointerTable) + sizeof(WindowData) + sizeof(InputData);
-	printf("PointerTable size: %lu\nWindowData size: %lu\nInputData size: %lu\ntotal size: %lu\n\n",sizeof(PointerTable), sizeof(WindowData), sizeof(InputData), poolSize);
+	printf("PointerTable size: %llu\nWindowData size: %llu\nInputData size: %llu\ntotal size: %llu\n\n",sizeof(PointerTable), sizeof(WindowData), sizeof(InputData), poolSize);
 
 	void* pool = mem_alloc(poolSize);
 	assert(pool);
