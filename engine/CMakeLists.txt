@@ -4,7 +4,6 @@ set(ENGINE_SOURCES
 		src/platform/window/window_glfw.c
 		src/platform/input/input_glfw.c
 		src/memory_pool.c
-		src/input.c
 )
 
 if(UNIX)

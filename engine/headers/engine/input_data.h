@@ -3,7 +3,6 @@
 #include <engine/errors.h>
 #include <engine/memory_pool.h>
 #include <engine/typedefs.h>
-// #include <external/glfw3.h>
 #include <stdbool.h>
 
 extern PointerTable* GameMemory;

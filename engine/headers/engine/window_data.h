@@ -4,13 +4,16 @@
 #include <engine/typedefs.h>
 #include <engine/errors.h>
 
-#include <external/glad/glad.h>
-#include <external/glfw3.h>
-
 #include <stdbool.h>
 
+typedef enum {
+	CURSOR_NORMAL,
+	CURSOR_HIDDEN,
+	CURSOR_DISABLED
+} CursorMode;
+
 typedef struct {
-    GLFWwindow* window;
+    void* window;
     i32 width;
     i32 height;
     i32 fps;
@@ -19,7 +22,7 @@ typedef struct {
     v4 clearColor;
 } WindowData ;
 
-Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, v4 clearColor, str title, i32 cursorMode);
+Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, v4 clearColor, str title, CursorMode cursorMode);
 
 Error CloseWindow(PointerTable* table);
 
