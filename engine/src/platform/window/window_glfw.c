@@ -1,6 +1,8 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include <engine/input_data.h>
+#include <engine/memory_pool.h>
 #include <engine/window_data.h>
 #include <engine/errors.h>
 
@@ -53,6 +55,22 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
     return OK;
 }
 
+void GameLoop(PointerTable* table) {
+    WindowData* windowData = table->regions[WINDOW_DATA].ptr;
+    InputData* inputData = table->regions[INPUT_DATA].ptr;
+
+    while (!glfwWindowShouldClose(windowData->window)) {
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        if (!inputData->keyboard.pressedPreviously[K_ESC] && inputData->keyboard.pressedNow[K_ESC]) {
+      		glfwSetWindowShouldClose(windowData->window, true);
+        }
+
+        glfwSwapBuffers(windowData->window);
+        glfwPollEvents();
+    }
+}
+
 Error CloseWindow(PointerTable* table) {
     assert(table);
     if (!table) {
@@ -63,13 +81,3 @@ Error CloseWindow(PointerTable* table) {
     return OK;
 }
 
-void GameLoop(PointerTable* table) {
-    WindowData* windowData = table->regions[WINDOW_DATA].ptr;
-
-    while (!glfwWindowShouldClose(windowData->window)) {
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glfwSwapBuffers(windowData->window);
-        glfwPollEvents();
-    }
-}

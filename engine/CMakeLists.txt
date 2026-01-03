@@ -1,9 +1,10 @@
 add_library(engine STATIC)
 
 set(ENGINE_SOURCES
-		src/loop.c
-        src/window.c
+		src/platform/window/window_glfw.c
+		src/platform/input/input_glfw.c
 		src/memory_pool.c
+		src/input.c
 )
 
 if(UNIX)

@@ -7,7 +7,7 @@
 #include <assert.h>
 
 inline void* mem_alloc(u64 size) {
-    if (size % 4*KB != 0) {
+    if (size % 4*KB != 0 || size < 4*KB) {
         printf("extending size to fill entire page\n");
         u64 oldsize = size;
         size /= 4*KB;
