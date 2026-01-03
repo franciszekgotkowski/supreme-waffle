@@ -1,3 +1,4 @@
+#include <engine/window_data.h>
 #include <engine/memory_pool.h>
 #include <assert.h>
 #include <stdbool.h>
@@ -5,6 +6,9 @@
 #include <engine/errors.h>
 #include <engine/input_data.h>
 #include <external/glfw3.h>
+#include <stdio.h>
+
+extern PointerTable* GameMemory;
 
 static Error updateKeyboard(PointerTable* table, i32 key, i32 scancode, i32 action, i32 mods) {
 	assert(table);
@@ -81,5 +85,39 @@ void inputCallback(GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mo
 
 	Error err = updateKeyboard(GameMemory, key, scancode, action, mods);
 	assert(err == OK);
+}
 
+void mouseCallback(GLFWwindow *window, f64 xpos, f64 ypos) {
+	assert(window);
+
+	InputData* inputData = (InputData*)GameMemory->regions[INPUT_DATA].ptr;
+	mouseState* mouse = &(inputData->mouse);
+	assert(inputData);
+	assert(mouse);
+
+	printf("mouse moved from (%f, %f) to (%f, %f)", mouse->x, mouse->y, xpos, ypos);
+
+	mouse->dx = xpos - mouse->x;
+	mouse->dy = ypos - mouse->y;
+
+	mouse->x = xpos;
+	mouse->y = ypos;
+
+	printf("\t moved by (%f, %f)\n", mouse->dx, mouse->dy);
+}
+
+Error InitializeInput(PointerTable *table) {
+	assert(table);
+
+	InputData* input = table->regions[INPUT_DATA].ptr;
+	assert(input);
+	GLFWwindow* window = ((WindowData*)table->regions[WINDOW_DATA].ptr)->window;
+	assert(window);
+
+	*input = (InputData){};
+	glfwSetKeyCallback(window, inputCallback);
+    glfwSetCursorPosCallback(window, mouseCallback);
+    // glfwSetScrollCallback(window, scroll_callback);
+
+	return OK;
 }

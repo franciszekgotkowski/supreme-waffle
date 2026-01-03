@@ -6,10 +6,47 @@
 #include <engine/window_data.h>
 #include <engine/errors.h>
 
-Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, v4 clearColor, str title, i32 cursorMode) {
+#include <external/glad/glad.h>
+#include <external/glfw3.h>
+
+extern PointerTable* GameMemory;
+
+void inputCallback(GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods);
+
+static void framebuffer_size_callback(GLFWwindow *window, i32 width, i32 height) {
+	assert(window);
+	assert(GameMemory);
+
+	WindowData* windowData = GameMemory->regions[WINDOW_DATA].ptr;
+
+	printf("window is resized from %dx%d to %dx%d\n", windowData->height, windowData->width, height, width);
+
+    windowData->width = width;
+    windowData->height = height;
+
+    glViewport(0, 0, windowData->width, windowData->height);
+}
+
+Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, v4 clearColor, str title, CursorMode cursorMode) {
     assert(table);
     assert(title);
     assert(width > 0 && height > 0 && fps > 0);
+
+    i32 cursorModeGlfw;
+    switch (cursorMode) {
+   		case CURSOR_NORMAL:
+    		cursorModeGlfw = GLFW_CURSOR_NORMAL;
+     		break;
+       	case CURSOR_HIDDEN:
+       		cursorModeGlfw = GLFW_CURSOR_HIDDEN;
+        	break;
+        case CURSOR_DISABLED:
+       		cursorModeGlfw = GLFW_CURSOR_DISABLED;
+        	break;
+        default:
+       		cursorModeGlfw = GLFW_CURSOR_NORMAL;
+         	break;
+    }
 
     WindowData* windowData = table->regions[WINDOW_DATA].ptr;
     assert(windowData);
@@ -20,7 +57,7 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
         .height = height,
         .width = width,
         .fps = fps,
-        .cursorMode = cursorMode,
+        .cursorMode = cursorModeGlfw,
         .vsync = vsync,
         .clearColor = clearColor,
     };
@@ -40,7 +77,7 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
     }
 
     glfwMakeContextCurrent(windowData->window);
-    glfwSetInputMode(windowData->window, GLFW_CURSOR, cursorMode);
+    glfwSetInputMode(windowData->window, GLFW_CURSOR, cursorModeGlfw);
     glfwSwapInterval(vsync);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
@@ -52,6 +89,8 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
     glViewport(0, 0, windowData->width, windowData->height);
     glClearColor(windowData->clearColor.arr[0],windowData->clearColor.arr[1], windowData->clearColor.arr[2], windowData->clearColor.arr[3]);
 
+    glfwSetFramebufferSizeCallback(windowData->window, framebuffer_size_callback);
+
     return OK;
 }
 
@@ -62,7 +101,8 @@ void GameLoop(PointerTable* table) {
     while (!glfwWindowShouldClose(windowData->window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        if (!inputData->keyboard.pressedPreviously[K_ESC] && inputData->keyboard.pressedNow[K_ESC]) {
+        if (inputData->keyboard.pressedPreviously[K_ESC] && !inputData->keyboard.pressedNow[K_ESC]) {
+       		printf("Odciśnięto Escape!\n");
       		glfwSetWindowShouldClose(windowData->window, true);
         }
 
