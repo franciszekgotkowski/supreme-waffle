@@ -5,12 +5,13 @@
 #include <engine/memory_pool.h>
 #include <engine/input_data.h>
 #include <engine/window_data.h>
+#include <engine/typedefs.h>
 #include <stdio.h>
 
 PointerTable* InitializePool() {
 
 	u64 poolSize = sizeof(PointerTable) + sizeof(WindowData) + sizeof(InputData);
-	printf("PointerTable size: %llu\nWindowData size: %llu\nInputData size: %llu\ntotal size: %llu\n\n",sizeof(PointerTable), sizeof(WindowData), sizeof(InputData), poolSize);
+	printf("PointerTable size: %llu\nWindowData size: %llu\nInputData size: %llu\ntotal size: %llu\n\n", (long long unsigned int)(sizeof(PointerTable)), (long long unsigned int)sizeof(WindowData), (long long unsigned int)sizeof(InputData), (long long unsigned int)poolSize);
 
 	void* pool = mem_alloc(poolSize);
 	assert(pool);
