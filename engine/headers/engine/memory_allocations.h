@@ -6,7 +6,7 @@
 #define MB (u64)KB*1024
 #define GB (u64)MB*1024
 
-#define page 64*KB
+#define BASE_POOL_ADDRESS 0x600000000000
 
 // allocates memory via system calls. Size will be rounded to multiples of 4KB
 void* mem_alloc(u64 size);

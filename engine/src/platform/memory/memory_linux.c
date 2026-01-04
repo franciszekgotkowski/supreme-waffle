@@ -15,8 +15,13 @@ inline void* mem_alloc(u64 size) {
         size += 4*KB;
         printf("mapping %ld instead of %ld\n", size, oldsize);
     }
-    void* ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-    assert(ptr);
+    void* ptr = mmap((void*)BASE_POOL_ADDRESS, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+
+    assert(ptr == (void*)BASE_POOL_ADDRESS);
+    if (ptr != (void*)BASE_POOL_ADDRESS) {
+    	return NULL;
+    }
+
     return ptr;
 }
 

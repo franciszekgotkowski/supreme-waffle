@@ -18,12 +18,16 @@ inline void* mem_alloc(u64 size) {
     }
     // void* ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     void* ptr = VirtualAlloc(
-            NULL,                       // Let OS choose address
+            (void*)BASE_POOL_ADDRESS,                       // Let OS choose address
             size,                       // Size in bytes
             MEM_RESERVE | MEM_COMMIT,   // Reserve + commit
             PAGE_READWRITE);             // Read/write access
 
-    assert(ptr);
+    assert(ptr == (void*)BASE_POOL_ADDRESS);
+    if (ptr != (void*)BASE_POOL_ADDRESS) {
+   		return NULL;
+    }
+
     return ptr;
 }
 
