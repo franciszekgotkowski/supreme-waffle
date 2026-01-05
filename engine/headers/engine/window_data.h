@@ -17,6 +17,7 @@ typedef struct {
     i32 width;
     i32 height;
     i32 fps;
+    f32 frametime;
     i32 cursorMode;
     bool vsync;
     v4 clearColor;

@@ -1,3 +1,4 @@
+#include "engine/measure_time.h"
 #include <assert.h>
 #include <stdio.h>
 
@@ -57,6 +58,7 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
         .height = height,
         .width = width,
         .fps = fps,
+        .frametime = 1000.0f*1/fps,
         .cursorMode = cursorModeGlfw,
         .vsync = vsync,
         .clearColor = clearColor,
@@ -98,6 +100,7 @@ void GameLoop(PointerTable* table) {
     WindowData* windowData = table->regions[WINDOW_DATA].ptr;
     InputData* inputData = table->regions[INPUT_DATA].ptr;
 
+    timestamp stamp = make_stamp();
     while (!glfwWindowShouldClose(windowData->window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -108,6 +111,7 @@ void GameLoop(PointerTable* table) {
 
         glfwSwapBuffers(windowData->window);
         glfwPollEvents();
+        printf("frame rendered in %fms\n", elapsed_time(&stamp));
     }
 }
 
