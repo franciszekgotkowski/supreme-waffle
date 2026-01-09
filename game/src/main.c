@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 
 	GameMemory = InitializePool();
 
-    InitializeWindow(GameMemory, 800, 600, 144, true, (v4){.arr = {0.18f, 0.20f, 0.25f, 1.0f}}, "Der Spiel!", CURSOR_NORMAL);
+    InitializeWindow(GameMemory, 800, 600, 144, true, true, (v4){.arr = {0.18f, 0.20f, 0.25f, 1.0f}}, "Der Spiel!", CURSOR_NORMAL);
     InitializeInput(GameMemory);
 
     GameLoop(GameMemory);
