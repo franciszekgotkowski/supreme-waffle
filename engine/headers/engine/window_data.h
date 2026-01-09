@@ -20,10 +20,11 @@ typedef struct {
     f32 frametime;
     i32 cursorMode;
     bool vsync;
+    bool resizable;
     v4 clearColor;
 } WindowData ;
 
-Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, v4 clearColor, str title, CursorMode cursorMode);
+Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, bool resizable, v4 clearColor, str title, CursorMode cursorMode);
 
 Error CloseWindow(PointerTable* table);
 

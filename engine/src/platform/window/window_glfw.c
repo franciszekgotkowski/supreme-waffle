@@ -28,7 +28,7 @@ static void framebuffer_size_callback(GLFWwindow *window, i32 width, i32 height)
     glViewport(0, 0, windowData->width, windowData->height);
 }
 
-Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, v4 clearColor, str title, CursorMode cursorMode) {
+Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, bool resizable, v4 clearColor, str title, CursorMode cursorMode) {
     assert(table);
     assert(title);
     assert(width > 0 && height > 0 && fps > 0);
@@ -61,6 +61,7 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
         .frametime = 1000.0f*1/fps,
         .cursorMode = cursorModeGlfw,
         .vsync = vsync,
+        .resizable = resizable,
         .clearColor = clearColor,
     };
 
@@ -70,6 +71,7 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
 
     windowData->window = glfwCreateWindow(width, height, title, NULL, NULL);
     assert(windowData->window);
