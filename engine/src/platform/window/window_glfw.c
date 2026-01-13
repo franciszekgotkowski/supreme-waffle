@@ -1,10 +1,9 @@
-#include "engine/measure_time.h"
 #include <assert.h>
 #include <stdio.h>
 
-#include <engine/input_data.h>
+#include <engine/platform/input_data.h>
 #include <engine/memory_pool.h>
-#include <engine/window_data.h>
+#include <engine/platform/window_data.h>
 #include <engine/errors.h>
 
 #include <external/glad/glad.h>
@@ -96,25 +95,6 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
     glfwSetFramebufferSizeCallback(windowData->window, framebuffer_size_callback);
 
     return OK;
-}
-
-void GameLoop(PointerTable* table) {
-    WindowData* windowData = table->regions[WINDOW_DATA].ptr;
-    InputData* inputData = table->regions[INPUT_DATA].ptr;
-
-    timestamp stamp = make_stamp();
-    while (!glfwWindowShouldClose(windowData->window)) {
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        if (inputData->keyboard.pressedPreviously[K_ESC] && !inputData->keyboard.pressedNow[K_ESC]) {
-       		printf("Odciśnięto Escape!\n");
-      		glfwSetWindowShouldClose(windowData->window, true);
-        }
-
-        glfwSwapBuffers(windowData->window);
-        glfwPollEvents();
-        printf("frame rendered in %fms\n", elapsed_time(&stamp));
-    }
 }
 
 Error CloseWindow(PointerTable* table) {

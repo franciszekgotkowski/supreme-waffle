@@ -18,6 +18,8 @@ typedef double f64;
 typedef const char* str;
 typedef char* mstr;
 
+typedef long long unsigned int llu;
+
 typedef union {
     f32 arr[3];
     struct {

@@ -1,10 +1,10 @@
-#include <engine/window_data.h>
+#include <engine/platform/window_data.h>
 #include <engine/memory_pool.h>
 #include <assert.h>
 #include <stdbool.h>
 
 #include <engine/errors.h>
-#include <engine/input_data.h>
+#include <engine/platform/input_data.h>
 #include <external/glfw3.h>
 #include <stdio.h>
 

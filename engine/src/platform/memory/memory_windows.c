@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include <windows.h>
 
-#include <engine/memory_allocations.h>
+#include <engine/platform/memory_allocations.h>
 #include <engine/typedefs.h>
 #include <stddef.h>
 #include <assert.h>
 
 inline void* mem_alloc(u64 size) {
-    if (size % 4*KB != 0 || size < 4*KB) {
+    if (size % (4*KB) != 0 || size < 4*KB) {
         printf("extending size to fill entire page\n");
         u64 oldsize = size;
         size /= 4*KB;

@@ -3,7 +3,10 @@ add_library(engine STATIC)
 set(ENGINE_SOURCES
 		src/platform/window/window_glfw.c
 		src/platform/input/input_glfw.c
+		src/platform/game_loop/game_loop_glfw.c
+		src/platform/graphics/graphics_glad.c
 		src/memory_pool.c
+		src/event_queue.c
 )
 
 if(UNIX)
@@ -50,6 +53,19 @@ elseif(WIN32)
 	)
 endif()
 
-add_library(glad STATIC ${CMAKE_CURRENT_SOURCE_DIR}/libs/src/glad/glad.c)
-target_include_directories(glad PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/headers/external)
+add_library(glad STATIC
+	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/glad/glad.c
+)
+
+target_include_directories(glad PUBLIC
+	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
+)
+
+add_library(nuklear STATIC
+	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/nuklear/nuklear.c
+)
+
+target_include_directories(nuklear SYSTEM PUBLIC
+	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
+)
 
