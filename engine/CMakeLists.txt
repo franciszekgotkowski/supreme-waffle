@@ -7,6 +7,11 @@ set(ENGINE_SOURCES
 		src/platform/graphics/graphics_glad.c
 		src/memory_pool.c
 		src/event_queue.c
+		src/string_utils.c
+		src/memory_arena.c
+		src/canvas.c
+		src/scene.c
+		src/ui.c
 )
 
 if(UNIX)
@@ -40,6 +45,7 @@ target_link_libraries(engine
 		PUBLIC
 		glad
 		glfw3
+		# stb
 )
 
 if(UNIX)
@@ -61,11 +67,28 @@ target_include_directories(glad PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
 )
 
-add_library(nuklear STATIC
-	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/nuklear/nuklear.c
+add_library(stb STATIC
+	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/stb/stb_image.c
+	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/stb/stb_image_write.c
 )
 
-target_include_directories(nuklear SYSTEM PUBLIC
+target_include_directories(stb PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
 )
+
+# add_library(cjson STATIC
+# 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/cJSON/cJSON.c
+# )
+
+# target_include_directories(cjson SYSTEM PUBLIC
+# 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
+# )
+
+# add_library(nuklear STATIC
+# 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/nuklear/nuklear.c
+# )
+
+# target_include_directories(nuklear SYSTEM PUBLIC
+# 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
+# )
 

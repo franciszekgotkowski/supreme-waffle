@@ -29,3 +29,5 @@ option(GAME_ENABLE_ASSERTS "Enable engine asserts" ON)
 
 add_subdirectory(engine)
 add_subdirectory(game)
+add_subdirectory(utils)
+#add_subdirectory(tests)

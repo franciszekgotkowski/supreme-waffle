@@ -1,0 +1,5 @@
+cd ../../build/
+cmake -S ../
+make
+cd ./utils/bdf_converter/
+./bdf_converter

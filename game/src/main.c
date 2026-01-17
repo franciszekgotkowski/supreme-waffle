@@ -3,6 +3,8 @@
 #include <engine/platform/window_data.h>
 #include <engine/platform/input_data.h>
 
+#include <engine/string_utils.h>
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>

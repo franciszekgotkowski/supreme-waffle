@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <internal/game_loop.h>
+#include <game/game_loop.h>
 #include <engine/platform/game_loop.h>
 
 #include <stdbool.h>

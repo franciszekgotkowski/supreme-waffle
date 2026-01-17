@@ -3,6 +3,7 @@
 #include <engine/platform/memory_allocations.h>
 
 #include <engine/memory_pool.h>
+#include <engine/errors.h>
 #include <engine/platform/input_data.h>
 #include <engine/platform/window_data.h>
 #include <engine/typedefs.h>
@@ -31,26 +32,27 @@ PointerTable* InitializePool(u64 size) {
 
 
 	void* temp = pool;
+	Error err;
 
 	PointerTable* table = (PointerTable*)pool;
 	table->size = poolSize;
-	table->emountOfRegions = AMOUNT_OF_ENGINE_MEMORY_REGIONS;
-	table->regions[POINTER_TABLE] = (Region){
-		.ptr = temp,
-		.len = sizeof(PointerTable),
-	};
+	table->emountOfRegions = 0;
+
+	err = InitializeRegion(table, temp, POINTER_TABLE, sizeof(PointerTable));
+	assert(err == OK);
 	temp += sizeof(PointerTable);
 
-	table->regions[WINDOW_DATA] = (Region){
-		.ptr = temp,
-		.len = sizeof(WindowData)
-	};
+	err = InitializeRegion(table, temp, WINDOW_DATA, sizeof(WindowData));
+	assert(err == OK);
 	temp += sizeof(WindowData);
 
-	table->regions[INPUT_DATA] = (Region){
-		.ptr = temp,
-		.len = sizeof(InputData)
-	};
+	err = InitializeRegion(table, temp, INPUT_DATA, sizeof(InputData));
+	assert(err == OK);
+	temp += sizeof(InputData);
+
+	// first i need to check how much space do i need
+	err = InitializeRegion(table, temp, CANVAS, sizeof(InputData));
+	assert(err == OK);
 	temp += sizeof(InputData);
 
 	table->poolTop = temp;
@@ -58,4 +60,20 @@ PointerTable* InitializePool(u64 size) {
 	return pool;
 }
 
+Error InitializeRegion(PointerTable* table, void* ptr, u64 regionIndex, u64 size) {
+	assert(table);
+	assert(ptr);
 
+	assert(!(regionIndex >= AMOUNT_OF_ENGINE_MEMORY_REGIONS));
+	if (regionIndex >= AMOUNT_OF_ENGINE_MEMORY_REGIONS) {
+		return OUT_OF_RANGE;
+	}
+
+	table->emountOfRegions += 1;
+	table->regions[regionIndex] = (Region){
+		.ptr = ptr,
+		.len = size
+	};
+
+	return OK;
+}
