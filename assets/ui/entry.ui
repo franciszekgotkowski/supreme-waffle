@@ -1,0 +1,21 @@
+AmountOfFonts 1
+	StartFonts
+		cherry-10-b.bdf
+	EndFonts
+AmountOfStrings 2
+	StartStrings
+		StartString
+			StartText
+				Jest tutaj sobie napis
+			EndText
+			Position 0.0 0.0
+			Font cherry-10-b
+		EndString
+		StartString
+			StartText
+				A to jest drugi napis
+			EndText
+			Position 0.0 -0.3
+			Font cherry-10-b
+		EndString
+	StopStrings

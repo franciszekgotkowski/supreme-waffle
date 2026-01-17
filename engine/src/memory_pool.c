@@ -17,6 +17,7 @@ PointerTable* InitializePool(u64 size) {
 	if (size == 0) {
 		printf("PointerTable size: %llu\nWindowData size: %llu\nInputData size: %llu\ntotal size: %llu\n\n", (llu)(sizeof(PointerTable)), (llu)sizeof(WindowData), (llu)sizeof(InputData), (llu)poolSize);
 		pool = mem_alloc(poolSize);
+		size = poolSize;
 		assert(pool);
 	} else {
 		assert(poolSize <= size);
@@ -35,7 +36,7 @@ PointerTable* InitializePool(u64 size) {
 	Error err;
 
 	PointerTable* table = (PointerTable*)pool;
-	table->size = poolSize;
+	table->capacity = size;
 	table->emountOfRegions = 0;
 
 	err = InitializeRegion(table, temp, POINTER_TABLE, sizeof(PointerTable));
@@ -50,10 +51,11 @@ PointerTable* InitializePool(u64 size) {
 	assert(err == OK);
 	temp += sizeof(InputData);
 
-	// first i need to check how much space do i need
-	err = InitializeRegion(table, temp, CANVAS, sizeof(InputData));
+	err = InitializeRegion(table, temp, MEMORY_ARENA, (table->capacity - poolSize));
 	assert(err == OK);
 	temp += sizeof(InputData);
+	printf("table->capacity - poolSize = %llu\n", (llu)(table->capacity - poolSize));
+	printf("there is %llu bytes of free space for the arena\n", (llu)table->regions[MEMORY_ARENA].len);
 
 	table->poolTop = temp;
 

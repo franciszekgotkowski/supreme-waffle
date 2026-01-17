@@ -10,7 +10,7 @@ typedef struct {
 	u64 amountOfCheckpoints;
 	void* base; // base pointer to arena
 	void* top; // current top of allocated memory
-	u64 capacity; // maximum capacity of an arena
+	u64 capacity; // maximum capacity of an arena including this struct
 	bool locked; // if memory arena is locked, pushing or reseting memory is illegal and functions should return an error
 } MemoryArena ;
 

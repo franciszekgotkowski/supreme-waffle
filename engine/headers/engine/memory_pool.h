@@ -13,7 +13,7 @@ typedef enum {
 	POINTER_TABLE,
 	WINDOW_DATA,
 	INPUT_DATA,
-	CANVAS,
+	MEMORY_ARENA,
 
 	AMOUNT_OF_ENGINE_MEMORY_REGIONS
 } Regions ;
@@ -22,7 +22,7 @@ typedef enum {
 // Intended use of pool with pointer table is to devide memory pool into chunks where each chunk will have their own metadata at the start and will manage rest of its memory. It is not intended to be used for gameplay dynamic allocations. This will be role of memory arenas
 typedef struct {
 	u64 emountOfRegions;
-	u64 size;
+	u64 capacity;
 	void* poolTop;
 	Region regions[AMOUNT_OF_ENGINE_MEMORY_REGIONS];
 } PointerTable ;

@@ -16,7 +16,7 @@ Error InitializeMemoryArena(void* base, u64 cap) {
 	*arena = (MemoryArena) {
 		.amountOfCheckpoints = 0,
 		.base = base,
-		.top = base,
+		.top = base + sizeof(MemoryArena),
 		.capacity = cap,
 		.locked = false
 	};

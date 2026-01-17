@@ -6,12 +6,12 @@ set(ENGINE_SOURCES
 		src/platform/game_loop/game_loop_glfw.c
 		src/platform/graphics/graphics_glad.c
 		src/memory_pool.c
-		src/event_queue.c
 		src/string_utils.c
 		src/memory_arena.c
 		src/canvas.c
 		src/scene.c
 		src/ui.c
+		src/font.c
 )
 
 if(UNIX)
