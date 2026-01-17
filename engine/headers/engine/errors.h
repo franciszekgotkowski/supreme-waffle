@@ -9,6 +9,8 @@ typedef enum {
     SYSCALL_FAIL,
     LIBRARY_FAIL,
     LOCKED,
+    FILE_NOT_FOUND,
+    IO_ERROR,
 
     AMOUNT_OF_ERRORS
 } Error ;

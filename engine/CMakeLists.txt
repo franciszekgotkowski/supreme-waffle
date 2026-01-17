@@ -5,6 +5,7 @@ set(ENGINE_SOURCES
 		src/platform/input/input_glfw.c
 		src/platform/game_loop/game_loop_glfw.c
 		src/platform/graphics/graphics_glad.c
+		src/platform/file_io/file_io_libc.c
 		src/memory_pool.c
 		src/string_utils.c
 		src/memory_arena.c
