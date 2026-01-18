@@ -4,6 +4,7 @@
 
 #include <engine/typedefs.h>
 #include <engine/errors.h>
+#include <engine/platform/file_io.h>
 
 typedef enum {
 	CELL, 			// every character has the same width
@@ -50,6 +51,7 @@ typedef struct {
 	// font ascent - how many pixels are below and above baseline
 	// from FONT_ASCENT
 	u32 fontAscent;
+	// from FONT_DESCENT
 	u32 fontDescent;
 
 	// amount of characters
@@ -60,4 +62,4 @@ typedef struct {
 	u8* characterBitmap;
 } Font;
 
-u64 FontSizeInBytes(Font* font);
+ u64 SpaceNeededForFont(FileData file);

@@ -1,6 +1,5 @@
-#include "engine/font.h"
+#include <engine/font.h>
 #include "engine/memory_arena.h"
-#include "engine/platform/file_io.h"
 #include <engine/platform/memory_allocations.h>
 #include <engine/memory_pool.h>
 #include <engine/platform/window_data.h>
@@ -8,6 +7,7 @@
 
 #include <engine/string_utils.h>
 
+#include <inttypes.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
