@@ -62,4 +62,15 @@ typedef struct {
 	u8* characterBitmap;
 } Font;
 
- u64 SpaceNeededForFont(FileData file);
+Font ReadJustFontData(FileData file);
+
+// Function returns amount of bytes needed to accomodate a font.
+// It counts size of font struct, amount of characters * (character struct size + (1 byte per pixel * BoundingBoxW * BoundingBoxH) )
+u64 SpaceNeededForFont(FileData file);
+
+// Function gives font struct pointers to where character structs are and where a bitmap is.
+// Inteded location of those is next to the Font struct like here:
+// 		Font struct
+// 		Character struct[]
+// 		Character bitmaps[]
+Error FillCharacaterData(Font* font, FileData file);

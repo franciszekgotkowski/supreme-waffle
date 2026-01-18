@@ -1,14 +1,13 @@
 #include <engine/font.h>
-#include "engine/memory_arena.h"
-#include "engine/platform/file_io.h"
+#include <engine/memory_arena.h>
+#include <engine/platform/file_io.h>
 #include <engine/platform/memory_allocations.h>
 #include <engine/memory_pool.h>
 #include <engine/platform/window_data.h>
 #include <engine/platform/input_data.h>
-
 #include <engine/string_utils.h>
 
-#include <inttypes.h>
+#include <alloca.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,10 +23,19 @@ int main(int argc, char *argv[]) {
     InitializeMemoryArena(GameMemory->regions[MEMORY_ARENA].ptr, GameMemory->regions[MEMORY_ARENA].len);
     // InitializeCanvas();
 
-    FileData file;
-    readEntireFile("../../assets/fonts/bdf/cherry-11-r.bdf", &file);
-    u64 space = SpaceNeededForFont(file);
-    printf("space needed for cherry-11-r.bdf = %llu\n", (llu)space);
+    // just experimenting with loading fonts into memory
+    // to be moved elsewhere
+    {
+    	FileData file;
+     	readEntireFile("../../assets/fonts/bdf/cherry-11-r.bdf", &file);
+      	u64 fontSpace = SpaceNeededForFont(file);
+       	printf("space needed for cherry-11-r.bdf = %llu\n", (llu)fontSpace);
+
+        Font* font = alloca(fontSpace);
+        *font = ReadJustFontData(file);
+
+        printf("no siema\n");
+    }
 
     GameLoop(GameMemory);
 
