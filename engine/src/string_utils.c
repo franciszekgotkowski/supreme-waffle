@@ -87,3 +87,29 @@ u32 wordLength(mstr s) {
 
 		return len;
 }
+
+bool wordsMatch(str a, str b) {
+    assert(a);
+    assert(b);
+
+    mstr ma = (mstr)a;
+    mstr mb = (mstr)b;
+
+    stickToWord(ma);
+    stickToWord(mb);
+
+    while ((*ma!= '\0' && *ma!= '\n' && *ma!= ' ' && *ma!= '\t')  && (*mb != '\0' && *mb != '\n' && *mb != ' ' && *mb != '\t')) {
+
+    	if (*ma != *mb) {
+   			return false;
+     	}
+
+    	ma++;
+        mb++;
+    }
+    if ((*ma== '\0' || *ma== '\n' || *ma== ' ' || *ma== '\t') && (*mb == '\0' || *mb == '\n' || *mb == ' ' || *mb == '\t')) {
+        return true;
+    } else {
+        return false;
+    }
+}

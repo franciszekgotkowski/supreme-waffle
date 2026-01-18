@@ -1,5 +1,6 @@
 #include <engine/font.h>
 #include "engine/memory_arena.h"
+#include "engine/platform/file_io.h"
 #include <engine/platform/memory_allocations.h>
 #include <engine/memory_pool.h>
 #include <engine/platform/window_data.h>
@@ -22,6 +23,11 @@ int main(int argc, char *argv[]) {
     InitializeInput(GameMemory);
     InitializeMemoryArena(GameMemory->regions[MEMORY_ARENA].ptr, GameMemory->regions[MEMORY_ARENA].len);
     // InitializeCanvas();
+
+    FileData file;
+    readEntireFile("../../assets/fonts/bdf/cherry-11-r.bdf", &file);
+    u64 space = SpaceNeededForFont(file);
+    printf("space needed for cherry-11-r.bdf = %llu\n", (llu)space);
 
     GameLoop(GameMemory);
 
