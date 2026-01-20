@@ -58,19 +58,32 @@ typedef struct {
 	// from CHARS
 	u32 amountOfCharacters;
 
-	Character* charactersData;
+	// Highest char code. Needed for me to create a table of offsets
+	u32 highestCharCode;
+
+    // How many pixels will be between character bitmaps
+    // All characters are in 1 array hegth array (there are no columns of characters. It has amountOfCharacters x 1 proportions)
+    u32 spacing;
+
+    u32* offsetTable;
+    Character* charactersData;
 	u8* characterBitmap;
 } Font;
 
-Font ReadJustFontData(FileData file);
-
 // Function returns amount of bytes needed to accomodate a font.
-// It counts size of font struct, amount of characters * (character struct size + (1 byte per pixel * BoundingBoxW * BoundingBoxH) )
+// It counts space for offset table, size of font struct, amount of characters * (character struct size + (1 byte per pixel * BoundingBoxW * BoundingBoxH) )
 u64 SpaceNeededForFont(FileData file);
+
+Font InitializeFont(FileData file);
 
 // Function gives font struct pointers to where character structs are and where a bitmap is.
 // Inteded location of those is next to the Font struct like here:
+// 		[low address]
 // 		Font struct
+// 		Offset table where indexes of the table are charCodes
 // 		Character struct[]
 // 		Character bitmaps[]
+// 		[hight address]
 Error FillCharacaterData(Font* font, FileData file);
+
+u32 positionInBitmap(Font* font, u32 charIdx, u32 x, u32 y);

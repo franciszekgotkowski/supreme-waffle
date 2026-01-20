@@ -3,6 +3,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <engine/platform/file_io.h>
 #include <engine/string_utils.h>
@@ -11,7 +12,11 @@
 #include <engine/range.h>
 
 static inline u64 CalculateSpaceForFont(Font font) {
-	u64 size = sizeof(Font) + (font.boundingBoxW*font.boundingBoxH + sizeof(Character))*font.amountOfCharacters;
+	u64 size =
+		sizeof(Font) // Font struct
+		+ font.highestCharCode*sizeof(u32) // offsetTable
+		+ (font.boundingBoxH + 2*font.spacing) * (font.spacing + font.amountOfCharacters*(font.boundingBoxW + font.spacing));
+
 	return size;
 }
 
@@ -130,7 +135,7 @@ static inline void handle_chars(mstr ms, Font* font){
     font->amountOfCharacters = atoi(currentstr);
 }
 
-Font ReadJustFontData(FileData file) {
+Font InitializeFont(FileData file) {
 	assert(file.ptr);
 
 	Font font;
@@ -182,13 +187,48 @@ Font ReadJustFontData(FileData file) {
         assert(parametersRead[i]);
     }
 
+    // font.spacing =
+
 	return font;
 }
+
+static u32 checkForHighestCharCode(FileData file) {
+
+	assert(file.ptr);
+
+	mstr ms = file.ptr;
+
+	i32 max = -1;
+
+	do {
+		if (wordsMatch("ENCODING", ms)) {
+
+			ms = nextWord(ms);
+			u64 wordLen = wordLength(ms);
+			mstr currentstr = alloca(wordLen+1);
+			strncpy(currentstr, ms, wordLen);
+			currentstr[wordLen] = '\0';
+			i32 t = atoi(currentstr);
+			if (t > max) {
+				max = t;
+			}
+
+		}
+
+		ms = newLine(ms);
+	} while (!wordsMatch("ENDFONT", ms));
+
+	assert(max != -1);
+	return max;
+}
+
 
 u64 SpaceNeededForFont(FileData file) {
 	assert(file.ptr);
 
-    Font font = ReadJustFontData(file);
+    Font font = InitializeFont(file);
+    font.highestCharCode = checkForHighestCharCode(file);
+    font.spacing = 1;
 
 	return CalculateSpaceForFont(font);
 }
@@ -283,17 +323,42 @@ static inline void handle_bbx(mstr ms, Character* character){
     currentstr[wordLen] = '\0';
     character->offsetY = atoi(currentstr);
 }
+//
+u32 positionInBitmap(Font* font, u32 charIdx, u32 x, u32 y) {
+    assert(font);
 
-// TODO: I still need to do bitmap reading
-static inline void handle_bitmap(mstr ms, Character* character, u8* bitmap){
+    assert(x < font->boundingBoxW);
+    assert(y < font->boundingBoxH);
+    assert(charIdx < font->amountOfCharacters);
+
+    u32 yOffset = (font->amountOfCharacters*(font->spacing+font->boundingBoxW)+font->spacing)*(y+font->spacing);
+    u32 xOffset = font->spacing + charIdx*(font->spacing + font->boundingBoxW) + x;
+
+    return yOffset + xOffset;
+}
+
+static inline void handle_bitmap(mstr ms, Character* character, Font* font, u32 charIdx){
 	assert(ms);
 	assert(character);
 
-	assert(0);
-
 	ms = nextWord(ms);
-	while (expression) {
+	u32 y = 0;
+	while (!wordsMatch("ENDCHAR", ms)) {
+		u32 wordLen = wordLength(ms);
+		u8* word = alloca(wordLen);
+		memcpy(word, ms, wordLen);
 
+		for range(x, character->boundingBoxW) {
+			u8 byte = word[x/8];
+			u8 shift = x % 8;
+
+			u8 value = (byte << shift) & 0x80;
+
+			u32 offset = positionInBitmap(font, charIdx, x, y);
+			font->characterBitmap[offset] = value == 0x80 ? 255 : 0;
+		}
+
+		y++;
 	}
 }
 
@@ -305,7 +370,7 @@ static inline void handle_endchar(mstr ms, Character* character){
 }
 
 
-static Character ReadCharacterData(mstr ms, u8* bitmap) {
+static Character ReadCharacterData(mstr ms, Font* font, u32 charIdx) {
 	assert(ms);
 
 	Character character;
@@ -340,7 +405,7 @@ static Character ReadCharacterData(mstr ms, u8* bitmap) {
           		handle_bbx(ms, &character);
                 break;
             case 4:
-          		handle_bitmap(ms, &character, bitmap);
+          		handle_bitmap(ms, &character, font, charIdx);
                 break;
             case 5:
           		handle_endchar(ms, &character);
@@ -358,12 +423,36 @@ static Character ReadCharacterData(mstr ms, u8* bitmap) {
 
     return character;
 }
-
-
 // TODO: 	Still have to write this function.
 // 			It will iterate not over lines but STARTCHAR lines
 Error FillCharacaterData(Font* font, FileData file) {
 	assert(font);
 	assert(file.ptr);
-	assert(0);
+
+	font->highestCharCode = checkForHighestCharCode(file);
+
+	font->offsetTable = (u32*)(font+1);
+	font->charactersData = (Character*)(font->offsetTable+font->highestCharCode);
+	font->characterBitmap = (u8*)(font->charactersData+font->amountOfCharacters);
+	u32 bitmapSpace = (font->boundingBoxH+2*font->spacing)*(font->spacing+font->amountOfCharacters*(font->spacing+font->boundingBoxW));
+	u64 top = (llu)font->characterBitmap + bitmapSpace;
+	// printf("clearing bitmap on address: 0x%llx up to 0x%llx", (llu)font->characterBitmap, ((llu)font->characterBitmap + bitmapSpace));
+	printf("%llu\n", (llu)top);
+
+	memset(font->characterBitmap, 0, bitmapSpace);
+
+	mstr ms = file.ptr;
+
+	for range(i, font->amountOfCharacters) {
+
+		do {
+			ms = newLine(ms);
+		} while (!wordsMatch("STARTCHAR", ms));
+
+		Character c = ReadCharacterData(ms, font, i);
+		font->charactersData[i] = c;
+		font->offsetTable[c.charCode] = i;
+	}
+
+	return OK;
 }

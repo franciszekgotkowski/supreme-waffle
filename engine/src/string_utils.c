@@ -95,8 +95,8 @@ bool wordsMatch(str a, str b) {
     mstr ma = (mstr)a;
     mstr mb = (mstr)b;
 
-    stickToWord(ma);
-    stickToWord(mb);
+    // stickToWord(ma);
+    // stickToWord(mb);
 
     while ((*ma!= '\0' && *ma!= '\n' && *ma!= ' ' && *ma!= '\t')  && (*mb != '\0' && *mb != '\n' && *mb != ' ' && *mb != '\t')) {
 

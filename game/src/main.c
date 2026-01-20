@@ -7,6 +7,7 @@
 #include <engine/platform/input_data.h>
 #include <engine/string_utils.h>
 
+#include <assert.h>
 #include <alloca.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -16,7 +17,7 @@ PointerTable* GameMemory = NULL;
 
 int main(int argc, char *argv[]) {
 
-	GameMemory = InitializePool(10000);
+	GameMemory = InitializePool(1*MB);
 
     InitializeWindow(GameMemory, 800, 600, 144, true, true, (v4){.arr = {0.18f, 0.20f, 0.25f, 1.0f}}, "Der Spiel!", CURSOR_NORMAL);
     InitializeInput(GameMemory);
@@ -32,9 +33,17 @@ int main(int argc, char *argv[]) {
        	printf("space needed for cherry-11-r.bdf = %llu\n", (llu)fontSpace);
 
         Font* font = alloca(fontSpace);
-        *font = ReadJustFontData(file);
+        u64 address = (u64)font + fontSpace;
+        printf("allocating memory address space from 0x%llx to 0x%llx\n", (llu)font, (llu)address);
+        assert(font);
+        *font = InitializeFont(file);
+        font->spacing = 1;
+
+        FillCharacaterData(font, file);
+        printf("index = %d\n", positionInBitmap(font, 0, 5, 1));
 
         printf("no siema\n");
+        freeEntireFile(file);
     }
 
     GameLoop(GameMemory);
