@@ -6,7 +6,6 @@ set(ENGINE_SOURCES
 		src/platform/input/input_glfw.c
 		src/platform/game_loop/game_loop_glfw.c
 		src/platform/graphics/graphics_glad.c
-		src/platform/file_io/file_io_libc.c
 		src/memory_pool.c
 		src/string_utils.c
 		src/memory_arena.c
@@ -22,6 +21,7 @@ if(UNIX)
 			ENGINE_SOURCES
 			src/platform/memory/memory_linux.c
 			src/platform/measure_time/measure_time_linux.c
+			src/platform/file_io/file_io_linux.c
 	)
 	target_link_directories(engine PUBLIC
 			${CMAKE_CURRENT_SOURCE_DIR}/libs/linux/dynamic
@@ -33,6 +33,7 @@ elseif(WIN32)
 			ENGINE_SOURCES
 			src/platform/memory/memory_windows.c
 			src/platform/measure_time/measure_time_windows.c
+			src/platform/file_io/file_io_windows.c
 	)
 	target_link_directories(engine PUBLIC
 			${CMAKE_CURRENT_SOURCE_DIR}/libs/windows/dynamic
