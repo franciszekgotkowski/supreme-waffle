@@ -128,7 +128,7 @@ static inline void handle_chars(mstr ms, Font* font){
 }
 
 static inline u64 offsetTableSize(Font* font) {
-	return sizeof(u64)*font->highestCharCode;
+	return sizeof(u64)*(1+font->highestCharCode);
 }
 
 static inline u64 characterDataSize(Font* font) {
@@ -478,6 +478,9 @@ Error InitializeCharacterData(Font* font, FileData file) {
 	assert((u64)font->characterBitmap > (u64)font);
 	assert((u64)font->characterBitmap + bitmapSize(font) <= (u64)font + GetSizeForEntireFont(font));
 
+	for (u8* ptr = (u8*)font->offsetTable; (u64)ptr < (u64)font + GetSizeForEntireFont(font); ptr++) {
+		*ptr = 0x00;
+	}
 
 	printf("Font addresses: %llx - %llx\n", (llu)font, (llu)font + GetSizeForEntireFont(font));
 
@@ -488,7 +491,7 @@ Error InitializeCharacterData(Font* font, FileData file) {
 			ms = newLine(ms);
 		} while (!wordsMatch("STARTCHAR", ms));
 
-		font->charactersData[i] = ReadCharacterData(ms, font, 0);
+		font->charactersData[i] = ReadCharacterData(ms, font, i);
 		font->offsetTable[font->charactersData[i].charCode] = i;
 	}
 

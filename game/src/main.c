@@ -38,18 +38,14 @@ int main(int argc, char *argv[]) {
 
         Font* font = alloca(GetSizeForEntireFont(&f));
 
-		#ifndef NDEBUG
-			for (u8* ptr = (u8*)font; (u64)ptr < (u64)font + GetSizeForEntireFont(font); ptr++) {
-				*ptr = 0x00;
-			}
-		#endif
+
 		*font = f;
 		// memcpy(font, &f, sizeof(Font));
         InitializeCharacterData(font, file);
 
         freeEntireFile(file);
 
-        stbi_write_png("./cherryfont.png", (i32)bitmapW(font), (i32)bitmapH(font), 1, font->characterBitmap, 1);
+        stbi_write_png("./cherryfont.png", (i32)bitmapW(font), (i32)bitmapH(font), 1, font->characterBitmap, (i32)bitmapW(font));
     }
 
     GameLoop(GameMemory);
