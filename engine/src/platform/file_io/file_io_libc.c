@@ -1,11 +1,11 @@
-#include "engine/errors.h"
-#include "engine/platform/memory_allocations.h"
+#include <engine/errors.h>
+#include <engine/platform/memory_allocations.h>
 #include <assert.h>
 #include <stdio.h>
 
 #include <engine/platform/file_io.h>
 
-Error readEntireFile(str path, FileData* fileData) {
+Error readEntireTextFile(str path, FileData* fileData) {
 	assert(path);
 	assert(fileData);
 
@@ -42,7 +42,7 @@ Error readEntireFile(str path, FileData* fileData) {
 	return OK;
 }
 
-Error freeEntireFile(FileData fileData) {
+Error freeEntireTextFile(FileData fileData) {
 	assert(fileData.ptr);
 	if (!fileData.ptr) {
 		return NULL_POINTER;

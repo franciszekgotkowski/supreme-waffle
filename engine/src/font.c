@@ -1,10 +1,10 @@
-#include <engine/platform/crossplatform_alloca.h>
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <engine/platform/crossplatform_alloca.h>
 #include <engine/platform/file_io.h>
 #include <engine/string_utils.h>
 #include <engine/font.h>
@@ -478,9 +478,7 @@ Error InitializeCharacterData(Font* font, FileData file) {
 	assert((u64)font->characterBitmap > (u64)font);
 	assert((u64)font->characterBitmap + bitmapSize(font) <= (u64)font + GetSizeForEntireFont(font));
 
-	for (u8* ptr = (u8*)font->offsetTable; (u64)ptr < (u64)font + GetSizeForEntireFont(font); ptr++) {
-		*ptr = 0x00;
-	}
+	memset(font->offsetTable, 0, GetSizeForCharacterData(font));
 
 	printf("Font addresses: %llx - %llx\n", (llu)font, (llu)font + GetSizeForEntireFont(font));
 

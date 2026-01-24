@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     // to be moved elsewhere
     {
    		FileData file;
-     	readEntireFile("../../assets/fonts/bdf/cherry-11-r.bdf", &file);
+     	readEntireTextFile("../../assets/fonts/bdf/cherry-11-r.bdf", &file);
       	Font f = InitializeFont(file);
        	printf("space needed for cherry-11-r.bdf = %llu\n", (llu)GetSizeForEntireFont(&f));
 
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 		*font = f;
         InitializeCharacterData(font, file);
 
-        freeEntireFile(file);
+        freeEntireTextFile(file);
 
         stbi_write_png("./cherryfont.png", (i32)bitmapW(font), (i32)bitmapH(font), 1, font->characterBitmap, (i32)bitmapW(font));
     }
