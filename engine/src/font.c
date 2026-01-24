@@ -1,4 +1,4 @@
-#include <alloca.h>
+#include <engine/platform/crossplatform_alloca.h>
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>

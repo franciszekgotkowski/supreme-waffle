@@ -1,4 +1,5 @@
-add_library(engine STATIC)
+add_library(engine STATIC
+		headers/engine/platform/crossplatform_alloca.h)
 
 set(ENGINE_SOURCES
 		src/platform/window/window_glfw.c
@@ -16,6 +17,7 @@ set(ENGINE_SOURCES
 )
 
 if(UNIX)
+	target_compile_definitions(engine PRIVATE PLATFORM_LINUX)
 	list(APPEND
 			ENGINE_SOURCES
 			src/platform/memory/memory_linux.c
@@ -26,6 +28,7 @@ if(UNIX)
 			${CMAKE_CURRENT_SOURCE_DIR}/libs/linux/static
 	)
 elseif(WIN32)
+	target_compile_definitions(engine PRIVATE PLATFORM_WINDOWS)
 	list(APPEND
 			ENGINE_SOURCES
 			src/platform/memory/memory_windows.c

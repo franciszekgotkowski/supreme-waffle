@@ -11,7 +11,7 @@
 #include <external/stb_image_write.h>
 
 #include <assert.h>
-#include <alloca.h>
+#include <engine/platform/crossplatform_alloca.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
