@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include <engine/typedefs.h>
+#include <engine/errors.h>
 
 mstr stickToWord(mstr s);
 
@@ -14,3 +15,5 @@ mstr searchFor(mstr s, char c);
 u32 wordLength(mstr s);
 
 bool wordsMatch(str a, str b);
+
+u8 charToHex(char c, Error* err);

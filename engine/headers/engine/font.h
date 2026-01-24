@@ -1,6 +1,7 @@
 #pragma once
 
 #define FONT_FILES_LOCATION "../../assets/fonts/bdf/"
+#define CHARACTER_SPACING 1
 
 #include <engine/typedefs.h>
 #include <engine/errors.h>
@@ -70,12 +71,13 @@ typedef struct {
 	u8* characterBitmap;
 } Font;
 
-// Function returns amount of bytes needed to accomodate a font.
-// It counts space for offset table, size of font struct, amount of characters * (character struct size + (1 byte per pixel * BoundingBoxW * BoundingBoxH) )
-u64 SpaceNeededForFont(FileData file);
+u64 GetSizeForCharacterData(Font* font);
+u64 GetSizeForEntireFont(Font* font);
 
 Font InitializeFont(FileData file);
 
+// TODO: Description is correct but i need to rewrite the finction
+//
 // Function gives font struct pointers to where character structs are and where a bitmap is.
 // Inteded location of those is next to the Font struct like here:
 // 		[low address]
@@ -84,6 +86,4 @@ Font InitializeFont(FileData file);
 // 		Character struct[]
 // 		Character bitmaps[]
 // 		[hight address]
-Error FillCharacaterData(Font* font, FileData file);
-
-u32 positionInBitmap(Font* font, u32 charIdx, u32 x, u32 y);
+Error InitializeCharacterData(Font* font, FileData file);

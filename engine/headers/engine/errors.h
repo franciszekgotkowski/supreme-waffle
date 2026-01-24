@@ -11,6 +11,7 @@ typedef enum {
     LOCKED,
     FILE_NOT_FOUND,
     IO_ERROR,
+    INVALID_INPUT,
 
     AMOUNT_OF_ERRORS
 } Error ;

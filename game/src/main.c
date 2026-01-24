@@ -1,4 +1,5 @@
 #include <engine/font.h>
+#include <engine/range.h>
 #include <engine/memory_arena.h>
 #include <engine/platform/file_io.h>
 #include <engine/platform/memory_allocations.h>
@@ -12,6 +13,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
 PointerTable* GameMemory = NULL;
 
@@ -27,22 +29,22 @@ int main(int argc, char *argv[]) {
     // just experimenting with loading fonts into memory
     // to be moved elsewhere
     {
-    	FileData file;
+   		FileData file;
      	readEntireFile("../../assets/fonts/bdf/cherry-11-r.bdf", &file);
-      	u64 fontSpace = SpaceNeededForFont(file);
-       	printf("space needed for cherry-11-r.bdf = %llu\n", (llu)fontSpace);
+      	Font f = InitializeFont(file);
+       	printf("space needed for cherry-11-r.bdf = %llu\n", (llu)GetSizeForEntireFont(&f));
 
-        Font* font = alloca(fontSpace);
-        u64 address = (u64)font + fontSpace;
-        printf("allocating memory address space from 0x%llx to 0x%llx\n", (llu)font, (llu)address);
-        assert(font);
-        *font = InitializeFont(file);
-        font->spacing = 1;
+        Font* font = alloca(GetSizeForEntireFont(&f));
 
-        FillCharacaterData(font, file);
-        printf("index = %d\n", positionInBitmap(font, 0, 5, 1));
+		#ifndef NDEBUG
+			for (u8* ptr = (u8*)font; (u64)ptr < (u64)font + GetSizeForEntireFont(font); ptr++) {
+				*ptr = 0x00;
+			}
+		#endif
+		*font = f;
+		// memcpy(font, &f, sizeof(Font));
+        InitializeCharacterData(font, file);
 
-        printf("no siema\n");
         freeEntireFile(file);
     }
 

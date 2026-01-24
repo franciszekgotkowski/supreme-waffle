@@ -1,3 +1,4 @@
+#include "engine/errors.h"
 #include <engine/string_utils.h>
 
 #include <assert.h>
@@ -112,4 +113,27 @@ bool wordsMatch(str a, str b) {
     } else {
         return false;
     }
+}
+
+u8 charToHex(char c, Error* err) {
+	assert((c >= "0"[0] && c <= "9"[0]) || (c >= "A"[0] && c <= "F"[0]));
+	if (!((c >= "0"[0] && c <= "9"[0]) || (c >= "A"[0] && c <= "F"[0]))) {
+		*err = INVALID_INPUT;
+		return 0;
+	}
+
+	if (c >= "0"[0] && c <= "9"[0]) {
+		char t = c - "0"[0];
+		*err = OK;
+		return t;
+	}
+
+	if (c >= "A"[0] && c <= "F"[0]) {
+		char t = c - "A"[0] + 0xA;
+		*err = OK;
+		return t;
+	}
+
+	*err = LOGIC_ERROR;
+	return 0;
 }
