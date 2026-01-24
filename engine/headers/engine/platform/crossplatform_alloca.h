@@ -5,7 +5,5 @@
     #define alloca _alloca
 #elif defined(PLATFORM_LINUX)
     #include <alloca.h>
-#else
-    #error Unsupported platform
 #endif
 
