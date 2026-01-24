@@ -135,8 +135,20 @@ static inline u64 characterDataSize(Font* font) {
 	return sizeof(Character)*font->amountOfCharacters;
 }
 
+inline u64 bitmapW(Font* font) {
+	assert(font);
+	return (font->amountOfCharacters*(font->boundingBoxW+font->spacing) + font->spacing);
+}
+
+inline u64 bitmapH(Font* font) {
+	assert(font);
+	return (font->boundingBoxH + 2*font->spacing);
+}
+
+
 static inline u64 bitmapSize(Font* font) {
-	return (font->boundingBoxH + 2*font->spacing)*(font->amountOfCharacters*(font->boundingBoxW+font->spacing) + font->spacing);
+	assert(font);
+	return bitmapW(font)*bitmapH(font);
 }
 
 static u32 checkForHighestCharCode(FileData file) {
@@ -374,7 +386,7 @@ static inline void handle_bitmap(mstr ms, Character* character, Font* font, u32 
 		for range(x, character->boundingBoxW) {
 			u32 offset = positionInBitmap(font, charIdx, x, y);
 			assert((u64)font->characterBitmap + (u64)offset <= (u64)font + GetSizeForEntireFont(font) );
-			printf("accessing address %llx\n", (llu)&(font->characterBitmap[offset]));
+			// printf("accessing address %llx\n", (llu)&(font->characterBitmap[offset]));
 			font->characterBitmap[offset] = buf[x];
 		}
 

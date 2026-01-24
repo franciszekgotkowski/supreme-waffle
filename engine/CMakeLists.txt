@@ -46,7 +46,7 @@ target_link_libraries(engine
 		PUBLIC
 		glad
 		glfw3
-		# stb
+		stb
 )
 
 if(UNIX)

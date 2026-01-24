@@ -87,3 +87,6 @@ Font InitializeFont(FileData file);
 // 		Character bitmaps[]
 // 		[hight address]
 Error InitializeCharacterData(Font* font, FileData file);
+
+u64 bitmapW(Font* font);
+u64 bitmapH(Font* font);

@@ -8,6 +8,8 @@
 #include <engine/platform/input_data.h>
 #include <engine/string_utils.h>
 
+#include <external/stb_image_write.h>
+
 #include <assert.h>
 #include <alloca.h>
 #include <stdbool.h>
@@ -46,6 +48,8 @@ int main(int argc, char *argv[]) {
         InitializeCharacterData(font, file);
 
         freeEntireFile(file);
+
+        stbi_write_png("./cherryfont.png", (i32)bitmapW(font), (i32)bitmapH(font), 1, font->characterBitmap, 1);
     }
 
     GameLoop(GameMemory);
