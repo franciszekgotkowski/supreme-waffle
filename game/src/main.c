@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
 
 
 		*font = f;
-		// memcpy(font, &f, sizeof(Font));
         InitializeCharacterData(font, file);
 
         freeEntireFile(file);
