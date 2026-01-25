@@ -255,7 +255,7 @@ inline u64 GetSizeForEntireFont(Font* font) {
 
 static i32 recogniseCharacterParameter(str s) {
     assert(s);
-    const u32 amountOfParameters = 7;
+    const u32 amountOfParameters = 6;
 	str parameters[] = {
 		"STARTCHAR",
 		"ENCODING",
