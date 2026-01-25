@@ -9,8 +9,11 @@ typedef struct {
 } FileData ;
 
 // reads entire file into a dynamically alocated memory region (via system calls). Gets rid of \r on endlilne on windows
-Error readEntireTextFile(str path, FileData* fileData);
-Error freeEntireTextFile(FileData fileData);
+Error readEntireTextFile(
+	str path, // in
+	FileData* fileDataOut // out
+	);
+Error freeEntireTextFile( FileData fileData );
 
 // maps file into memory
 // TODO

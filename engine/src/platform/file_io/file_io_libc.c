@@ -5,9 +5,9 @@
 
 #include <engine/platform/file_io.h>
 
-Error readEntireTextFile(str path, FileData* fileData) {
+Error readEntireTextFile(str path, FileData* returnFileData) {
 	assert(path);
-	assert(fileData);
+	assert(returnFileData);
 
 	FILE* file = fopen(path, "r");
 	assert(file);
@@ -36,7 +36,7 @@ Error readEntireTextFile(str path, FileData* fileData) {
 	}
 
 	((char*)(currentFile.ptr))[currentFile.fileSize-1] = '\0';
-	*fileData = currentFile;
+	*returnFileData = currentFile;
 	fclose(file);
 
 	return OK;
