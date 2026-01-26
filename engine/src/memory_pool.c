@@ -14,23 +14,14 @@ PointerTable* InitializePool(u64 size) {
 	u64 poolSize = sizeof(PointerTable) + sizeof(WindowData) + sizeof(InputData);
 	void* pool = NULL;
 
-	if (size == 0) {
-		printf("PointerTable size: %llu\nWindowData size: %llu\nInputData size: %llu\ntotal size: %llu\n\n", (llu)(sizeof(PointerTable)), (llu)sizeof(WindowData), (llu)sizeof(InputData), (llu)poolSize);
-		pool = mem_alloc_on_address(poolSize, (void*)BASE_POOL_ADDRESS);
-		size = poolSize;
-		assert(pool);
-	} else {
-		assert(poolSize <= size);
-		if (!(poolSize <= size)) {
-			printf("To little space for game to start!\n");
-			return NULL;
-		}
-
-		printf("Allocating %llu of bytes of which %llu will be free for use\n", (llu)size, (llu)(size - poolSize));
-		pool = mem_alloc(size);
-		assert(pool);
+	assert(poolSize <= size);
+	if (!(poolSize <= size)) {
+		printf("To little space for game to start!\n");
+		return NULL;
 	}
-
+	printf("Allocating %llu of bytes of which %llu will be free for use\n", (llu)size, (llu)(size - poolSize));
+	pool = mem_alloc(size);
+	assert(pool);
 
 	void* temp = pool;
 	Error err;

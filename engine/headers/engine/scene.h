@@ -1,14 +1,23 @@
 #pragma once
 
-#define SCENE_FILES_LOCATION "../../assets/scene/"
+#include <engine/memory_pool.h>
 
-#define MAXIMUM_AMOUNT_OF_FONTS_IN_SCENE 10
-#define MAXIMUM_AMOUNT_OF_IMAGES_IN_SCENE 10
-#define MAXIMUM_AMOUNT_OF_STRINGS_IN_SCENE 100
+#include <engine/ui.h>
+#include <engine/area.h>
+
+#define SCENE_FILES_LOCATION "../../assets/scene/"
+#define SIZEOF_XS_SCENE (5*MB)
+#define SIZEOF_S_SCENE (25*MB)
+#define SIZEOF_M_SCENE (75*MB)
+#define SIZEOF_L_SCENE (150*MB)
+#define SIZEOF_XL_SCENE (300*MB)
+
+#define SIZEOF_LARGEST_SCENE SIZEOF_XL_SCENE
+#define SIZEOF_LOADING_SCREEN_SCENE SIZEOF_S_SCENE
 
 typedef struct {
-
-
-
+	u64 sceneSize;
+	UiData* uiData;
+	AreaData* areaData;
 } SceneData ;
 

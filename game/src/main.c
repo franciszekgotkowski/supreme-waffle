@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 
 
 		*font = f;
-        InitializeCharacterData(font, file);
+        InitializeCharacterDataOntoFont(font, file);
 
         freeEntireTextFile(file);
 

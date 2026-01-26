@@ -9,10 +9,10 @@ set(ENGINE_SOURCES
 		src/memory_pool.c
 		src/string_utils.c
 		src/memory_arena.c
-		src/canvas.c
+		src/font.c
 		src/scene.c
 		src/ui.c
-		src/font.c
+		src/area.c
 )
 
 if(UNIX)

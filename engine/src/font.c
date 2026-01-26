@@ -457,44 +457,48 @@ static Character ReadCharacterData(mstr ms, Font* font, u32 charIdx) {
     return character;
 }
 
-// 			It will iterate not over lines but STARTCHAR lines
-Error InitializeCharacterData(Font* font, FileData file) {
-	assert(font);
-	assert(file.ptr);
+Error InitializeCharacterDataOnAddress(Font* font, void* dest, FileData file) {
+		assert(font);
+		assert(file.ptr);
 
-	font->offsetTable = ((void*)font)+sizeof(Font);
-	font->charactersData = ((void*)font->offsetTable)+offsetTableSize(font);
-	font->characterBitmap = ((void*)font->charactersData)+characterDataSize(font);
+		font->offsetTable = dest;
+		font->charactersData = ((void*)font->offsetTable)+offsetTableSize(font);
+		font->characterBitmap = ((void*)font->charactersData)+characterDataSize(font);
 
-	assert((u64)font->offsetTable <= (u64)font + GetSizeForEntireFont(font));
-	assert((u64)font->offsetTable > (u64)font);
-	assert((u64)font->offsetTable + offsetTableSize(font) <= (u64)font + GetSizeForEntireFont(font));
+		assert((u64)font->offsetTable <= (u64)font + GetSizeForEntireFont(font));
+		assert((u64)font->offsetTable > (u64)font);
+		assert((u64)font->offsetTable + offsetTableSize(font) <= (u64)font + GetSizeForEntireFont(font));
 
-	assert((u64)font->charactersData <= (u64)font + GetSizeForEntireFont(font));
-	assert((u64)font->charactersData > (u64)font);
-	assert((u64)font->charactersData + characterDataSize(font) <= (u64)font + GetSizeForEntireFont(font));
+		assert((u64)font->charactersData <= (u64)font + GetSizeForEntireFont(font));
+		assert((u64)font->charactersData > (u64)font);
+		assert((u64)font->charactersData + characterDataSize(font) <= (u64)font + GetSizeForEntireFont(font));
 
-	assert((u64)font->characterBitmap <= (u64)font + GetSizeForEntireFont(font));
-	assert((u64)font->characterBitmap > (u64)font);
-	assert((u64)font->characterBitmap + bitmapSize(font) <= (u64)font + GetSizeForEntireFont(font));
+		assert((u64)font->characterBitmap <= (u64)font + GetSizeForEntireFont(font));
+		assert((u64)font->characterBitmap > (u64)font);
+		assert((u64)font->characterBitmap + bitmapSize(font) <= (u64)font + GetSizeForEntireFont(font));
 
-	memset(font->offsetTable, 0, GetSizeForCharacterData(font));
+		memset(font->offsetTable, 0, GetSizeForCharacterData(font));
 
-	printf("Font addresses: %llx - %llx\n", (llu)font, (llu)font + GetSizeForEntireFont(font));
+		printf("Font addresses: %llx - %llx\n", (llu)font, (llu)font + GetSizeForEntireFont(font));
 
-	mstr ms = (mstr)file.ptr;
+		mstr ms = (mstr)file.ptr;
 
-	for range(i, font->amountOfCharacters) {
-		do {
-			ms = newLine(ms);
-		} while (!wordsMatch("STARTCHAR", ms));
+		for range(i, font->amountOfCharacters) {
+			do {
+				ms = newLine(ms);
+			} while (!wordsMatch("STARTCHAR", ms));
 
-		font->charactersData[i] = ReadCharacterData(ms, font, i);
-		font->offsetTable[font->charactersData[i].charCode] = i;
-	}
+			font->charactersData[i] = ReadCharacterData(ms, font, i);
+			font->offsetTable[font->charactersData[i].charCode] = i;
+		}
 
-	// Character c = ReadCharacterData(ms, font, 0);
-	// printf("c: %d\n", c.charCode);
+		// Character c = ReadCharacterData(ms, font, 0);
+		// printf("c: %d\n", c.charCode);
 
-	return OK;
+		return OK;
+}
+
+// The same as InitializeCharacterDataOntoFont but will destination is top of the address just on top  of font
+Error InitializeCharacterDataOntoFont(Font* font, FileData file) {
+	return InitializeCharacterDataOnAddress(font, ((void*)font)+sizeof(Font), file);
 }

@@ -27,7 +27,7 @@ typedef struct {
 	Region regions[AMOUNT_OF_ENGINE_MEMORY_REGIONS];
 } PointerTable ;
 
-// Initializes pool with requested size. It will return NULL pointer if size is to small to contain memory needed by the engine. If size is 0 it will allocate memory only for the engine
+// Initializes pool with requested size. It will return NULL pointer if size is to small to contain memory needed by the engine
 PointerTable* InitializePool(u64 size);
 
 // Initializes region. Can override existing memory region!!!
@@ -38,20 +38,14 @@ Error InitializeRegion(PointerTable* table, void* ptr, u64 regionIndex, u64 size
 //		window data
 // 		input data
 // 		sound???
-// 		ui layer??
-// 			fonts???
-// 			ui images???
-// 			ui composition???
-// 		scene???
-// 			ECS componenst???
-// 				envirnoment componensts???
-// 				interactive componensts???
-// 				mobs componensts???
-// 		gameplay???
-// 			addition components???
-//
-//
-//
-//
-// 		temp file storage???
-//
+// 		Default scene - scene in which gameplay will occur SIZEOF LARGEST AVAILABLE SCENE
+// 			UI layer
+// 				Assets
+// 				Ui variables
+// 			3d scene (area)
+// 				Assets
+// 				gameplay variables
+// 		Loading screen scene - scene for loading
+// 			UI layer
+// 				Assets
+// 				Ui variables

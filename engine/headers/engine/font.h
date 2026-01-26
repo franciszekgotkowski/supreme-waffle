@@ -82,11 +82,13 @@ Font InitializeFont(FileData file);
 // Inteded location of those is next to the Font struct like here:
 // 		[low address]
 // 		Font struct
-// 		Offset table where indexes of the table are charCodes
+// 		Offset table where i
+// ndexes of the table are charCodes
 // 		Character struct[]
 // 		Character bitmaps[]
 // 		[hight address]
-Error InitializeCharacterData(Font* font, FileData file);
+Error InitializeCharacterDataOntoFont(Font* font, FileData file);
+Error InitializeCharacterDataOnAddress(Font* font, void* dest, FileData file);
 
 u64 bitmapW(Font* font);
 u64 bitmapH(Font* font);
