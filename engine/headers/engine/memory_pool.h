@@ -5,7 +5,7 @@
 #include <engine/errors.h>
 
 typedef struct {
-	u64 len;
+	u64 capacity;
 	void* ptr;
 } Region;
 
@@ -13,7 +13,8 @@ typedef enum {
 	POINTER_TABLE,
 	WINDOW_DATA,
 	INPUT_DATA,
-	MEMORY_ARENA,
+	GAME_SCENE,
+	LOADING_SCREEN_SCENE,
 
 	AMOUNT_OF_ENGINE_MEMORY_REGIONS
 } Regions ;
@@ -28,7 +29,7 @@ typedef struct {
 } PointerTable ;
 
 // Initializes pool with requested size. It will return NULL pointer if size is to small to contain memory needed by the engine
-PointerTable* InitializePool(u64 size);
+PointerTable* InitializePool();
 
 // Initializes region. Can override existing memory region!!!
 Error InitializeRegion(PointerTable* table, void* ptr, u64 regionIndex, u64 size);

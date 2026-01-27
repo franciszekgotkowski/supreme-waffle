@@ -1,3 +1,5 @@
+#include "engine/scene.h"
+#include <assert.h>
 #include <engine/font.h>
 #include <engine/range.h>
 #include <engine/memory_arena.h>
@@ -7,26 +9,41 @@
 #include <engine/platform/window_data.h>
 #include <engine/platform/input_data.h>
 #include <engine/string_utils.h>
+#include <engine/platform/crossplatform_alloca.h>
 
 #include <external/stb_image_write.h>
 
-#include <assert.h>
-#include <engine/platform/crossplatform_alloca.h>
-#include <stdbool.h>
 #include <stdio.h>
-#include <string.h>
-#include <inttypes.h>
 
 PointerTable* GameMemory = NULL;
 
 int main(int argc, char *argv[]) {
+	Error err;
 
-	GameMemory = InitializePool(1*MB);
 
-    InitializeWindow(GameMemory, 800, 600, 144, true, true, (v4){.arr = {0.18f, 0.20f, 0.25f, 1.0f}}, "Der Spiel!", CURSOR_NORMAL);
-    InitializeInput(GameMemory);
-    InitializeMemoryArena(GameMemory->regions[MEMORY_ARENA].ptr, GameMemory->regions[MEMORY_ARENA].len);
-    // InitializeCanvas();
+	GameMemory = InitializePool();
+
+    err = InitializeWindow(
+    	GameMemory,
+     	800,
+      	600,
+       	144,
+        true,
+        true,
+        (v4){.arr = {0.18f, 0.20f, 0.25f, 1.0f}},
+        "Der Spiel!",
+        CURSOR_NORMAL
+    );
+    assert(err == OK);
+
+    err = InitializeInput(GameMemory);
+    assert(err == OK);
+
+    err = InitializeGameScene(GameMemory, "stub");
+    assert(err == OK);
+
+    err = InitializeLoadingScreenScene(GameMemory, "stub");
+    assert(err == OK);
 
     // just experimenting with loading fonts into memory
     // to be moved elsewhere

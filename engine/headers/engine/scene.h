@@ -16,8 +16,11 @@
 #define SIZEOF_LOADING_SCREEN_SCENE SIZEOF_S_SCENE
 
 typedef struct {
-	u64 sceneSize;
+	u64 sceneCapacity;
 	UiData* uiData;
 	AreaData* areaData;
 } SceneData ;
 
+Error InitializeScene(SceneData* sceneData, u64 cap, str uiPath, str areaPath);
+Error InitializeGameScene(PointerTable* table, str path);
+Error InitializeLoadingScreenScene(PointerTable* table, str path);

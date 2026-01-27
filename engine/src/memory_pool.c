@@ -3,52 +3,56 @@
 #include <engine/platform/memory_allocations.h>
 
 #include <engine/memory_pool.h>
+#include <engine/scene.h>
 #include <engine/errors.h>
 #include <engine/platform/input_data.h>
 #include <engine/platform/window_data.h>
 #include <engine/typedefs.h>
-#include <stdio.h>
 
-PointerTable* InitializePool(u64 size) {
+PointerTable* InitializePool() {
 
-	u64 poolSize = sizeof(PointerTable) + sizeof(WindowData) + sizeof(InputData);
-	void* pool = NULL;
+	u64 poolSize = (
+		sizeof(PointerTable) +
+		sizeof(WindowData) +
+		sizeof(InputData) +
+		SIZEOF_LARGEST_SCENE +
+		SIZEOF_LOADING_SCREEN_SCENE
+	);
 
-	assert(poolSize <= size);
-	if (!(poolSize <= size)) {
-		printf("To little space for game to start!\n");
-		return NULL;
-	}
-	printf("Allocating %llu of bytes of which %llu will be free for use\n", (llu)size, (llu)(size - poolSize));
-	pool = mem_alloc(size);
+	void* pool = mem_alloc(poolSize);
+
 	assert(pool);
 
-	void* temp = pool;
+	void* stackTop = pool;
 	Error err;
 
 	PointerTable* table = (PointerTable*)pool;
-	table->capacity = size;
+	table->capacity = poolSize;
 	table->emountOfRegions = 0;
 
-	err = InitializeRegion(table, temp, POINTER_TABLE, sizeof(PointerTable));
+	err = InitializeRegion(table, stackTop, POINTER_TABLE, sizeof(PointerTable));
 	assert(err == OK);
-	temp += sizeof(PointerTable);
+	stackTop += sizeof(PointerTable);
 
-	err = InitializeRegion(table, temp, WINDOW_DATA, sizeof(WindowData));
+	err = InitializeRegion(table, stackTop, WINDOW_DATA, sizeof(WindowData));
 	assert(err == OK);
-	temp += sizeof(WindowData);
+	stackTop += sizeof(WindowData);
 
-	err = InitializeRegion(table, temp, INPUT_DATA, sizeof(InputData));
+	err = InitializeRegion(table, stackTop, INPUT_DATA, sizeof(InputData));
 	assert(err == OK);
-	temp += sizeof(InputData);
+	stackTop += sizeof(InputData);
 
-	err = InitializeRegion(table, temp, MEMORY_ARENA, (table->capacity - poolSize));
+	err = InitializeRegion(table, stackTop, GAME_SCENE, SIZEOF_LARGEST_SCENE);
 	assert(err == OK);
-	temp += sizeof(InputData);
-	printf("table->capacity - poolSize = %llu\n", (llu)(table->capacity - poolSize));
-	printf("there is %llu bytes of free space for the arena\n", (llu)table->regions[MEMORY_ARENA].len);
+	stackTop += SIZEOF_LARGEST_SCENE;
 
-	table->poolTop = temp;
+	err = InitializeRegion(table, stackTop, LOADING_SCREEN_SCENE, SIZEOF_LOADING_SCREEN_SCENE);
+	assert(err == OK);
+	stackTop += SIZEOF_LOADING_SCREEN_SCENE;
+
+	assert((u64)stackTop - (u64)pool == (u64)poolSize);
+
+	table->poolTop = stackTop;
 
 	return pool;
 }
@@ -65,7 +69,7 @@ Error InitializeRegion(PointerTable* table, void* ptr, u64 regionIndex, u64 size
 	table->emountOfRegions += 1;
 	table->regions[regionIndex] = (Region){
 		.ptr = ptr,
-		.len = size
+		.capacity = size
 	};
 
 	return OK;
