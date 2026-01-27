@@ -1,3 +1,4 @@
+#include <engine/errors.h>
 #include <assert.h>
 #include <engine/memory_pool.h>
 #include <engine/scene.h>
@@ -5,10 +6,12 @@
 // TODO: Write file parser for .ui files
 static u64 evalueateUiSizeInBytes(str path) {
 	assert(path);
+	return 0;
 }
 
 static u64 evalueateAreaSizeInBytes(str path) {
 	assert(path);
+	return 0;
 }
 
 Error InitializeScene(SceneData* sceneData, u64 capacity, str uiPath, str areaPath) {
@@ -16,7 +19,9 @@ Error InitializeScene(SceneData* sceneData, u64 capacity, str uiPath, str areaPa
 
 	u64 uiSizeInBytes = evalueateUiSizeInBytes(uiPath);
 	assert(uiSizeInBytes + evalueateAreaSizeInBytes(areaPath) <= capacity);
-	if ()
+	if (uiSizeInBytes + evalueateAreaSizeInBytes(areaPath) > capacity) {
+		return OUT_OF_MEMORY;
+	}
 
 	*sceneData = (SceneData){
 		.sceneCapacity = capacity,
@@ -24,6 +29,7 @@ Error InitializeScene(SceneData* sceneData, u64 capacity, str uiPath, str areaPa
 		.areaData = (void*)sceneData + sizeof(SceneData) + uiSizeInBytes
 	};
 
+	return OK;
 }
 
 Error InitializeGameScene(PointerTable* table, str path) {
