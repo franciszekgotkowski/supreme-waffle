@@ -16,6 +16,8 @@ static u64 evalueateAreaSizeInBytes(str path) {
 
 Error InitializeScene(SceneData* sceneData, u64 capacity, str uiPath, str areaPath) {
 	assert(sceneData);
+	assert(uiPath);
+	assert(areaPath);
 
 	u64 uiSizeInBytes = evalueateUiSizeInBytes(uiPath);
 	assert(uiSizeInBytes + evalueateAreaSizeInBytes(areaPath) <= capacity);
@@ -32,20 +34,29 @@ Error InitializeScene(SceneData* sceneData, u64 capacity, str uiPath, str areaPa
 	return OK;
 }
 
-Error InitializeGameScene(PointerTable* table, str path) {
+Error InitializeGameScene(PointerTable* table, str uiPath, str areaPath) {
 	assert(table);
+	assert(uiPath);
+	assert(areaPath);
 	return InitializeScene(
 		table->regions[GAME_SCENE].ptr,
 		table->regions[GAME_SCENE].capacity,
-		path
+		uiPath,
+		areaPath
 	);
+
+	return OK;
 }
 
-Error InitializeLoadingScreenScene(PointerTable* table, str path) {
+Error InitializeLoadingScreenScene(PointerTable* table, str uiPath, str areaPath) {
 	assert(table);
+	assert(uiPath);
+	assert(areaPath);
 	return InitializeScene(
 		table->regions[LOADING_SCREEN_SCENE].ptr,
 		table->regions[LOADING_SCREEN_SCENE].capacity,
-		path
+		uiPath,
+		areaPath
 	);
+	return OK;
 }

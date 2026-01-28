@@ -17,7 +17,8 @@
 
 PointerTable* GameMemory = NULL;
 
-int main(int argc, char *argv[]) {
+int main() {
+// int main(int argc, char *argv[]) {
 	Error err;
 
 
@@ -39,10 +40,10 @@ int main(int argc, char *argv[]) {
     err = InitializeInput(GameMemory);
     assert(err == OK);
 
-    err = InitializeGameScene(GameMemory, "stub");
+    err = InitializeGameScene(GameMemory, "stub", "stub");
     assert(err == OK);
 
-    err = InitializeLoadingScreenScene(GameMemory, "stub");
+    err = InitializeLoadingScreenScene(GameMemory, "stub", "stub");
     assert(err == OK);
 
     // just experimenting with loading fonts into memory

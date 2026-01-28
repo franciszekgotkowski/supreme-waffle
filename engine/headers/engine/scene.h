@@ -22,5 +22,5 @@ typedef struct {
 } SceneData ;
 
 Error InitializeScene(SceneData* sceneData, u64 cap, str uiPath, str areaPath);
-Error InitializeGameScene(PointerTable* table, str path);
-Error InitializeLoadingScreenScene(PointerTable* table, str path);
+Error InitializeGameScene(PointerTable* table, str uiPath, str areaPath);
+Error InitializeLoadingScreenScene(PointerTable* table, str uiPath, str areaPath);

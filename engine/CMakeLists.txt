@@ -1,5 +1,4 @@
-add_library(engine STATIC
-		headers/engine/platform/crossplatform_alloca.h)
+add_library(engine STATIC)
 
 set(ENGINE_SOURCES
 		src/platform/window/window_glfw.c
@@ -51,6 +50,7 @@ target_link_libraries(engine
 		glad
 		glfw3
 		stb
+		cglm
 )
 
 if(UNIX)
@@ -63,6 +63,8 @@ elseif(WIN32)
 			opengl32
 	)
 endif()
+
+
 
 add_library(glad STATIC
 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/glad/glad.c
@@ -80,6 +82,7 @@ add_library(stb STATIC
 target_include_directories(stb PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
 )
+
 
 # add_library(cjson STATIC
 # 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/cJSON/cJSON.c
