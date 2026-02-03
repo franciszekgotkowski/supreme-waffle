@@ -106,7 +106,7 @@ void mouseCallback(GLFWwindow *window, f64 xpos, f64 ypos) {
 	printf("\t moved by (%f, %f)\n", mouse->dx, mouse->dy);
 }
 
-Error InitializeInput(PointerTable *table) {
+void InitializeInput(PointerTable *table) {
 	assert(table);
 
 	InputData* input = table->regions[INPUT_DATA].ptr;
@@ -118,6 +118,4 @@ Error InitializeInput(PointerTable *table) {
 	glfwSetKeyCallback(window, inputCallback);
     glfwSetCursorPosCallback(window, mouseCallback);
     // glfwSetScrollCallback(window, scroll_callback);
-
-	return OK;
 }

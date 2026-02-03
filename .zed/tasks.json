@@ -7,7 +7,7 @@
 	{
 		"label": "make",
 		"cwd": "$ZED_WORKTREE_ROOT/build",
-		"command": "make -j 16"
+		"command": "make -j 14"
 	},
 	{
 		"label": "run",

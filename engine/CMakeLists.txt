@@ -12,6 +12,7 @@ set(ENGINE_SOURCES
 		src/scene.c
 		src/ui.c
 		src/area.c
+		src/memory_region_capacities.c
 )
 
 if(UNIX)

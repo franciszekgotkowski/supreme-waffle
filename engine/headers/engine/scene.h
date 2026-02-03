@@ -4,6 +4,7 @@
 
 #include <engine/ui.h>
 #include <engine/area.h>
+#include <engine/typedefs.h>
 
 #define SCENE_FILES_LOCATION "../../assets/scene/"
 #define SIZEOF_XS_SCENE (5*MB)

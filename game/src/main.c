@@ -21,10 +21,10 @@ int main() {
 // int main(int argc, char *argv[]) {
 	Error err;
 
-
 	GameMemory = InitializePool();
+	assert(GameMemory);
 
-    err = InitializeWindow(
+    InitializeWindow(
     	GameMemory,
      	800,
       	600,
@@ -35,10 +35,8 @@ int main() {
         "Der Spiel!",
         CURSOR_NORMAL
     );
-    assert(err == OK);
 
-    err = InitializeInput(GameMemory);
-    assert(err == OK);
+    InitializeInput(GameMemory);
 
     err = InitializeGameScene(GameMemory, "stub", "stub");
     assert(err == OK);

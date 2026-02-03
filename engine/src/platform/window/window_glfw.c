@@ -32,7 +32,7 @@ static void framebuffer_size_callback(GLFWwindow *window, i32 width, i32 height)
     glViewport(0, 0, windowData->width, windowData->height);
 }
 
-Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, bool resizable, v4 clearColor, str title, CursorMode cursorMode) {
+void InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, bool resizable, v4 clearColor, str title, CursorMode cursorMode) {
     assert(table);
     assert(title);
     assert(width > 0 && height > 0 && fps > 0);
@@ -69,7 +69,7 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
         .clearColor = clearColor,
     };
 
-    if (!glfwInit()) {return LIBRARY_FAIL;}
+    // if (!glfwInit()) {return LIBRARY_FAIL;}
     assert(glfwInit());
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -79,27 +79,26 @@ Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool
 
     windowData->window = glfwCreateWindow(width, height, title, NULL, NULL);
     assert(windowData->window);
-    if (!windowData->window) {
-        glfwTerminate();
-        return LIBRARY_FAIL;
-    }
+    // if (!windowData->window) {
+    //     glfwTerminate();
+    //     return LIBRARY_FAIL;
+    // }
 
     glfwMakeContextCurrent(windowData->window);
     glfwSetInputMode(windowData->window, GLFW_CURSOR, cursorModeGlfw);
     glfwSwapInterval(vsync);
 
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-        printf("Failed to initialize GLAD\n");
-        return LIBRARY_FAIL;
-    }
+    assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));
+    // if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+    //     printf("Failed to initialize GLAD\n");
+    //     return LIBRARY_FAIL;
+    // }
 
     glfwGetFramebufferSize(windowData->window, &(windowData->width), &(windowData->height));
     glViewport(0, 0, windowData->width, windowData->height);
     glClearColor(windowData->clearColor.arr[0],windowData->clearColor.arr[1], windowData->clearColor.arr[2], windowData->clearColor.arr[3]);
 
     glfwSetFramebufferSizeCallback(windowData->window, framebuffer_size_callback);
-
-    return OK;
 }
 
 Error CloseWindow(PointerTable* table) {

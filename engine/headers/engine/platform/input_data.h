@@ -75,4 +75,4 @@ typedef struct {
 	gamepadState gamepad;
 } InputData ;
 
-Error InitializeInput(PointerTable* table);
+void InitializeInput(PointerTable* table);

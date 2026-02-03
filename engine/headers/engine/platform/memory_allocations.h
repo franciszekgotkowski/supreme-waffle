@@ -2,9 +2,9 @@
 
 #include <engine/typedefs.h>
 
-#define KB (u64)1024
-#define MB (u64)KB*1024
-#define GB (u64)MB*1024
+#define KB ((u64)1024)
+#define MB ((u64)KB*1024)
+#define GB ((u64)MB*1024)
 
 #define BASE_POOL_ADDRESS 0x600000000000
 

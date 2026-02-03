@@ -1,8 +1,8 @@
 #pragma once
 
-#include <engine/memory_pool.h>
 #include <engine/typedefs.h>
 #include <engine/errors.h>
+#include <engine/memory_pool.h>
 
 #include <stdbool.h>
 
@@ -24,7 +24,7 @@ typedef struct {
     v4 clearColor;
 } WindowData ;
 
-Error InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, bool resizable, v4 clearColor, str title, CursorMode cursorMode);
+void InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, bool resizable, v4 clearColor, str title, CursorMode cursorMode);
 
 Error CloseWindow(PointerTable* table);
 
