@@ -22,10 +22,10 @@ if(UNIX)
 			src/platform/measure_time/measure_time_linux.c
 			src/platform/file_io/file_io_linux.c
 	)
-	# target_link_directories(engine PUBLIC
-	# 		${CMAKE_CURRENT_SOURCE_DIR}/libs/linux/dynamic
-	# 		${CMAKE_CURRENT_SOURCE_DIR}/libs/linux/static
-	# )
+	target_link_directories(engine PUBLIC
+			${CMAKE_CURRENT_SOURCE_DIR}/libs/linux/dynamic
+			${CMAKE_CURRENT_SOURCE_DIR}/libs/linux/static
+	)
 elseif(WIN32)
 	target_compile_definitions(engine PRIVATE PLATFORM_WINDOWS)
 	list(APPEND
@@ -34,10 +34,10 @@ elseif(WIN32)
 			src/platform/measure_time/measure_time_windows.c
 			src/platform/file_io/file_io_windows.c
 	)
-	# target_link_directories(engine PUBLIC
-	# 		${CMAKE_CURRENT_SOURCE_DIR}/libs/windows/dynamic
-	# 		${CMAKE_CURRENT_SOURCE_DIR}/libs/windows/static
-	# )
+	target_link_directories(engine PUBLIC
+			${CMAKE_CURRENT_SOURCE_DIR}/libs/windows/dynamic
+			${CMAKE_CURRENT_SOURCE_DIR}/libs/windows/static
+	)
 endif()
 
 target_sources(engine PRIVATE ${ENGINE_SOURCES})
@@ -50,7 +50,7 @@ target_link_libraries(engine
 		glad
 		stb
 		cglm
-		glfw
+		glfw3
 )
 
 if(UNIX)
@@ -83,15 +83,14 @@ target_include_directories(stb PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
 )
 
-add_subdirectory(
-	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/cglm/
-    EXCLUDE_FROM_ALL
-)
+# add_subdirectory(
+# 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/cglm/
+#     EXCLUDE_FROM_ALL
+# )
 
-add_subdirectory(
-	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/glfw
-)
-
+# add_subdirectory(
+# 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/glfw
+# )
 
 # add_library(cjson STATIC
 # 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/cJSON/cJSON.c
