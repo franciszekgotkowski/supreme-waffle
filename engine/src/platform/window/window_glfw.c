@@ -1,8 +1,3 @@
-
-// DEPRECATED
-// PLEASE DONT USE IT
-// FILE IS SAVED FOR THE SAKE OF PRESERVATION
-
 #include <assert.h>
 #include <stdio.h>
 
@@ -40,6 +35,13 @@ static void framebuffer_size_callback(
     windowData->height = height;
 
     glViewport(0, 0, windowData->width, windowData->height);
+}
+
+static inline void window_should_close_callback(
+	GLFWwindow* window
+) {
+	assert(window);
+	((WindowData*)getRegion(GameMemory, WINDOW_DATA))->windowShouldClose = true;
 }
 
 void InitializeWindow(
@@ -98,26 +100,20 @@ void InitializeWindow(
 
     windowData->window = glfwCreateWindow(width, height, title, NULL, NULL);
     assert(windowData->window);
-    // if (!windowData->window) {
-    //     glfwTerminate();
-    //     return LIBRARY_FAIL;
-    // }
 
     glfwMakeContextCurrent(windowData->window);
     glfwSetInputMode(windowData->window, GLFW_CURSOR, cursorModeGlfw);
     glfwSwapInterval(vsync);
 
     assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));
-    // if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-    //     printf("Failed to initialize GLAD\n");
-    //     return LIBRARY_FAIL;
-    // }
 
     glfwGetFramebufferSize(windowData->window, &(windowData->width), &(windowData->height));
     glViewport(0, 0, windowData->width, windowData->height);
     glClearColor(windowData->clearColor.arr[0],windowData->clearColor.arr[1], windowData->clearColor.arr[2], windowData->clearColor.arr[3]);
 
     glfwSetFramebufferSizeCallback(windowData->window, framebuffer_size_callback);
+    glfwSetWindowCloseCallback(windowData->window, window_should_close_callback);
+
 }
 
 void WindowShouldClose(

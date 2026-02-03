@@ -1,5 +1,6 @@
 #include <engine/memory_pool.h>
 #include <engine/platform/window_data.h>
+#include <engine/platform/input_data.h>
 #include <assert.h>
 #include <game/game_loop.h>
 #include <engine/platform/game_loop.h>
@@ -13,9 +14,9 @@ void GameLoop(
 	while (!((WindowData*)getRegion(table, WINDOW_DATA))->windowShouldClose) {
 		clearScreen(table);
 
-		// if (((InputData*)getRegion(table, INPUT_DATA))->keyboard.pressedNow[K_ESC]) {
-		// 	WindowShouldClose(getRegion(table, WINDOW_DATA));
-		// }
+		if (((InputData*)getRegion(table, INPUT_DATA))->keyboard.pressedNow[K_ESC]) {
+			WindowShouldClose(getRegion(table, WINDOW_DATA));
+		}
 
 		// handleInput(table);
 		// handleEditor();
