@@ -16,9 +16,19 @@
 
 extern PointerTable* GameMemory;
 
-void inputCallback(GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods);
+void inputCallback(
+	GLFWwindow* window,
+	i32 key,
+	i32 scancode,
+	i32 action,
+	i32 mods
+);
 
-static void framebuffer_size_callback(GLFWwindow *window, i32 width, i32 height) {
+static void framebuffer_size_callback(
+	GLFWwindow *window,
+	i32 width,
+	i32 height
+) {
 	assert(window);
 	assert(GameMemory);
 
@@ -32,8 +42,18 @@ static void framebuffer_size_callback(GLFWwindow *window, i32 width, i32 height)
     glViewport(0, 0, windowData->width, windowData->height);
 }
 
-void InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, bool resizable, v4 clearColor, str title, CursorMode cursorMode) {
-    assert(table);
+void InitializeWindow(
+	WindowData* windowData,
+	i32 width,
+	i32 height,
+	i32 fps,
+	bool vsync,
+	bool resizable,
+	v4 clearColor,
+	str title,
+	CursorMode cursorMode
+) {
+    assert(windowData);
     assert(title);
     assert(width > 0 && height > 0 && fps > 0);
 
@@ -53,8 +73,6 @@ void InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool 
          	break;
     }
 
-    WindowData* windowData = table->regions[WINDOW_DATA].ptr;
-    assert(windowData);
 
 
     (*windowData) = (WindowData){
@@ -66,6 +84,7 @@ void InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool 
         .cursorMode = cursorModeGlfw,
         .vsync = vsync,
         .resizable = resizable,
+        .windowShouldClose = false,
         .clearColor = clearColor,
     };
 
@@ -101,13 +120,14 @@ void InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool 
     glfwSetFramebufferSizeCallback(windowData->window, framebuffer_size_callback);
 }
 
-Error CloseWindow(PointerTable* table) {
-    assert(table);
-    if (!table) {
-        return NULL_POINTER;
-    }
+void WindowShouldClose(
+	WindowData* window
+) {
+	assert(window);
+	window->windowShouldClose = true;
+}
 
+void CloseWindow() {
     glfwTerminate();
-    return OK;
 }
 

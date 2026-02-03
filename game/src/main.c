@@ -25,7 +25,7 @@ int main() {
 	assert(GameMemory);
 
     InitializeWindow(
-    	GameMemory,
+    	getRegion(GameMemory, WINDOW_DATA),
      	800,
       	600,
        	144,
@@ -36,12 +36,21 @@ int main() {
         CURSOR_NORMAL
     );
 
-    InitializeInput(GameMemory);
+    InitializeInput(
+   		getRegion(GameMemory, INPUT_DATA),
+   		getRegion(GameMemory, WINDOW_DATA)
+    );
 
-    err = InitializeGameScene(GameMemory, "stub", "stub");
+    err = InitializeGameScene(
+    	"stub",
+     	"stub"
+    );
     assert(err == OK);
 
-    err = InitializeLoadingScreenScene(GameMemory, "stub", "stub");
+    err = InitializeLoadingScreenScene(
+     	"stub",
+      	"stub"
+    );
     assert(err == OK);
 
     // just experimenting with loading fonts into memory

@@ -106,16 +106,15 @@ void mouseCallback(GLFWwindow *window, f64 xpos, f64 ypos) {
 	printf("\t moved by (%f, %f)\n", mouse->dx, mouse->dy);
 }
 
-void InitializeInput(PointerTable *table) {
-	assert(table);
-
-	InputData* input = table->regions[INPUT_DATA].ptr;
+void InitializeInput(
+	InputData* input,
+	WindowData* window
+) {
 	assert(input);
-	GLFWwindow* window = ((WindowData*)table->regions[WINDOW_DATA].ptr)->window;
 	assert(window);
 
 	*input = (InputData){};
-	glfwSetKeyCallback(window, inputCallback);
-    glfwSetCursorPosCallback(window, mouseCallback);
+	glfwSetKeyCallback(window->window, inputCallback);
+    glfwSetCursorPosCallback(window->window, mouseCallback);
     // glfwSetScrollCallback(window, scroll_callback);
 }

@@ -3,18 +3,29 @@
 #include <engine/memory_pool.h>
 #include <engine/scene.h>
 
+extern PointerTable* GameMemory;
+
 // TODO: Write file parser for .ui files
-static u64 evalueateUiSizeInBytes(str path) {
+static u64 evalueateUiSizeInBytes(
+	str path
+) {
 	assert(path);
 	return 0;
 }
 
-static u64 evalueateAreaSizeInBytes(str path) {
+static u64 evalueateAreaSizeInBytes(
+	str path
+) {
 	assert(path);
 	return 0;
 }
 
-Error InitializeScene(SceneData* sceneData, u64 capacity, str uiPath, str areaPath) {
+Error InitializeScene(
+	SceneData* sceneData,
+	u64 capacity,
+	str uiPath,
+	str areaPath
+) {
 	assert(sceneData);
 	assert(uiPath);
 	assert(areaPath);
@@ -34,13 +45,16 @@ Error InitializeScene(SceneData* sceneData, u64 capacity, str uiPath, str areaPa
 	return OK;
 }
 
-Error InitializeGameScene(PointerTable* table, str uiPath, str areaPath) {
-	assert(table);
+Error InitializeGameScene(
+	str uiPath,
+	str areaPath
+) {
 	assert(uiPath);
 	assert(areaPath);
+
 	return InitializeScene(
-		table->regions[GAME_SCENE].ptr,
-		table->regions[GAME_SCENE].capacity,
+		getRegion(GameMemory, GAME_SCENE),
+		getRegionCapacity(GameMemory, GAME_SCENE),
 		uiPath,
 		areaPath
 	);
@@ -48,15 +62,19 @@ Error InitializeGameScene(PointerTable* table, str uiPath, str areaPath) {
 	return OK;
 }
 
-Error InitializeLoadingScreenScene(PointerTable* table, str uiPath, str areaPath) {
-	assert(table);
+Error InitializeLoadingScreenScene(
+	str uiPath,
+	str areaPath
+) {
 	assert(uiPath);
 	assert(areaPath);
+
 	return InitializeScene(
-		table->regions[LOADING_SCREEN_SCENE].ptr,
-		table->regions[LOADING_SCREEN_SCENE].capacity,
+		getRegion(GameMemory, LOADING_SCREEN_SCENE),
+		getRegionCapacity(GameMemory, LOADING_SCREEN_SCENE),
 		uiPath,
 		areaPath
 	);
+
 	return OK;
 }

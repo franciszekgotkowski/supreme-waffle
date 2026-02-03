@@ -35,7 +35,22 @@ extern u64 RegionCapacity[AMOUNT_OF_ENGINE_MEMORY_REGIONS];
 PointerTable* InitializePool();
 
 // Initializes region. Can override existing memory region!!!
-void InitializeRegion(PointerTable* table, void* ptr, u64 regionIndex, u64 size);
+void InitializeRegion(
+	PointerTable* table,
+	void* ptr,
+	u64 regionIndex,
+	u64 size
+);
+
+void* getRegion(
+	PointerTable* table,
+	Regions region
+);
+
+u64 getRegionCapacity(
+	PointerTable* table,
+	Regions region
+);
 
 // Memory layout:
 // 		pointer table

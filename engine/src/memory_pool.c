@@ -43,7 +43,12 @@ PointerTable* InitializePool() {
 	return pool;
 }
 
-void InitializeRegion(PointerTable* table, void* ptr, u64 regionIndex, u64 size) {
+void InitializeRegion(
+	PointerTable* table,
+	void* ptr,
+	u64 regionIndex,
+	u64 size
+) {
 	assert(table);
 	assert(ptr);
 	assert(regionIndex < AMOUNT_OF_ENGINE_MEMORY_REGIONS);
@@ -54,4 +59,25 @@ void InitializeRegion(PointerTable* table, void* ptr, u64 regionIndex, u64 size)
 		.capacity = size
 	};
 
+}
+
+inline void* getRegion(
+	PointerTable* table,
+	Regions region
+) {
+	assert(table);
+	assert(region >= 0 && region < AMOUNT_OF_ENGINE_MEMORY_REGIONS);
+	void* ptr = table->regions[region].ptr;
+	assert(ptr);
+	return ptr;
+}
+
+inline u64 getRegionCapacity(
+	PointerTable* table,
+	Regions region
+) {
+	assert(table);
+	assert(region >= 0 && region < AMOUNT_OF_ENGINE_MEMORY_REGIONS);
+	u64 capacity = table->regions[region].capacity;
+	return capacity;
 }

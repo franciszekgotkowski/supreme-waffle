@@ -21,11 +21,28 @@ typedef struct {
     i32 cursorMode;
     bool vsync;
     bool resizable;
+    bool windowShouldClose;
     v4 clearColor;
 } WindowData ;
 
-void InitializeWindow(PointerTable* table, i32 width, i32 height, i32 fps, bool vsync, bool resizable, v4 clearColor, str title, CursorMode cursorMode);
+void InitializeWindow(
+	WindowData* windowData,
+	i32 width,
+	i32 height,
+	i32 fps,
+	bool vsync,
+	bool resizable,
+	v4 clearColor,
+	str title,
+	CursorMode cursorMode
+);
 
-Error CloseWindow(PointerTable* table);
+void WindowShouldClose(
+	WindowData* window
+);
 
-void GameLoop(PointerTable* table);
+void CloseWindow();
+
+void GameLoop(
+	PointerTable* table
+);

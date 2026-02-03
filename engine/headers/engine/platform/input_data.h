@@ -2,6 +2,7 @@
 
 #include <engine/errors.h>
 #include <engine/memory_pool.h>
+#include <engine/platform/window_data.h>
 #include <engine/typedefs.h>
 #include <stdbool.h>
 
@@ -75,4 +76,7 @@ typedef struct {
 	gamepadState gamepad;
 } InputData ;
 
-void InitializeInput(PointerTable* table);
+void InitializeInput(
+	InputData* input,
+	WindowData* window
+);
