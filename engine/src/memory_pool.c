@@ -10,6 +10,8 @@
 #include <engine/platform/window_data.h>
 #include <engine/typedefs.h>
 
+#include <stdio.h>
+
 static inline u64 totalMemoryFootprint() {
 	u64 sum = 0;
 	for range(i, AMOUNT_OF_ENGINE_MEMORY_REGIONS) {
@@ -21,6 +23,7 @@ static inline u64 totalMemoryFootprint() {
 PointerTable* InitializePool() {
 
 	u64 poolSize = totalMemoryFootprint();
+	printf("Total pool size: %lluMB %lluKB (%llu)\n", (llu)(poolSize/MB), (llu)((poolSize%MB)/KB), (llu)(poolSize));
 
 	void* pool = mem_alloc(poolSize);
 

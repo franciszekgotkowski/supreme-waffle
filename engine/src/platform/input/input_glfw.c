@@ -7,7 +7,6 @@
 #include <engine/range.h>
 #include <engine/platform/input.h>
 #include <external/glfw3.h>
-#include <stdio.h>
 
 extern PointerTable* GameMemory;
 
@@ -112,15 +111,12 @@ void mouseCallback(
 	assert(inputData);
 	assert(mouse);
 
-	printf("mouse moved from (%f, %f) to (%f, %f)", mouse->x, mouse->y, xpos, ypos);
-
 	mouse->dx = xpos - mouse->x;
 	mouse->dy = ypos - mouse->y;
 
 	mouse->x = xpos;
 	mouse->y = ypos;
 
-	printf("\t moved by (%f, %f)\n", mouse->dx, mouse->dy);
 }
 
 void InitializeInputData() {
