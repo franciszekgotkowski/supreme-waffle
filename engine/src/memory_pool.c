@@ -6,7 +6,7 @@
 #include <engine/scene.h>
 #include <engine/errors.h>
 #include <engine/range.h>
-#include <engine/platform/input_data.h>
+#include <engine/platform/input.h>
 #include <engine/platform/window_data.h>
 #include <engine/typedefs.h>
 
@@ -62,9 +62,9 @@ void InitializeRegion(
 }
 
 inline void* getRegion(
-	PointerTable* table,
 	Regions region
 ) {
+	PointerTable* table = GameMemory;
 	assert(table);
 	assert(region >= 0 && region < AMOUNT_OF_ENGINE_MEMORY_REGIONS);
 	void* ptr = table->regions[region].ptr;

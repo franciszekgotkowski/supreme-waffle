@@ -7,11 +7,12 @@
 #include <engine/platform/memory_allocations.h>
 #include <engine/memory_pool.h>
 #include <engine/platform/window_data.h>
-#include <engine/platform/input_data.h>
+#include <engine/platform/input.h>
 #include <engine/string_utils.h>
 #include <engine/platform/crossplatform_alloca.h>
-
 #include <external/stb_image_write.h>
+
+#include <game/input_functions.h>
 
 #include <stdio.h>
 
@@ -25,7 +26,6 @@ int main() {
 	assert(GameMemory);
 
     InitializeWindow(
-    	getRegion(GameMemory, WINDOW_DATA),
      	800,
       	600,
        	144,
@@ -36,10 +36,9 @@ int main() {
         CURSOR_NORMAL
     );
 
-    InitializeInput(
-   		getRegion(GameMemory, INPUT_DATA),
-   		getRegion(GameMemory, WINDOW_DATA)
-    );
+    InitializeInputData();
+    InitializeInputFunctions();
+    InsertInputFunctions();
 
     err = InitializeGameScene(
     	"stub",

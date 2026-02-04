@@ -76,7 +76,51 @@ typedef struct {
 	gamepadState gamepad;
 } InputData ;
 
-void InitializeInput(
-	InputData* input,
-	WindowData* window
+// checks if key have just been pressed
+bool KeyJustPressed(
+	KeyboardKeys key
+);
+
+// ckecks if key is pressed now and was in previous frame
+bool KeyLongPressed(
+	KeyboardKeys key
+);
+
+// checks if key is pressed (does not consider previous frame)
+bool KeyIsPressed(
+	KeyboardKeys key
+);
+
+// checks if key has just been released
+bool KeyJustReleased(
+	KeyboardKeys key
+);
+
+void InitializeInputData();
+
+#define MAXIMUM_INPUT_FUNCTIONS_AMOUNT 1024
+typedef void (*InputFunction)(PointerTable* table) ;
+// Functions can be added to input qeue with PushInputFunction. They will be ran every frame in handleInput() function.
+typedef struct {
+	u64 amountOfFunctions;
+	InputFunction function[MAXIMUM_INPUT_FUNCTIONS_AMOUNT];
+} InputFunctions;
+
+void InitializeInputFunctions();
+
+void PushInputFunction(
+	InputFunctions* input,
+	InputFunction func
+);
+
+void PopInputFunction(
+	InputFunctions* input
+);
+
+void ClearInputFunction(
+	InputFunctions* input
+);
+
+void RunAllInputFunctions(
+	InputFunctions* input
 );

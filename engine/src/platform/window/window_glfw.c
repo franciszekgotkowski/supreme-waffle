@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include <engine/platform/input_data.h>
+#include <engine/platform/input.h>
 #include <engine/memory_pool.h>
 #include <engine/platform/window_data.h>
 #include <engine/errors.h>
@@ -41,11 +41,10 @@ static inline void window_should_close_callback(
 	GLFWwindow* window
 ) {
 	assert(window);
-	((WindowData*)getRegion(GameMemory, WINDOW_DATA))->windowShouldClose = true;
+	((WindowData*)getRegion(WINDOW_DATA))->windowShouldClose = true;
 }
 
 void InitializeWindow(
-	WindowData* windowData,
 	i32 width,
 	i32 height,
 	i32 fps,
@@ -55,6 +54,7 @@ void InitializeWindow(
 	str title,
 	CursorMode cursorMode
 ) {
+	WindowData* windowData = getRegion(WINDOW_DATA);
     assert(windowData);
     assert(title);
     assert(width > 0 && height > 0 && fps > 0);

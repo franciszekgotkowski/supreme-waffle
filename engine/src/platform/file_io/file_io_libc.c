@@ -1,3 +1,8 @@
+
+// DEPRECATED
+// PLEASE DONT USE IT
+// FILE IS SAVED FOR THE SAKE OF PRESERVATION
+
 #include <engine/errors.h>
 #include <engine/platform/memory_allocations.h>
 #include <assert.h>

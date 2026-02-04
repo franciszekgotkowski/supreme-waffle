@@ -15,6 +15,7 @@ typedef enum {
 	POINTER_TABLE,
 	WINDOW_DATA,
 	INPUT_DATA,
+	INPUT_FUNCTIONS,
 	GAME_SCENE,
 	LOADING_SCREEN_SCENE,
 
@@ -43,7 +44,6 @@ void InitializeRegion(
 );
 
 void* getRegion(
-	PointerTable* table,
 	Regions region
 );
 

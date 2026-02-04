@@ -13,6 +13,7 @@ set(ENGINE_SOURCES
 		src/ui.c
 		src/area.c
 		src/memory_region_capacities.c
+		src/input.c
 )
 
 if(UNIX)

@@ -3,6 +3,7 @@ add_executable(game)
 target_sources(game PRIVATE
 	src/main.c
 	src/game_loop.c
+	src/input_functions.c
 )
 
 target_include_directories(game PRIVATE

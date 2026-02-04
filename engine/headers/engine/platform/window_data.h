@@ -26,7 +26,6 @@ typedef struct {
 } WindowData ;
 
 void InitializeWindow(
-	WindowData* windowData,
 	i32 width,
 	i32 height,
 	i32 fps,

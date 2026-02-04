@@ -4,13 +4,20 @@
 #include <stdbool.h>
 
 #include <engine/errors.h>
-#include <engine/platform/input_data.h>
+#include <engine/range.h>
+#include <engine/platform/input.h>
 #include <external/glfw3.h>
 #include <stdio.h>
 
 extern PointerTable* GameMemory;
 
-static Error updateKeyboard(PointerTable* table, i32 key, i32 scancode, i32 action, i32 mods) {
+static Error updateKeyboard(
+	PointerTable* table,
+	i32 key,
+	i32 scancode,
+	i32 action,
+	i32 mods
+) {
 	assert(table);
 	InputData* input = table->regions[INPUT_DATA].ptr;
 
@@ -80,14 +87,24 @@ static Error updateKeyboard(PointerTable* table, i32 key, i32 scancode, i32 acti
 // 	return OK;
 // }
 
-void inputCallback(GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods) {
+void inputCallback(
+	GLFWwindow* window,
+	i32 key,
+	i32 scancode,
+	i32 action,
+	i32 mods
+) {
 	assert(window);
 
 	Error err = updateKeyboard(GameMemory, key, scancode, action, mods);
 	assert(err == OK);
 }
 
-void mouseCallback(GLFWwindow *window, f64 xpos, f64 ypos) {
+void mouseCallback(
+	GLFWwindow *window,
+	f64 xpos,
+	f64 ypos
+) {
 	assert(window);
 
 	InputData* inputData = (InputData*)GameMemory->regions[INPUT_DATA].ptr;
@@ -106,10 +123,9 @@ void mouseCallback(GLFWwindow *window, f64 xpos, f64 ypos) {
 	printf("\t moved by (%f, %f)\n", mouse->dx, mouse->dy);
 }
 
-void InitializeInput(
-	InputData* input,
-	WindowData* window
-) {
+void InitializeInputData() {
+	InputData* input = getRegion(INPUT_DATA);
+	WindowData* window = getRegion(WINDOW_DATA);
 	assert(input);
 	assert(window);
 

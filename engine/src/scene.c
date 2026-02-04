@@ -53,7 +53,7 @@ Error InitializeGameScene(
 	assert(areaPath);
 
 	return InitializeScene(
-		getRegion(GameMemory, GAME_SCENE),
+		getRegion(GAME_SCENE),
 		getRegionCapacity(GameMemory, GAME_SCENE),
 		uiPath,
 		areaPath
@@ -70,7 +70,7 @@ Error InitializeLoadingScreenScene(
 	assert(areaPath);
 
 	return InitializeScene(
-		getRegion(GameMemory, LOADING_SCREEN_SCENE),
+		getRegion(LOADING_SCREEN_SCENE),
 		getRegionCapacity(GameMemory, LOADING_SCREEN_SCENE),
 		uiPath,
 		areaPath

@@ -1,6 +1,8 @@
+#include "engine/platform/graphics.h"
+#include "game/input_functions.h"
 #include <engine/memory_pool.h>
 #include <engine/platform/window_data.h>
-#include <engine/platform/input_data.h>
+#include <engine/platform/input.h>
 #include <assert.h>
 #include <game/game_loop.h>
 #include <engine/platform/game_loop.h>
@@ -11,14 +13,10 @@ void GameLoop(
 	PointerTable* table
 ) {
 	assert(table);
-	while (!((WindowData*)getRegion(table, WINDOW_DATA))->windowShouldClose) {
+	while (!((WindowData*)getRegion(WINDOW_DATA))->windowShouldClose) {
 		clearScreen(table);
 
-		if (((InputData*)getRegion(table, INPUT_DATA))->keyboard.pressedNow[K_ESC]) {
-			WindowShouldClose(getRegion(table, WINDOW_DATA));
-		}
-
-		// handleInput(table);
+		handleInput(table);
 		// handleEditor();
 		// handleGameEvents(table);
 		// renderScene(table);
