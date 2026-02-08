@@ -21,6 +21,14 @@ typedef char* mstr;
 typedef long long unsigned int llu;
 
 typedef union {
+    f32 arr[2];
+    struct {
+        f32 x;
+        f32 y;
+    };
+} v2;
+
+typedef union {
     f32 arr[3];
     struct {
         f32 x;

@@ -492,9 +492,6 @@ Error InitializeCharacterDataOnAddress(Font* font, void* dest, FileData file) {
 			font->offsetTable[font->charactersData[i].charCode] = i;
 		}
 
-		// Character c = ReadCharacterData(ms, font, 0);
-		// printf("c: %d\n", c.charCode);
-
 		return OK;
 }
 

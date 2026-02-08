@@ -76,14 +76,11 @@ u64 GetSizeForEntireFont(Font* font);
 
 Font InitializeFont(FileData file);
 
-// TODO: Description is correct but i need to rewrite the finction
-//
 // Function gives font struct pointers to where character structs are and where a bitmap is.
 // Inteded location of those is next to the Font struct like here:
 // 		[low address]
 // 		Font struct
-// 		Offset table where i
-// ndexes of the table are charCodes
+// 		Offset table where indexes of the table are charCodes
 // 		Character struct[]
 // 		Character bitmaps[]
 // 		[hight address]

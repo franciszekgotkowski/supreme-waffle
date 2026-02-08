@@ -85,10 +85,10 @@ target_include_directories(stb PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
 )
 
-# add_subdirectory(
-# 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/cglm/
-#     EXCLUDE_FROM_ALL
-# )
+add_subdirectory(
+	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/cglm
+				# EXCLUDE_FROM_ALL
+)
 
 # add_subdirectory(
 # 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/glfw
