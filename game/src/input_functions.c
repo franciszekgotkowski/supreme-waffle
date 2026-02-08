@@ -6,21 +6,22 @@
 #include <assert.h>
 #include <stdio.h>
 
-void CheckForExit(
-	PointerTable* table
-) {
+extern PointerTable* GameMemory;
+
+void CheckForExit() {
+	PointerTable* const table = GameMemory;
 	assert(table);
 
 	if (KeyJustReleased(K_ESC)) {
-		WindowShouldClose(getRegion(WINDOW_DATA));
+		SetWindowToClose();
 	}
 }
 
-void MouseMoved(
-	PointerTable* table
-) {
-	mouseState* mouse = &(((InputData*)getRegion(INPUT_DATA))->mouse);
+void MouseMoved() {
+	PointerTable* const table = GameMemory;
 	assert(table);
+	mouseState* mouse = &(((InputData*)getRegion(INPUT_DATA))->mouse);
+	assert(mouse);
 
 
 	if(
@@ -40,13 +41,10 @@ void MouseMoved(
 
 
 void InsertInputFunctions() {
-	PushInputFunction(getRegion(INPUT_FUNCTIONS), CheckForExit);
-	PushInputFunction(getRegion(INPUT_FUNCTIONS), MouseMoved);
+	PushInputFunction(CheckForExit);
+	PushInputFunction(MouseMoved);
 }
 
-void handleInput(
-	PointerTable* table
-) {
-	assert(table);
-	RunAllInputFunctions(getRegion(INPUT_FUNCTIONS));
+void handleInput() {
+	RunAllInputFunctions();
 }

@@ -27,7 +27,7 @@ static void framebuffer_size_callback(
 	assert(window);
 	assert(GameMemory);
 
-	WindowData* windowData = GameMemory->regions[WINDOW_DATA].ptr;
+	WindowData* const windowData = GameMemory->regions[WINDOW_DATA].ptr;
 
 	printf("window is resized from %dx%d to %dx%d\n", windowData->height, windowData->width, height, width);
 
@@ -54,7 +54,7 @@ void InitializeWindow(
 	str title,
 	CursorMode cursorMode
 ) {
-	WindowData* windowData = getRegion(WINDOW_DATA);
+	WindowData* const windowData = getRegion(WINDOW_DATA);
     assert(windowData);
     assert(title);
     assert(width > 0 && height > 0 && fps > 0);
@@ -116,9 +116,8 @@ void InitializeWindow(
 
 }
 
-void WindowShouldClose(
-	WindowData* window
-) {
+void SetWindowToClose() {
+	WindowData* const window = getRegion(WINDOW_DATA);
 	assert(window);
 	window->windowShouldClose = true;
 }

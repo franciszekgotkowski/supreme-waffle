@@ -36,12 +36,9 @@ void InitializeWindow(
 	CursorMode cursorMode
 );
 
-void WindowShouldClose(
-	WindowData* window
-);
+// Sets windowShouldClose parameter to true
+void SetWindowToClose();
 
 void CloseWindow();
 
-void GameLoop(
-	PointerTable* table
-);
+void GameLoop();

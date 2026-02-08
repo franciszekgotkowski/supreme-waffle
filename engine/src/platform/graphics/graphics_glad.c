@@ -5,7 +5,8 @@
 
 #include <assert.h>
 
-void clearScreen(PointerTable* table) {
-	assert(table);
+extern PointerTable* GameMemory;
+
+void clearScreen() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }

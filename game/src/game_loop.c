@@ -9,20 +9,21 @@
 
 #include <stdbool.h>
 
-void GameLoop(
-	PointerTable* table
-) {
+extern PointerTable* GameMemory;
+
+void GameLoop() {
+	const PointerTable* table = GameMemory;
 	assert(table);
 	while (!((WindowData*)getRegion(WINDOW_DATA))->windowShouldClose) {
-		clearScreen(table);
+		clearScreen();
 
-		handleInput(table);
+		handleInput();
 		// handleEditor();
 		// handleGameEvents(table);
 		// renderScene(table);
 
-		updateBuffer(table);
-		handleEngineEvents(table);
+		updateBuffer();
+		handleEngineEvents();
 	}
 	CloseWindow();
 }

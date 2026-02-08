@@ -3,10 +3,14 @@
 #include <engine/memory_pool.h>
 #include <stdbool.h>
 
-bool shouldWindowClose(PointerTable* table);
+// checks if os sstem want close window (for example because user clicked on x button or clicked alt-f4)
+bool doesSystemWantToCloseWindow();
 
-void clearScreen(PointerTable* table);
+// clears screen
+void clearScreen();
 
-void updateBuffer(PointerTable* table);
+// updates buffer
+void updateBuffer();
 
-void handleEngineEvents(PointerTable* table);
+// polls events (like input, resizing window etc.)
+void handleEngineEvents();

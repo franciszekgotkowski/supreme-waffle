@@ -12,7 +12,7 @@
 extern PointerTable* GameMemory;
 
 void InitializeInputFunctions() {
-	InputFunctions* input = getRegion(INPUT_FUNCTIONS);
+	InputFunctions* const input = getRegion(INPUT_FUNCTIONS);
 	assert(input);
 
 	*input = (InputFunctions){
@@ -22,9 +22,9 @@ void InitializeInputFunctions() {
 }
 
 void PushInputFunction(
-	InputFunctions* input,
 	InputFunction func
 ) {
+	InputFunctions* const input = getRegion(INPUT_FUNCTIONS);
 	assert(input);
 	assert(func);
 	assert(input->amountOfFunctions >= 0);
@@ -34,9 +34,8 @@ void PushInputFunction(
 	input->amountOfFunctions++;
 }
 
-void PopInputFunction(
-	InputFunctions* input
-) {
+void PopInputFunction() {
+	InputFunctions* const input = getRegion(INPUT_FUNCTIONS);
 	assert(input);
 	assert(input->amountOfFunctions > 0);
 	assert(input->amountOfFunctions < MAXIMUM_INPUT_FUNCTIONS_AMOUNT);
@@ -44,9 +43,8 @@ void PopInputFunction(
 	input->amountOfFunctions--;
 }
 
-void ClearInputFunction(
-	InputFunctions* input
-) {
+void ClearInputFunction() {
+	InputFunctions* const input = getRegion(INPUT_FUNCTIONS);
 	assert(input);
 	assert(input->amountOfFunctions > 0);
 	assert(input->amountOfFunctions < MAXIMUM_INPUT_FUNCTIONS_AMOUNT);
@@ -54,22 +52,21 @@ void ClearInputFunction(
 	input->amountOfFunctions = 0;
 }
 
-inline void RunAllInputFunctions(
-	InputFunctions* input
-) {
+inline void RunAllInputFunctions() {
+	InputFunctions* const input = getRegion(INPUT_FUNCTIONS);
 	assert(input);
 	assert(input->amountOfFunctions >= 0);
 	assert(input->amountOfFunctions < MAXIMUM_INPUT_FUNCTIONS_AMOUNT);
 
 	for range(i, input->amountOfFunctions) {
-		input->function[i](GameMemory);
+		input->function[i]();
 	}
 }
 
 inline bool KeyJustPressed(
 	KeyboardKeys key
 ) {
-	InputData* inputData = getRegion(INPUT_DATA);
+	InputData* const inputData = getRegion(INPUT_DATA);
 	assert(inputData);
 
 	if (
@@ -85,7 +82,7 @@ inline bool KeyJustPressed(
 inline bool KeyLongPressed(
 	KeyboardKeys key
 ) {
-	InputData* inputData = getRegion(INPUT_DATA);
+	InputData* const inputData = getRegion(INPUT_DATA);
 	assert(inputData);
 
 	if (
@@ -101,7 +98,7 @@ inline bool KeyLongPressed(
 bool KeyIsPressed(
 	KeyboardKeys key
 ) {
-	InputData* inputData = getRegion(INPUT_DATA);
+	InputData* const inputData = getRegion(INPUT_DATA);
 	assert(inputData);
 
 	if (
@@ -116,7 +113,7 @@ bool KeyIsPressed(
 inline bool KeyJustReleased(
 	KeyboardKeys key
 ) {
-	InputData* inputData = getRegion(INPUT_DATA);
+	InputData* const inputData = getRegion(INPUT_DATA);
 	assert(inputData);
 
 	if (

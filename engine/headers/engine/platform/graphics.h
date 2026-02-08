@@ -2,4 +2,4 @@
 
 #include <engine/memory_pool.h>
 
-void clearScreen(PointerTable* table);
+void clearScreen();

@@ -5,7 +5,7 @@
 
 typedef struct {
 	u64 fileSize; // comes with additional \0 at the end
-	void* ptr;
+	void* ptr; // pointer to where file lives
 } FileData ;
 
 // reads entire file into a dynamically alocated memory region (via system calls). Gets rid of \r on endlilne on windows

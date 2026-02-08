@@ -71,7 +71,7 @@ int main() {
         stbi_write_png("./cherryfont.png", (i32)bitmapW(font), (i32)bitmapH(font), 1, font->characterBitmap, (i32)bitmapW(font));
     }
 
-    GameLoop(GameMemory);
+    GameLoop();
 
 	printf("amount of memory regions in enum %d\n", AMOUNT_OF_ENGINE_MEMORY_REGIONS);
 	// InitializeGameState()

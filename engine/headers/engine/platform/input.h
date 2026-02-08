@@ -99,7 +99,7 @@ bool KeyJustReleased(
 void InitializeInputData();
 
 #define MAXIMUM_INPUT_FUNCTIONS_AMOUNT 1024
-typedef void (*InputFunction)(PointerTable* table) ;
+typedef void (*InputFunction)() ;
 // Functions can be added to input qeue with PushInputFunction. They will be ran every frame in handleInput() function.
 typedef struct {
 	u64 amountOfFunctions;
@@ -109,18 +109,11 @@ typedef struct {
 void InitializeInputFunctions();
 
 void PushInputFunction(
-	InputFunctions* input,
 	InputFunction func
 );
 
-void PopInputFunction(
-	InputFunctions* input
-);
+void PopInputFunction();
 
-void ClearInputFunction(
-	InputFunctions* input
-);
+void ClearInputFunction();
 
-void RunAllInputFunctions(
-	InputFunctions* input
-);
+void RunAllInputFunctions();
