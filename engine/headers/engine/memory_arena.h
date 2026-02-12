@@ -14,12 +14,26 @@ typedef struct {
 	bool locked; // if memory arena is locked, pushing or reseting memory is illegal and functions should return an error
 } MemoryArena ;
 
-Error InitializeMemoryArena(void* base, u64 cap);
+Error InitializeMemoryArena(
+	void* base,
+	u64 cap
+);
 
-Error push_MemoryArena(MemoryArena* arena, u64 size);
+Error push_MemoryArena(
+	MemoryArena* arena,
+	u64 size
+);
 
-Error reset_MemoryArena(MemoryArena* arena);
+Error reset_MemoryArena(
+	MemoryArena* arena
+);
 
-Error addCheckpoint_MemoryArena(MemoryArena* arena, void* ptr);
+Error addCheckpoint_MemoryArena(
+	MemoryArena* arena,
+	void* ptr
+);
 
-Error returnToCheckpoint_MemoryArena(MemoryArena* arena, u64 idx);
+Error returnToCheckpoint_MemoryArena(
+	MemoryArena* arena,
+	u64 idx
+);

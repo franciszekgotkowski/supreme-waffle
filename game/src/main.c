@@ -1,5 +1,7 @@
-#include <engine/scene.h>
 #include <assert.h>
+
+#include <engine/scene.h>
+#include <engine/typedefs.h>
 #include <engine/font.h>
 #include <engine/range.h>
 #include <engine/memory_arena.h>
@@ -40,13 +42,13 @@ int main() {
     InitializeInputFunctions();
     InsertInputFunctions();
 
-    err = InitializeGameScene(
+    err = LoadGameScene(
     	"stub",
      	"stub"
     );
     assert(err == OK);
 
-    err = InitializeLoadingScreenScene(
+    err = LoadLoadingScreenScene(
      	"stub",
       	"stub"
     );
@@ -69,6 +71,25 @@ int main() {
         freeEntireTextFile(file);
 
         stbi_write_png("./cherryfont.png", (i32)bitmapW(font), (i32)bitmapH(font), 1, font->characterBitmap, (i32)bitmapW(font));
+
+        GetTextureCoordinateBottomLeft(0, font);
+        GetTextureCoordinateBottomRight(0, font);
+        GetTextureCoordinateTopLeft(0, font);
+        GetTextureCoordinateTopRight(0, font);
+		printf("\n");
+		GetTextureCoordinateBottomLeft('!', font);
+		GetTextureCoordinateBottomRight('!', font);
+		GetTextureCoordinateTopLeft('!', font);
+		GetTextureCoordinateTopRight('!', font);
+		printf("\n");
+		GetTextureCoordinateBottomLeft('#', font);
+		GetTextureCoordinateBottomRight('#', font);
+		GetTextureCoordinateTopLeft('#', font);
+		GetTextureCoordinateTopRight('#', font);
+
+        GetTextureCoordinateBottomLeft('0', font);
+        // CreateRenderObject
+        // DrawRednerObject
     }
 
     GameLoop();

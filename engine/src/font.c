@@ -483,6 +483,7 @@ Error InitializeCharacterDataOnAddress(Font* font, void* dest, FileData file) {
 
 		mstr ms = (mstr)file.ptr;
 
+		memset(font->offsetTable, -1, offsetTableSize(font));
 		for range(i, font->amountOfCharacters) {
 			do {
 				ms = newLine(ms);
@@ -498,4 +499,126 @@ Error InitializeCharacterDataOnAddress(Font* font, void* dest, FileData file) {
 // The same as InitializeCharacterDataOntoFont but will destination is top of the address just on top  of font
 Error InitializeCharacterDataOntoFont(Font* font, FileData file) {
 	return InitializeCharacterDataOnAddress(font, ((void*)font)+sizeof(Font), file);
+}
+
+v2 GetTextureCoordinateBottomLeft(
+	u8 character,
+	Font* font
+) {
+	assert(font);
+	assert(font->offsetTable[character] != -1);
+
+	u64 bitmapWidth = bitmapW(font);
+	u64 bitmapHeight = bitmapH(font);
+
+	u32 pixelOffsetX =
+		CHARACTER_SPACING * (font->offsetTable[character] + 1) +
+		font->offsetTable[character] * font->charactersData[font->offsetTable[character]].boundingBoxW;
+
+	u32 pixelOffsetY = CHARACTER_SPACING +
+		font->charactersData[font->offsetTable[character]].boundingBoxH;
+
+	v2 position = {
+		.x = (f64)pixelOffsetX/bitmapWidth,
+		.y = (f64)pixelOffsetY/bitmapHeight
+	};
+
+	printf("bottom left pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
+
+	return position;
+}
+
+v2 GetTextureCoordinateBottomRight(
+	u8 character,
+	Font* font
+) {
+	assert(font);
+	assert(font->offsetTable[character] != -1);
+
+	u64 bitmapWidth = bitmapW(font);
+	u64 bitmapHeight = bitmapH(font);
+
+	u32 pixelOffsetX =
+		CHARACTER_SPACING * (font->offsetTable[character] + 1) +
+		(font->offsetTable[character] + 1) * font->charactersData[font->offsetTable[character]].boundingBoxW;
+
+	u32 pixelOffsetY = CHARACTER_SPACING +
+		font->charactersData[font->offsetTable[character]].boundingBoxH;
+
+	v2 position = {
+		.x = (f64)pixelOffsetX/bitmapWidth,
+		.y = (f64)pixelOffsetY/bitmapHeight
+	};
+
+	printf("bottom right pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
+
+	return position;
+}
+
+v2 GetTextureCoordinateTopLeft(
+	u8 character,
+	Font* font
+) {
+	assert(font);
+	assert(font->offsetTable[character] != -1);
+
+	u64 bitmapWidth = bitmapW(font);
+	u64 bitmapHeight = bitmapH(font);
+
+	u32 pixelOffsetX =
+		CHARACTER_SPACING * (font->offsetTable[character] + 1) +
+		font->offsetTable[character] * font->charactersData[font->offsetTable[character]].boundingBoxW;
+
+	u32 pixelOffsetY = CHARACTER_SPACING;
+
+	v2 position = {
+		.x = (f64)pixelOffsetX/bitmapWidth,
+		.y = (f64)pixelOffsetY/bitmapHeight
+	};
+
+	printf("top left pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
+
+	return position;
+}
+
+
+v2 GetTextureCoordinateTopRight(
+	u8 character,
+	Font* font
+) {
+	assert(font);
+	assert(font->offsetTable[character] != -1);
+
+	u64 bitmapWidth = bitmapW(font);
+	u64 bitmapHeight = bitmapH(font);
+
+	u32 pixelOffsetX =
+		CHARACTER_SPACING * (font->offsetTable[character] + 1) +
+		(font->offsetTable[character] + 1) * font->charactersData[font->offsetTable[character]].boundingBoxW;
+
+	u32 pixelOffsetY = CHARACTER_SPACING;
+
+	v2 position = {
+		.x = (f64)pixelOffsetX/bitmapWidth,
+		.y = (f64)pixelOffsetY/bitmapHeight
+	};
+
+	printf("top right pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
+
+	return position;
+}
+
+
+void InitializeTextureCoordinatesBuffer(
+	Font* font, // font to look up to
+	str* textLine, // ascii line to generate
+	u32 offset, // offset from buffer to start filling in texture coordinates
+	u32 stride, // stride between characters texture coordinates
+	void* out
+) {
+	assert(font);
+	assert(textLine);
+	assert(out);
+
+
 }

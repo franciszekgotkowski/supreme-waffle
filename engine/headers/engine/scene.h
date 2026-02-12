@@ -29,12 +29,12 @@ Error InitializeScene(
 	str areaPath
 );
 
-Error InitializeGameScene(
+Error LoadGameScene(
 	str uiPath,
 	str areaPath
 );
 
-Error InitializeLoadingScreenScene(
+Error LoadLoadingScreenScene(
 	str uiPath,
 	str areaPath
 );

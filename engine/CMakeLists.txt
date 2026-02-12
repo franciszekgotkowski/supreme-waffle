@@ -90,22 +90,18 @@ add_subdirectory(
 				# EXCLUDE_FROM_ALL
 )
 
-# add_subdirectory(
-# 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/glfw
-# )
-
 # add_library(cjson STATIC
 # 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/cJSON/cJSON.c
 # )
-
+#
 # target_include_directories(cjson SYSTEM PUBLIC
 # 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
 # )
-
+#
 # add_library(nuklear STATIC
 # 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/nuklear/nuklear.c
 # )
-
+#
 # target_include_directories(nuklear SYSTEM PUBLIC
 # 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
 # )

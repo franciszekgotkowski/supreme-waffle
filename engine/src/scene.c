@@ -45,7 +45,7 @@ Error InitializeScene(
 	return OK;
 }
 
-Error InitializeGameScene(
+Error LoadGameScene(
 	str uiPath,
 	str areaPath
 ) {
@@ -62,7 +62,7 @@ Error InitializeGameScene(
 	return OK;
 }
 
-Error InitializeLoadingScreenScene(
+Error LoadLoadingScreenScene(
 	str uiPath,
 	str areaPath
 ) {

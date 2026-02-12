@@ -34,6 +34,7 @@ typedef struct {
 	i32 offsetY;
 } Character ;
 
+// Contains all relevant info about a font
 typedef struct {
 	// maximum bounding box size
 	// from FONTBOUNDINGBOX
@@ -66,15 +67,27 @@ typedef struct {
     // All characters are in 1 array hegth array (there are no columns of characters. It has amountOfCharacters x 1 proportions)
     u32 spacing;
 
-    u32* offsetTable;
+    // index [i] is offset in to array which has offset into charactersData which has relevant information about the character
+    i32* offsetTable;
+
+    // array with relevant information about character
     Character* charactersData;
+
+    // bitmap of the font
 	u8* characterBitmap;
 } Font;
 
+// size in bytes needed to accomodate offsetTable, charactersData and characterBitmap
 u64 GetSizeForCharacterData(Font* font);
+
+// size in bytes for GetSizeForCharacterData and Font struct
 u64 GetSizeForEntireFont(Font* font);
 
-Font InitializeFont(FileData file);
+// Creates Font struct with info about a font without filling in offsetTable, charactersData and characterBitmap
+// This will happen later in InitializeCharacterDataOntoFont or InitializeCharacterDataOnAddress
+Font InitializeFont(
+	FileData file
+);
 
 // Function gives font struct pointers to where character structs are and where a bitmap is.
 // Inteded location of those is next to the Font struct like here:
@@ -84,8 +97,57 @@ Font InitializeFont(FileData file);
 // 		Character struct[]
 // 		Character bitmaps[]
 // 		[hight address]
-Error InitializeCharacterDataOntoFont(Font* font, FileData file);
-Error InitializeCharacterDataOnAddress(Font* font, void* dest, FileData file);
+// NOTE: if character does not exist there is -1 in its offset table value
+Error InitializeCharacterDataOnAddress(
+	Font* font,
+	void* dest,
+	FileData file
+);
 
-u64 bitmapW(Font* font);
-u64 bitmapH(Font* font);
+// the same as InitializeCharacterDataOntoFont but it allocates character data not on some address but on addres adter font
+Error InitializeCharacterDataOntoFont(
+	Font* font,
+	FileData file
+);
+
+// how wide is bitmap in pixels accounting for padding
+u64 bitmapW(
+	Font* font
+);
+
+// how high is bitmap in pixels accounting for padding
+u64 bitmapH(
+	Font* font
+);
+
+// gets bottom left u8acter position in texture
+v2 GetTextureCoordinateBottomLeft(
+	u8 character,
+	Font* font
+);
+
+// gets bottom right u8acter position in texture
+v2 GetTextureCoordinateBottomRight(
+	u8 character,
+	Font* font
+);
+
+// gets top left u8acter position in texture
+v2 GetTextureCoordinateTopLeft(
+	u8 character,
+	Font* font
+);
+
+// gets top left u8acter position in texture
+v2 GetTextureCoordinateTopRight(
+	u8 character,
+	Font* font
+);
+
+void InitializeTextureCoordinatesBuffer(
+	Font* font, // font to look up to
+	str* textLine, // ascii line to generate
+	u32 offset, // offset from buffer to start filling in texture coordinates
+	u32 stride, // stride between characters texture coordinates
+	void* out
+);
