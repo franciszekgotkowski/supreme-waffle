@@ -31,7 +31,7 @@ int main() {
       	600,
        	144,
         true,
-        true,
+        false,
         (v4){.arr = {0.18f, 0.20f, 0.25f, 1.0f}},
         "Der Spiel!",
         CURSOR_NORMAL
@@ -70,23 +70,6 @@ int main() {
         freeEntireTextFile(file);
 
         stbi_write_png("./cherryfont.png", (i32)bitmapW(font), (i32)bitmapH(font), 1, font->characterBitmap, (i32)bitmapW(font));
-
-        GetTextureCoordinateBottomLeft(0, font);
-        GetTextureCoordinateBottomRight(0, font);
-        GetTextureCoordinateTopLeft(0, font);
-        GetTextureCoordinateTopRight(0, font);
-		printf("\n");
-		GetTextureCoordinateBottomLeft('!', font);
-		GetTextureCoordinateBottomRight('!', font);
-		GetTextureCoordinateTopLeft('!', font);
-		GetTextureCoordinateTopRight('!', font);
-		printf("\n");
-		GetTextureCoordinateBottomLeft('#', font);
-		GetTextureCoordinateBottomRight('#', font);
-		GetTextureCoordinateTopLeft('#', font);
-		GetTextureCoordinateTopRight('#', font);
-
-        GetTextureCoordinateBottomLeft('0', font);
         // CreateRenderObject
         // DrawRednerObject
     }
