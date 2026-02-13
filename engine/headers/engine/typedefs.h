@@ -46,3 +46,9 @@ typedef union {
         f32 w;
     };
 } v4;
+
+#ifndef NDEBUG
+	#define DEBUG_ONLY(CONTENT) CONTENT;
+#else
+	#define DEBUG_ONLY(CONTENT);
+#endif

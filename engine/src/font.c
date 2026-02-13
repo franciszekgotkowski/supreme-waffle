@@ -187,7 +187,7 @@ Font InitializeFont(FileData file) {
 
 	Font font;
 
-    bool parametersRead[] = {
+	bool parametersRead[] = {
         false,
         false,
         false,
@@ -519,11 +519,11 @@ v2 GetTextureCoordinateBottomLeft(
 		font->charactersData[font->offsetTable[character]].boundingBoxH;
 
 	v2 position = {
-		.x = (f64)pixelOffsetX/bitmapWidth,
-		.y = (f64)pixelOffsetY/bitmapHeight
+		.x = ((f64)pixelOffsetX-bitmapWidth/2.0)/(bitmapWidth/2.0),
+		.y = ((f64)pixelOffsetY-bitmapHeight/2.0)/(bitmapHeight/2.0)
 	};
 
-	printf("bottom left pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
+	// printf("bottom left pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
 
 	return position;
 }
@@ -546,11 +546,11 @@ v2 GetTextureCoordinateBottomRight(
 		font->charactersData[font->offsetTable[character]].boundingBoxH;
 
 	v2 position = {
-		.x = (f64)pixelOffsetX/bitmapWidth,
-		.y = (f64)pixelOffsetY/bitmapHeight
+		.x = ((f64)pixelOffsetX-bitmapWidth/2.0)/(bitmapWidth/2.0),
+		.y = ((f64)pixelOffsetY-bitmapHeight/2.0)/(bitmapHeight/2.0)
 	};
 
-	printf("bottom right pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
+	// printf("bottom right pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
 
 	return position;
 }
@@ -572,11 +572,11 @@ v2 GetTextureCoordinateTopLeft(
 	u32 pixelOffsetY = CHARACTER_SPACING;
 
 	v2 position = {
-		.x = (f64)pixelOffsetX/bitmapWidth,
-		.y = (f64)pixelOffsetY/bitmapHeight
+		.x = ((f64)pixelOffsetX-bitmapWidth/2.0)/(bitmapWidth/2.0),
+		.y = ((f64)pixelOffsetY-bitmapHeight/2.0)/(bitmapHeight/2.0)
 	};
 
-	printf("top left pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
+	// printf("top left pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
 
 	return position;
 }
@@ -599,11 +599,11 @@ v2 GetTextureCoordinateTopRight(
 	u32 pixelOffsetY = CHARACTER_SPACING;
 
 	v2 position = {
-		.x = (f64)pixelOffsetX/bitmapWidth,
-		.y = (f64)pixelOffsetY/bitmapHeight
+		.x = ((f64)pixelOffsetX-bitmapWidth/2.0)/(bitmapWidth/2.0),
+		.y = ((f64)pixelOffsetY-bitmapHeight/2.0)/(bitmapHeight/2.0)
 	};
 
-	printf("top right pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
+	// printf("top right pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
 
 	return position;
 }

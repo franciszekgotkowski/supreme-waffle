@@ -21,7 +21,6 @@
 PointerTable* GameMemory = NULL;
 
 int main() {
-// int main(int argc, char *argv[]) {
 	Error err;
 
 	GameMemory = InitializePool();
