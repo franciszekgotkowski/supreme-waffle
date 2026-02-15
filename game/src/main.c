@@ -28,7 +28,7 @@ int main() {
 
     InitializeWindow(
      	800,
-      	600,
+      	800,
        	144,
         true,
         false,
@@ -55,24 +55,24 @@ int main() {
 
     // just experimenting with loading fonts into memory
     // to be moved elsewhere
-    {
-   		FileData file;
-     	readEntireTextFile("../../assets/fonts/bdf/cherry-11-r.bdf", &file);
-      	Font f = InitializeFont(file);
-       	printf("space needed for cherry-11-r.bdf = %llu\n", (llu)GetSizeForEntireFont(&f));
+  //   {
+  //  		FileData file;
+  //    	readEntireTextFile("../../assets/fonts/bdf/cherry-11-r.bdf", &file);
+  //     	Font f = InitializeFont(file);
+  //      	printf("space needed for cherry-11-r.bdf = %llu\n", (llu)GetSizeForEntireFont(&f));
 
-        Font* font = alloca(GetSizeForEntireFont(&f));
+  //       Font* font = alloca(GetSizeForEntireFont(&f));
 
 
-		*font = f;
-        InitializeCharacterDataOntoFont(font, file);
+		// *font = f;
+  //       InitializeCharacterDataOntoFont(font, file);
 
-        freeEntireTextFile(file);
+  //       freeEntireTextFile(file);
 
-        stbi_write_png("./cherryfont.png", (i32)bitmapW(font), (i32)bitmapH(font), 1, font->characterBitmap, (i32)bitmapW(font));
-        // CreateRenderObject
-        // DrawRednerObject
-    }
+  //       stbi_write_png("./cherryfont.png", (i32)bitmapW(font), (i32)bitmapH(font), 1, font->characterBitmap, (i32)bitmapW(font));
+  //       // CreateRenderObject
+  //       // DrawRednerObject
+  //   }
 
     GameLoop();
 

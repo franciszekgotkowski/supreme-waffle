@@ -1,3 +1,4 @@
+#include <engine/platform/window_data.h>
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
@@ -11,6 +12,8 @@
 #include <engine/typedefs.h>
 #include <engine/range.h>
 #include <engine/platform/memory_allocations.h>
+
+extern PointerTable* GameMemory;
 
 static i32 recogniseFontParameter(str s) {
     assert(s);
@@ -519,8 +522,8 @@ v2 GetTextureCoordinateBottomLeft(
 		font->charactersData[font->offsetTable[character]].boundingBoxH;
 
 	v2 position = {
-		.x = ((f64)pixelOffsetX-bitmapWidth/2.0)/(bitmapWidth/2.0),
-		.y = ((f64)pixelOffsetY-bitmapHeight/2.0)/(bitmapHeight/2.0)
+		.x = (f64)pixelOffsetX/bitmapWidth,
+		.y = (f64)pixelOffsetY/bitmapHeight,
 	};
 
 	// printf("bottom left pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
@@ -546,8 +549,8 @@ v2 GetTextureCoordinateBottomRight(
 		font->charactersData[font->offsetTable[character]].boundingBoxH;
 
 	v2 position = {
-		.x = ((f64)pixelOffsetX-bitmapWidth/2.0)/(bitmapWidth/2.0),
-		.y = ((f64)pixelOffsetY-bitmapHeight/2.0)/(bitmapHeight/2.0)
+		.x = (f64)pixelOffsetX/bitmapWidth,
+		.y = (f64)pixelOffsetY/bitmapHeight,
 	};
 
 	// printf("bottom right pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
@@ -572,8 +575,8 @@ v2 GetTextureCoordinateTopLeft(
 	u32 pixelOffsetY = CHARACTER_SPACING;
 
 	v2 position = {
-		.x = ((f64)pixelOffsetX-bitmapWidth/2.0)/(bitmapWidth/2.0),
-		.y = ((f64)pixelOffsetY-bitmapHeight/2.0)/(bitmapHeight/2.0)
+		.x = (f64)pixelOffsetX/bitmapWidth,
+		.y = (f64)pixelOffsetY/bitmapHeight,
 	};
 
 	// printf("top left pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
@@ -599,8 +602,8 @@ v2 GetTextureCoordinateTopRight(
 	u32 pixelOffsetY = CHARACTER_SPACING;
 
 	v2 position = {
-		.x = ((f64)pixelOffsetX-bitmapWidth/2.0)/(bitmapWidth/2.0),
-		.y = ((f64)pixelOffsetY-bitmapHeight/2.0)/(bitmapHeight/2.0)
+		.x = (f64)pixelOffsetX/bitmapWidth,
+		.y = (f64)pixelOffsetY/bitmapHeight,
 	};
 
 	// printf("top right pixels:\t x: %d y: %d\nfloats:\t x: %f y: %f\n", pixelOffsetX, pixelOffsetY, position.x, position.y);
@@ -608,17 +611,135 @@ v2 GetTextureCoordinateTopRight(
 	return position;
 }
 
-
-void InitializeTextureCoordinatesBuffer(
-	Font* font, // font to look up to
-	str* textLine, // ascii line to generate
-	u32 offset, // offset from buffer to start filling in texture coordinates
-	u32 stride, // stride between characters texture coordinates
-	void* out
+v2 GetCharacterDOffset(
+	u8 character,
+	Font* font
 ) {
 	assert(font);
-	assert(textLine);
+
+	v2 doffset = {
+		.x = font->charactersData[font->offsetTable[character]].dWidthX,
+		.y = font->charactersData[font->offsetTable[character]].dWidthY,
+	};
+	return doffset;
+}
+
+void FillInFontTexture(
+	str sourceString,
+	u32 stringLength,
+	Font* font,
+	f32* out // array bo filled in
+) {
+	assert(sourceString);
+	assert(font);
 	assert(out);
 
+	const u32 charStride = 4 * 4; // how many floats is there in one 'character edge'
+	const u32 vertexStride = 4; // how many floats is there in one 'character edge'
+	const u32 texturePositionOffset = 2; // i have to offset 2 floats because first are xy for creenspace
+
+	// filling in bottom left position
+	for range(i, stringLength) {
+		v2 pos = GetTextureCoordinateBottomLeft(sourceString[i], font);
+		out[texturePositionOffset + i * charStride] = pos.x;
+		out[texturePositionOffset + 1 + i * charStride] = pos.y;
+	}
+
+	// filling in bottom right position
+	for range(i, stringLength) {
+		v2 pos = GetTextureCoordinateBottomRight(sourceString[i], font);
+		out[texturePositionOffset + vertexStride + i * charStride] = pos.x;
+		out[texturePositionOffset + 1 + vertexStride + i * charStride] = pos.y;
+	}
+
+	// filling in top right position
+	for range(i, stringLength) {
+		v2 pos = GetTextureCoordinateTopRight(sourceString[i], font);
+		out[texturePositionOffset + 2*vertexStride + i * charStride] = pos.x;
+		out[texturePositionOffset + 1 + 2*vertexStride + i * charStride] = pos.y;
+	}
+
+	// filling in top left position
+	for range(i, stringLength) {
+		v2 pos = GetTextureCoordinateTopLeft(sourceString[i], font);
+		out[texturePositionOffset + 3*vertexStride + i * charStride] = pos.x;
+		out[texturePositionOffset + 1 + 3*vertexStride + i * charStride] = pos.y;
+	}
+}
+//
+// static inline v2 screenspacePosition(v2u32 point, Font* font) {
+// 	assert(font);
+//
+// 	WindowData* windowData = GameMemory->regions[WINDOW_DATA].ptr;
+// 	v2 screenspace = {
+// 		.x = point.x / windowData->width,
+// 		.y = point.y / windowData->height
+// 	};
+// 	return screenspace;
+// }
+//
+void FillInScreenspacePosition(
+	str sourceString,
+	u32 stringLength,
+	Font* font,
+	f32* out // array bo filled in
+) {
 
 }
+
+// fills in indexes for ebo
+void FillInVertexIndexes(
+	str sourceString,
+	u32 stringLength,
+	Font* font,
+	f32* out // array bo filled in
+) {
+	assert(sourceString);
+	assert(font);
+	assert(out);
+
+	const u32 eboOffset = stringLength * 4 * 4;
+	u32* eboOut = (u32*)(out + eboOffset);
+
+	for range(i, stringLength) {
+		eboOut[i*6 + 0] = i*4 + 0;
+		eboOut[i*6 + 1] = i*4 + 1;
+		eboOut[i*6 + 2] = i*4 + 3;
+		eboOut[i*6 + 3] = i*4 + 1;
+		eboOut[i*6 + 4] = i*4 + 2;
+		eboOut[i*6 + 5] = i*4 + 3;
+	}
+}
+
+	void InitializeTextureCoordinatesBuffer(
+		str sourceString, // ascii line to generate
+		u32 stringLength,
+		Font* font, // font to look up to
+		void* out
+	) {
+		assert(font);
+		assert(sourceString);
+		assert(out);
+
+		FillInScreenspacePosition(
+			sourceString,
+			stringLength,
+			font,
+			out
+		);
+
+		FillInFontTexture(
+			sourceString,
+			stringLength,
+			font,
+			out
+		);
+
+		FillInVertexIndexes(
+			sourceString,
+			stringLength,
+			font,
+			out
+		);
+
+	}

@@ -26,6 +26,14 @@ typedef union {
         f32 x;
         f32 y;
     };
+} v2u32;
+
+typedef union {
+    f32 arr[2];
+    struct {
+        f32 x;
+        f32 y;
+    };
 } v2;
 
 typedef union {

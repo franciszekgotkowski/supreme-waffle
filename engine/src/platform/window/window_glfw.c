@@ -114,6 +114,8 @@ void InitializeWindow(
     glfwSetFramebufferSizeCallback(windowData->window, framebuffer_size_callback);
     glfwSetWindowCloseCallback(windowData->window, window_should_close_callback);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void SetWindowToClose() {

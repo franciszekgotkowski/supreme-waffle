@@ -17,11 +17,11 @@ static i32 CompileVertexShader(
 	glCompileShader(vertexID);
 
 	i32 success;
-	mstr infoLog[512];
+	char infoLog[512];
 	glGetShaderiv(vertexID, GL_COMPILE_STATUS, &success);
 	if (!success) {
-		glGetShaderInfoLog(vertexID, 512, NULL, *infoLog);
-		printf("Error compiling vertex shader:\n%s\n\n", *infoLog);
+		glGetShaderInfoLog(vertexID, 512, NULL, infoLog);
+		printf("Error compiling vertex shader:\n%s\n\n", infoLog);
 	}
 	assert(success);
 	return vertexID;
@@ -38,11 +38,11 @@ static i32 CompileFragmentShader(
 	glCompileShader(fragmentID);
 
 	i32 success;
-	mstr infoLog[512];
+	char infoLog[512];
 	glGetShaderiv(fragmentID, GL_COMPILE_STATUS, &success);
 	if (!success) {
-		glGetShaderInfoLog(fragmentID, 512, NULL, *infoLog);
-		printf("Error compiling fragment shader:\n%s\n\n", *infoLog);
+		glGetShaderInfoLog(fragmentID, 512, NULL, infoLog);
+		printf("Error compiling fragment shader:\n%s\n\n", infoLog);
 	}
 	assert(success);
 	return fragmentID;
@@ -60,11 +60,11 @@ static i32 LinkShaderProgram(
 	glLinkProgram(shaderProgramID);
 
 	i32 success;
-	mstr infoLog[512];
+	char infoLog[512];
 	glGetShaderiv(shaderProgramID, GL_COMPILE_STATUS, &success);
 	if (!success) {
-		glGetShaderInfoLog(shaderProgramID, 512, NULL, *infoLog);
-		printf("Error compiling shader program:\n%s\n\n", *infoLog);
+		glGetShaderInfoLog(shaderProgramID, 512, NULL, infoLog);
+		printf("Error compiling shader program:\n%s\n\n", infoLog);
 	}
 	assert(success);
 

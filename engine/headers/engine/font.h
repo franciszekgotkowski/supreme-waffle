@@ -144,10 +144,43 @@ v2 GetTextureCoordinateTopRight(
 	Font* font
 );
 
+v2 GetCharacterDOffset(
+	u8 character,
+	Font* font
+);
+
+// for each character there will be one 4 edges each havind 4 floats and then after each egde will have their u32 offset for ebo
+// Each one will have counter clockwise points
+// and each point will be comprised of:
+// position x, y in screenspace (floats) and x, y for texture mapping
+// edges order: bottom left, bottom right, top right, top left
 void InitializeTextureCoordinatesBuffer(
+	str sourceString, // ascii line to generate
+	u32 stringLength,
 	Font* font, // font to look up to
-	str* textLine, // ascii line to generate
-	u32 offset, // offset from buffer to start filling in texture coordinates
-	u32 stride, // stride between characters texture coordinates
 	void* out
+);
+
+// fill in data under array with screenspace positions of characters
+void FillInScreenspacePosition(
+	str sourceString,
+	u32 stringLength,
+	Font* font,
+	f32* out // array to be filled in
+);
+
+// fill in data under array with texture of font
+void FillInFontTexture(
+	str sourceString,
+	u32 stringLength,
+	Font* font,
+	f32* out // array to be filled in
+);
+
+// fills in indexes for ebo
+void FillInVertexIndexes(
+	str sourceString,
+	u32 stringLength,
+	Font* font,
+	f32* out // array to be filled in
 );
