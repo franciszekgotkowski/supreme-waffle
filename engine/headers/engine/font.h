@@ -157,14 +157,17 @@ v2 GetCharacterDOffset(
 void InitializeTextureCoordinatesBuffer(
 	str sourceString, // ascii line to generate
 	u32 stringLength,
+	u32 fontScale, // by how much should font be scaled
 	Font* font, // font to look up to
-	void* out
+	f32* VBO_out,
+	u32* EBO_out
 );
 
 // fill in data under array with screenspace positions of characters
 void FillInScreenspacePosition(
 	str sourceString,
 	u32 stringLength,
+	u32 fontScale,
 	Font* font,
 	f32* out // array to be filled in
 );
@@ -182,5 +185,5 @@ void FillInVertexIndexes(
 	str sourceString,
 	u32 stringLength,
 	Font* font,
-	f32* out // array to be filled in
+	u32* out // array to be filled in
 );

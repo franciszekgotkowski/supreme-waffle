@@ -16,6 +16,7 @@
 
 #include <game/input_functions.h>
 
+#include <inttypes.h>
 #include <stdio.h>
 
 PointerTable* GameMemory = NULL;

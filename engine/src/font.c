@@ -1,3 +1,5 @@
+#include "engine/memory_pool.h"
+#include <alloca.h>
 #include <engine/platform/window_data.h>
 #include <stdbool.h>
 #include <string.h>
@@ -5,7 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <engine/platform/crossplatform_alloca.h>
+#include <engine/platform/graphics.h>
 #include <engine/platform/file_io.h>
 #include <engine/string_utils.h>
 #include <engine/font.h>
@@ -611,6 +613,7 @@ v2 GetTextureCoordinateTopRight(
 	return position;
 }
 
+
 v2 GetCharacterDOffset(
 	u8 character,
 	Font* font
@@ -630,116 +633,197 @@ void FillInFontTexture(
 	Font* font,
 	f32* out // array bo filled in
 ) {
+
 	assert(sourceString);
 	assert(font);
 	assert(out);
 
-	const u32 charStride = 4 * 4; // how many floats is there in one 'character edge'
-	const u32 vertexStride = 4; // how many floats is there in one 'character edge'
-	const u32 texturePositionOffset = 2; // i have to offset 2 floats because first are xy for creenspace
+	const u32 characterStride = 4 * 4;
+	const u32 vertexStride = 4;
+	const u32 uvOffset = 2;
 
-	// filling in bottom left position
+	// bottom left
 	for range(i, stringLength) {
-		v2 pos = GetTextureCoordinateBottomLeft(sourceString[i], font);
-		out[texturePositionOffset + i * charStride] = pos.x;
-		out[texturePositionOffset + 1 + i * charStride] = pos.y;
+		v2 uv = GetTextureCoordinateBottomLeft(sourceString[i], font);
+		out[characterStride * i + 0*vertexStride + uvOffset] = uv.x;
+		out[characterStride * i + 0*vertexStride + uvOffset + 1] = uv.y;
 	}
-
-	// filling in bottom right position
+	// bottom right
 	for range(i, stringLength) {
-		v2 pos = GetTextureCoordinateBottomRight(sourceString[i], font);
-		out[texturePositionOffset + vertexStride + i * charStride] = pos.x;
-		out[texturePositionOffset + 1 + vertexStride + i * charStride] = pos.y;
+		v2 uv = GetTextureCoordinateBottomRight(sourceString[i], font);
+		out[characterStride * i + 1*vertexStride + uvOffset] = uv.x;
+		out[characterStride * i + 1*vertexStride + uvOffset + 1] = uv.y;
 	}
-
-	// filling in top right position
+	// top right
 	for range(i, stringLength) {
-		v2 pos = GetTextureCoordinateTopRight(sourceString[i], font);
-		out[texturePositionOffset + 2*vertexStride + i * charStride] = pos.x;
-		out[texturePositionOffset + 1 + 2*vertexStride + i * charStride] = pos.y;
+		v2 uv = GetTextureCoordinateTopRight(sourceString[i], font);
+		out[characterStride * i + 2*vertexStride + uvOffset] = uv.x;
+		out[characterStride * i + 2*vertexStride + uvOffset + 1] = uv.y;
 	}
-
-	// filling in top left position
+	// top left
 	for range(i, stringLength) {
-		v2 pos = GetTextureCoordinateTopLeft(sourceString[i], font);
-		out[texturePositionOffset + 3*vertexStride + i * charStride] = pos.x;
-		out[texturePositionOffset + 1 + 3*vertexStride + i * charStride] = pos.y;
+		v2 uv = GetTextureCoordinateTopLeft(sourceString[i], font);
+		out[characterStride * i + 3*vertexStride + uvOffset] = uv.x;
+		out[characterStride * i + 3*vertexStride + uvOffset + 1] = uv.y;
 	}
 }
-//
-// static inline v2 screenspacePosition(v2u32 point, Font* font) {
-// 	assert(font);
-//
-// 	WindowData* windowData = GameMemory->regions[WINDOW_DATA].ptr;
-// 	v2 screenspace = {
-// 		.x = point.x / windowData->width,
-// 		.y = point.y / windowData->height
-// 	};
-// 	return screenspace;
-// }
-//
+
 void FillInScreenspacePosition(
 	str sourceString,
 	u32 stringLength,
+	u32 fontScale, // how much do i scale the font
 	Font* font,
 	f32* out // array bo filled in
 ) {
 
-}
-
-// fills in indexes for ebo
-void FillInVertexIndexes(
-	str sourceString,
-	u32 stringLength,
-	Font* font,
-	f32* out // array bo filled in
-) {
 	assert(sourceString);
 	assert(font);
 	assert(out);
 
-	const u32 eboOffset = stringLength * 4 * 4;
-	u32* eboOut = (u32*)(out + eboOffset);
+	const u32 characterStride = 4 * 4;
+	const u32 vertexStride = 4;
 
+	// creating table of pixel offsets for characters to make them string on screen
+	v2u32* needleoffsets = alloca(stringLength * sizeof(v2u32));
+	v2u32 needle = {
+		.x = 0,
+		.y = 0
+	};
 	for range(i, stringLength) {
-		eboOut[i*6 + 0] = i*4 + 0;
-		eboOut[i*6 + 1] = i*4 + 1;
-		eboOut[i*6 + 2] = i*4 + 3;
-		eboOut[i*6 + 3] = i*4 + 1;
-		eboOut[i*6 + 4] = i*4 + 2;
-		eboOut[i*6 + 5] = i*4 + 3;
+		needleoffsets[i] = needle;
+		needle.x += font->charactersData[font->offsetTable[(i8)sourceString[i]]].dWidthX;
+		needle.y += font->charactersData[font->offsetTable[(i8)sourceString[i]]].dWidthY;
+	}
+
+	// bottom left
+	for range(i, stringLength) {
+		v2u32 pos = {
+			.x = 0,
+			.y = font->boundingBoxH
+		};
+		pos.x += needleoffsets[i].x;
+		pos.y += needleoffsets[i].y;
+
+		pos.x *= fontScale;
+		pos.y *= fontScale;
+
+
+		v2 screenspacePos = PixelsToScreenspace(pos);
+
+		out[characterStride * i + 0*vertexStride] = screenspacePos.x;
+		out[characterStride * i + 0*vertexStride + 1] = screenspacePos.y;
+	}
+
+	// bottom right
+	for range(i, stringLength) {
+
+		v2u32 pos = {
+			.x = font->boundingBoxW,
+			.y = font->boundingBoxH
+		};
+		pos.x += needleoffsets[i].x;
+		pos.y += needleoffsets[i].y;
+
+		pos.x *= fontScale;
+		pos.y *= fontScale;
+
+		v2 screenspacePos = PixelsToScreenspace(pos);
+
+		out[characterStride * i + 1*vertexStride] = screenspacePos.x;
+		out[characterStride * i + 1*vertexStride + 1] = screenspacePos.y;
+	}
+
+	// top right
+	for range(i, stringLength) {
+		v2u32 pos = {
+			.x = font->boundingBoxW,
+			.y = 0
+		};
+		pos.x += needleoffsets[i].x;
+		pos.y += needleoffsets[i].y;
+
+		pos.x *= fontScale;
+		pos.y *= fontScale;
+
+		v2 screenspacePos = PixelsToScreenspace(pos);
+
+		out[characterStride * i + 2*vertexStride] = screenspacePos.x;
+		out[characterStride * i + 2*vertexStride + 1] = screenspacePos.y;
+	}
+
+	// top left
+	for range(i, stringLength) {
+		v2u32 pos = {
+			.x = 0,
+			.y = 0
+		};
+		pos.x += needleoffsets[i].x;
+		pos.y += needleoffsets[i].y;
+
+		pos.x *= fontScale;
+		pos.y *= fontScale;
+
+		v2 screenspacePos = PixelsToScreenspace(pos);
+
+		out[characterStride * i + 3*vertexStride] = screenspacePos.x;
+		out[characterStride * i + 3*vertexStride + 1] = screenspacePos.y;
 	}
 }
 
-	void InitializeTextureCoordinatesBuffer(
-		str sourceString, // ascii line to generate
+	// fills in indexes for ebo
+	void FillInVertexIndexes(
+		str sourceString,
 		u32 stringLength,
-		Font* font, // font to look up to
-		void* out
+		Font* font,
+		u32* out // array bo filled in
 	) {
+
 		assert(font);
 		assert(sourceString);
 		assert(out);
 
+		for range(i, stringLength) {
+			out[6 * i + 0] = i * 4 + 0;
+			out[6 * i + 1] = i * 4 + 1;
+			out[6 * i + 2] = i * 4 + 3;
+			out[6 * i + 3] = i * 4 + 1;
+			out[6 * i + 4] = i * 4 + 2;
+			out[6 * i + 5] = i * 4 + 3;
+		}
+	}
+
+	void InitializeTextureCoordinatesBuffer(
+		str sourceString, // ascii line to generate
+		u32 stringLength,
+		u32 fontScale,
+		Font* font, // font to look up to
+		f32* VBO_out,
+		u32* EBO_out
+	) {
+		assert(font);
+		assert(sourceString);
+		assert(VBO_out);
+
 		FillInScreenspacePosition(
 			sourceString,
 			stringLength,
+			fontScale,
 			font,
-			out
+			VBO_out
 		);
 
 		FillInFontTexture(
 			sourceString,
 			stringLength,
 			font,
-			out
+			VBO_out
 		);
 
 		FillInVertexIndexes(
 			sourceString,
 			stringLength,
 			font,
-			out
+			EBO_out
 		);
 
 	}

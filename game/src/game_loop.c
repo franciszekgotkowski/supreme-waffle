@@ -1,7 +1,5 @@
-#include "engine/platform/shader.h"
-#include "engine/range.h"
-#include "glad/glad.h"
-#include <alloca.h>
+#include <engine/platform/shader.h>
+#include <external/glad/glad.h>
 #include <engine/platform/graphics.h>
 #include <game/input_functions.h>
 #include <engine/memory_pool.h>
@@ -11,16 +9,13 @@
 #include <game/game_loop.h>
 #include <engine/platform/game_loop.h>
 
-#include <stdbool.h>
-#include <string.h>
 #include <external/stb_image_write.h>
 
 #include <engine/platform/file_io.h>
+#include <engine/platform/crossplatform_alloca.h>
 #include <engine/font.h>
 #include <stdio.h>
-#include <math.h>
-
-#include "glfw3.h"
+#include <string.h>
 
 extern PointerTable *GameMemory;
 
@@ -28,31 +23,8 @@ void GameLoop() {
     const PointerTable *table = GameMemory;
     assert(table);
 
-    // ShaderProgramID shader = CreateShaderProgram("../../engine/src/shaders/triangle.vert", "../../engine/src/shaders/triangle.frag");
-
-    // f32 vertices[] = {
-    // 	-0.5f, -0.5f, 0.0f,
-    // 	0.5f, -0.5f, 0.0f,
-    // 	0.0f,  0.5f, 0.0f
-    // };
-
-    // u32 VBO;
-    // glGenBuffers(1, &VBO);
-    // u32 VAO;
-    // glGenVertexArrays(1, &VAO);
-
-    // glBindVertexArray(VAO);
-    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(f32), (void*)0);
-    // glEnableVertexAttribArray(0);
-
-    // UseShaderProgram(shader);
-    // glBindVertexArray(VAO);
-
     FileData file;
-    readEntireTextFile("../../assets/fonts/bdf/cherry-11-r.bdf", &file);
+    readEntireTextFile("../../assets/fonts/bdf/cherry-11-b.bdf", &file);
     Font f = InitializeFont(file);
     printf("space needed for cherry-11-r.bdf = %llu\n", (llu) GetSizeForEntireFont(&f));
     Font *font = alloca(GetSizeForEntireFont(&f));
@@ -83,31 +55,21 @@ void GameLoop() {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureID);
 
-    f32 buf[] = {
-        0.0f, 0.0f, GetTextureCoordinateBottomLeft('&', font).x, GetTextureCoordinateBottomLeft('&', font).y,
-        0.06f, 0.0f, GetTextureCoordinateBottomRight('&', font).x, GetTextureCoordinateBottomRight('&', font).y,
-        0.06f, 0.11f, GetTextureCoordinateTopRight('&', font).x, GetTextureCoordinateTopRight('&', font).y,
-        0.0f, 0.11f, GetTextureCoordinateTopLeft('&', font).x, GetTextureCoordinateTopLeft('&', font).y,
-        0.06f + 0.0f, 0.0f, GetTextureCoordinateBottomLeft('s', font).x, GetTextureCoordinateBottomLeft('s', font).y,
-        0.06f + 0.06f, 0.0f, GetTextureCoordinateBottomRight('s', font).x, GetTextureCoordinateBottomRight('s', font).y,
-        0.06f + 0.06f, 0.11f, GetTextureCoordinateTopRight('s', font).x, GetTextureCoordinateTopRight('s', font).y,
-        0.06f + 0.0f, 0.11f, GetTextureCoordinateTopLeft('s', font).x, GetTextureCoordinateTopLeft('s', font).y,
-        2.0f * 0.06f + 0.0f, 0.0f, GetTextureCoordinateBottomLeft('@', font).x, GetTextureCoordinateBottomLeft('@', font).y,
-        2.0f * 0.06f + 0.06f, 0.0f, GetTextureCoordinateBottomRight('@', font).x, GetTextureCoordinateBottomRight('@', font).y,
-        2.0f * 0.06f + 0.06f, 0.11f, GetTextureCoordinateTopRight('@', font).x, GetTextureCoordinateTopRight('@', font).y,
-        2.0f * 0.06f + 0.0f, 0.11f, GetTextureCoordinateTopLeft('@', font).x, GetTextureCoordinateTopLeft('@', font).y,
-    };
+    str s = "W strzebrzeszynie chrzaszcz brzmi w trzcinie!";
+    // str s = "I wtedy dopiero zrozumialem ile $$ jestem w stanie zarobic piszac maile z konta paprykojad@gmail.com!";
+    // str s = "YAT";
+    u32 bufsize = strlen(s) * 4 * 4 * sizeof(f32);
+    printf("bufsize = %d\n", bufsize);
+    f32* buf = alloca(bufsize);
 
-    u32 ebobuf[] = {
-        0, 1, 3,
-        1, 2, 3,
+    u32 ebobufsize = strlen(s) * sizeof(u32) * 6;
+    u32* ebobuf = alloca(ebobufsize);
 
-        4, 5, 7,
-        5, 6, 7,
-
-        8, 9, 11,
-        9, 10, 11
-    };
+    // FillInFontTexture(s, strlen(s), font, buf);
+    // FillInScreenspacePosition(s, strlen(s), font, buf);
+    // FillInVertexIndexes(s, strlen(s), font, ebobuf);
+    //
+    InitializeTextureCoordinatesBuffer(s, strlen(s), 2, font, buf, ebobuf);
 
     u32 VAO;
     u32 VBO;
@@ -118,10 +80,10 @@ void GameLoop() {
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(buf), buf, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, bufsize, buf, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ebobuf), ebobuf, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ebobufsize, ebobuf, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(f32), (void *) 0);
@@ -150,9 +112,9 @@ void GameLoop() {
         // handleGameEvents(table);
         // renderScene(table);
 
-        offset[1] = 0.5f*sin(glfwGetTime());
+        // offset[1] = 0.5f*sin(glfwGetTime());
         glUniform2fv(loc, 1, offset);
-        glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, (void *) 0);
+        glDrawElements(GL_TRIANGLES, strlen(s)*6, GL_UNSIGNED_INT, (void *) 0);
 
 
         updateBuffer();
