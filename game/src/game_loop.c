@@ -98,7 +98,7 @@ void GameLoop() {
     GLint loc = glGetUniformLocation(FontShader, "FontTexture");
     glUniform1i(loc, 0);
     loc = glGetUniformLocation(FontShader, "fontColor");
-    f32 color[3] = {0.0f, 1.0f, 1.0f};
+    f32 color[3] = {1.0f, 0.5f, 0.2f};
     glUniform3fv(loc, 1, color);
     glBindVertexArray(VAO);
 
