@@ -17,6 +17,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <math.h>
+#include <external/glfw3.h>
+
 extern PointerTable *GameMemory;
 
 void GameLoop() {
@@ -55,7 +58,8 @@ void GameLoop() {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureID);
 
-    str s = "W strzebrzeszynie chrzaszcz brzmi w trzcinie!";
+    // TODO: i have to somehow assert that i cannot use non ascii characters
+    str s = "Jak Kuba Bogu tak Bog Kubie...";
     // str s = "I wtedy dopiero zrozumialem ile $$ jestem w stanie zarobic piszac maile z konta paprykojad@gmail.com!";
     // str s = "YAT";
     u32 bufsize = strlen(s) * 4 * 4 * sizeof(f32);
@@ -69,7 +73,7 @@ void GameLoop() {
     // FillInScreenspacePosition(s, strlen(s), font, buf);
     // FillInVertexIndexes(s, strlen(s), font, ebobuf);
     //
-    InitializeTextureCoordinatesBuffer(s, strlen(s), 2, font, buf, ebobuf);
+    InitializeTextureCoordinatesBuffer(s, strlen(s), 3, font, buf, ebobuf);
 
     u32 VAO;
     u32 VBO;
@@ -112,7 +116,7 @@ void GameLoop() {
         // handleGameEvents(table);
         // renderScene(table);
 
-        // offset[1] = 0.5f*sin(glfwGetTime());
+        offset[1] = -1.0f-0.5f*sin(glfwGetTime());
         glUniform2fv(loc, 1, offset);
         glDrawElements(GL_TRIANGLES, strlen(s)*6, GL_UNSIGNED_INT, (void *) 0);
 
