@@ -18,6 +18,9 @@
 #include <engine/platform/file_io.h>
 #include <engine/font.h>
 #include <stdio.h>
+#include <math.h>
+
+#include "glfw3.h"
 
 extern PointerTable *GameMemory;
 
@@ -89,10 +92,10 @@ void GameLoop() {
         0.06f + 0.06f, 0.0f, GetTextureCoordinateBottomRight('s', font).x, GetTextureCoordinateBottomRight('s', font).y,
         0.06f + 0.06f, 0.11f, GetTextureCoordinateTopRight('s', font).x, GetTextureCoordinateTopRight('s', font).y,
         0.06f + 0.0f, 0.11f, GetTextureCoordinateTopLeft('s', font).x, GetTextureCoordinateTopLeft('s', font).y,
-        2.0f * 0.06f + 0.0f, 0.0f, GetTextureCoordinateBottomLeft('Y', font).x, GetTextureCoordinateBottomLeft('&', font).y,
-        2.0f * 0.06f + 0.06f, 0.0f, GetTextureCoordinateBottomRight('Y', font).x, GetTextureCoordinateBottomRight('&', font).y,
-        2.0f * 0.06f + 0.06f, 0.11f, GetTextureCoordinateTopRight('Y', font).x, GetTextureCoordinateTopRight('&', font).y,
-        2.0f * 0.06f + 0.0f, 0.11f, GetTextureCoordinateTopLeft('Y', font).x, GetTextureCoordinateTopLeft('&', font).y,
+        2.0f * 0.06f + 0.0f, 0.0f, GetTextureCoordinateBottomLeft('@', font).x, GetTextureCoordinateBottomLeft('@', font).y,
+        2.0f * 0.06f + 0.06f, 0.0f, GetTextureCoordinateBottomRight('@', font).x, GetTextureCoordinateBottomRight('@', font).y,
+        2.0f * 0.06f + 0.06f, 0.11f, GetTextureCoordinateTopRight('@', font).x, GetTextureCoordinateTopRight('@', font).y,
+        2.0f * 0.06f + 0.0f, 0.11f, GetTextureCoordinateTopLeft('@', font).x, GetTextureCoordinateTopLeft('@', font).y,
     };
 
     u32 ebobuf[] = {
@@ -128,6 +131,7 @@ void GameLoop() {
 
     UseShaderProgram(FontShader);
 
+    f32 offset[2] = {0.0f, 0.0f};
     glBindTexture(GL_TEXTURE_2D, textureID);
     GLint loc = glGetUniformLocation(FontShader, "FontTexture");
     glUniform1i(loc, 0);
@@ -137,6 +141,7 @@ void GameLoop() {
     glBindVertexArray(VAO);
 
 
+    loc = glGetUniformLocation(FontShader, "offset");
     while (!((WindowData *) getRegion(WINDOW_DATA))->windowShouldClose) {
         clearScreen();
 
@@ -145,6 +150,8 @@ void GameLoop() {
         // handleGameEvents(table);
         // renderScene(table);
 
+        offset[1] = 0.5f*sin(glfwGetTime());
+        glUniform2fv(loc, 1, offset);
         glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, (void *) 0);
 
 
