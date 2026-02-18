@@ -1,3 +1,4 @@
+#include "engine/platform/measure_time.h"
 #include <assert.h>
 #include <stdio.h>
 
@@ -75,19 +76,22 @@ void InitializeWindow(
          	break;
     }
 
-
+    TimeStamp t = InitializeTimeStamp();
 
     (*windowData) = (WindowData){
         .window = NULL,
         .height = height,
         .width = width,
         .fps = fps,
-        .frametime = 1000.0f*1/fps,
+        .frametime = 1000.0f/fps,
         .cursorMode = cursorModeGlfw,
         .vsync = vsync,
         .resizable = resizable,
         .windowShouldClose = false,
         .clearColor = clearColor,
+        .framesElapsed = 0,
+        .bootTimeStamp = t,
+        .frametimeEveningTimeStamp = t,
     };
 
     // if (!glfwInit()) {return LIBRARY_FAIL;}
@@ -103,6 +107,7 @@ void InitializeWindow(
 
     glfwMakeContextCurrent(windowData->window);
     glfwSetInputMode(windowData->window, GLFW_CURSOR, cursorModeGlfw);
+
     glfwSwapInterval(vsync);
 
     assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));

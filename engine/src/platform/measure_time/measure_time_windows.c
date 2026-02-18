@@ -15,10 +15,10 @@ _Static_assert(sizeof(win_stamp)==sizeof(timestamp), "lin_stamp has different si
 inline timestamp make_stamp() {
     /*
     timestamp:
-    [8bit] - frequency
-    [8bit] - then
-    [8bit] - now
-    [8bit] - diff
+    [8byte] - frequency
+    [8byte] - then
+    [8byte] - now
+    [8byte] - diff
     */
 
     win_stamp stamp = {0};
@@ -48,8 +48,9 @@ inline f64 read_elapsed_time(timestamp* ptr) {
     return stamp->diff;
 }
 
-inline void wait_for_frame(timestamp* ptr, f64 fps) {
-    win_stamp* stamp = (win_stamp*)ptr;
+inline void wait_for_frame() {
+    win_stamp* stamp = (win_stamp*)&(((WindowData*)getRegion(WINDOW_DATA))->fpsMaintainingTimestamp);
+    i32 fps = ((WindowData*)getRegion(WINDOW_DATA))->fps;
 
     f64 timePerFrame = 1000.0/fps;
     f64 timeToWait = timePerFrame - stamp->diff;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <engine/platform/measure_time.h>
 #include <engine/typedefs.h>
 #include <engine/errors.h>
 #include <engine/memory_pool.h>
@@ -23,6 +24,10 @@ typedef struct {
     bool resizable;
     bool windowShouldClose;
     v4 clearColor;
+
+    u64 framesElapsed;
+    TimeStamp bootTimeStamp;
+    TimeStamp frametimeEveningTimeStamp;
 } WindowData ;
 
 void InitializeWindow(

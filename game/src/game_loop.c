@@ -1,3 +1,4 @@
+#include "engine/platform/measure_time.h"
 #include <engine/platform/shader.h>
 #include <external/glad/glad.h>
 #include <engine/platform/graphics.h>
@@ -108,6 +109,8 @@ void GameLoop() {
 
 
     loc = glGetUniformLocation(FontShader, "offset");
+
+    WindowData* windowData = getRegion(WINDOW_DATA);
     while (!((WindowData *) getRegion(WINDOW_DATA))->windowShouldClose) {
         clearScreen();
 
@@ -123,6 +126,15 @@ void GameLoop() {
 
         updateBuffer();
         handleEngineEvents();
+        windowData->framesElapsed++;
     }
     CloseWindow();
+    u64 frames = windowData->framesElapsed;
+    // TODO: probably some number overflow in PrintTimeSince on miliseconds
+    TimeStamp since = PrintTimeSince(windowData->bootTimeStamp);
+    f64 fsec = (f64)since.sec;
+    f64 fnsectosec = (f64)since.nsec/1000000000.f;
+    f64 fsince = fsec + fnsectosec;
+    f64 fps = (f64)frames/fsince;
+    printf("Average fps: %f\n", fps);
 }

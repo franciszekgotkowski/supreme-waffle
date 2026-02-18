@@ -1,66 +1,98 @@
-#include <string.h>
+#include <engine/memory_pool.h>
 #include <engine/platform/measure_time.h>
-#include <engine/typedefs.h>
 
+#include <assert.h>
+#include <stdio.h>
 #include <time.h>
 
-typedef struct timespec timespec;
+extern PointerTable* GameMemory;
 
-typedef struct {
-    timespec then;
-    timespec now;
-}lin_stamp;
+inline TimeStamp InitializeTimeStamp() {
+	struct timespec spec;
+	i32 errno = clock_gettime(CLOCK_REALTIME, &spec);
+	assert(errno == 0);
 
-_Static_assert(sizeof(lin_stamp) == sizeof(timestamp), "lin_stamp has different size from timestamp");
-
-timestamp make_stamp() {
-    lin_stamp stamp = {};
-
-    clock_gettime(CLOCK_MONOTONIC, &stamp.now);
-    timestamp t;
-    memcpy(&t, &stamp, sizeof(t));
-    return t;
+	return (TimeStamp){
+		.sec = spec.tv_sec,
+		.nsec = spec.tv_nsec
+	};
 }
 
-static inline f64 time_diff(timespec then, timespec now) {
-    f64 timeThen = then.tv_sec*1000.0 + then.tv_nsec/1000000.0;
-    f64 timeNow = now.tv_sec*1000.0 + now.tv_nsec/1000000.0;
-    return timeNow - timeThen;
+inline DoubleTimeStamp InitializeDoubleTimeStamp(){
+	struct timespec spec;
+	i32 errno = clock_gettime(CLOCK_REALTIME, &spec);
+	assert(errno == 0);
+
+	return (DoubleTimeStamp){
+		.then = {
+			.sec = spec.tv_sec,
+			.nsec = spec.tv_nsec
+		}
+	};
 }
 
-f64 elapsed_time(timestamp* ptr) {
-    lin_stamp* stamp = (lin_stamp*)ptr;
+inline void UpdateDoubleTimeStamp(DoubleTimeStamp *ptr) {
+	assert(ptr);
 
-    stamp->then = stamp->now;
-    clock_gettime(CLOCK_MONOTONIC, &stamp->now);
+	struct timespec spec;
+	i32 errno = clock_gettime(CLOCK_REALTIME, &spec);
+	assert(errno == 0);
 
-    return time_diff(stamp->then, stamp->now);
+	ptr->then = ptr->now;
+	ptr->now = (TimeStamp) {
+		.sec = spec.tv_sec,
+		.nsec = spec.tv_nsec
+	};
+
+	return;
 }
 
-f64 read_elapsed_time(timestamp* ptr) {
-    lin_stamp* stamp = (lin_stamp*)ptr;
-    return time_diff(stamp->then, stamp->now);
+inline TimeStamp TimeSince(TimeStamp stamp) {
+		struct timespec spec;
+		i32 errno = clock_gettime(CLOCK_REALTIME, &spec);
+		assert(errno == 0);
+
+		return (TimeStamp) {
+			.sec = spec.tv_sec - stamp.sec,
+			.nsec = spec.tv_nsec - stamp.nsec
+		};
+}
+inline TimeStamp PrintTimeSince(TimeStamp stamp) {
+	TimeStamp diff = TimeSince(stamp);
+	printf("Time elapsed: %llus %llums\n", (llu)diff.sec, (llu)diff.nsec);
+	return diff;
 }
 
-void wait_for_frame(timestamp* ptr, f64 fps) {
-    lin_stamp* stamp = (lin_stamp*)ptr;
+inline i8 Smaller(TimeStamp a, TimeStamp b) {
+	if (a.sec < b.sec) {
+		return -1;
+	} else if (a.sec > b.sec) {
+		return 1;
+	} else {
+		if (a.nsec < b.nsec) {
+			return -1;
+		} else if (a.nsec > b.nsec) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+}
 
-    u64 timePerFrame = 1000000000/fps;
+inline void MatchFrametime(TimeStamp frameTime, TimeStamp lastStamp) {
+	TimeStamp elapsed = TimeSince(lastStamp);
 
-    timespec target = {
-        .tv_sec = (timePerFrame/1000000000),
-        .tv_nsec = (timePerFrame%1000000000)
-    };
+	if (Smaller(elapsed, frameTime) == 1) {
+		printf("FRAMETIME MISSED!!!\tFRAME TOOK %llus %llums\n", (llu)elapsed.sec, (llu)elapsed.nsec);
+		return;
+	}
 
-    timespec timediff = {
-        .tv_sec = stamp->now.tv_sec - stamp->then.tv_sec,
-        .tv_nsec = stamp->now.tv_nsec - stamp->then.tv_nsec,
-    };
+	struct timespec diff = {
+		.tv_sec = frameTime.sec - elapsed.sec,
+		.tv_nsec = frameTime.nsec - elapsed.nsec
+	};
+	struct timespec remaining;
 
-    timespec timeToWait = {
-        .tv_sec = target.tv_sec - timediff.tv_sec,
-        .tv_nsec = target.tv_nsec - timediff.tv_nsec
-    };
-
-    nanosleep(&timeToWait, NULL);
+	i32 errno = nanosleep(&diff, &remaining);
+	assert(errno == 0);
 }

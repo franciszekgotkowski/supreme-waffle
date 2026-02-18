@@ -34,7 +34,7 @@ elseif(WIN32)
 	list(APPEND
 			ENGINE_SOURCES
 			src/platform/memory/memory_windows.c
-			src/platform/measure_time/measure_time_windows.c
+			# src/platform/measure_time/measure_time_windows.c
 			src/platform/file_io/file_io_windows.c
 	)
 	target_link_directories(engine PUBLIC
