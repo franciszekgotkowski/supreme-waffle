@@ -48,14 +48,28 @@ inline void UpdateDoubleTimeStamp(DoubleTimeStamp *ptr) {
 }
 
 inline TimeStamp TimeSince(TimeStamp stamp) {
-		struct timespec spec;
-		i32 errno = clock_gettime(CLOCK_REALTIME, &spec);
+		struct timespec now;
+		i32 errno = clock_gettime(CLOCK_REALTIME, &now);
 		assert(errno == 0);
+		// checking if stamp is not from future
+		assert(
+			stamp.sec < now.tv_sec ||
+			(stamp.sec == now.tv_sec && stamp.nsec < now.tv_nsec)
+		);
 
-		return (TimeStamp) {
-			.sec = spec.tv_sec - stamp.sec,
-			.nsec = spec.tv_nsec - stamp.nsec
-		};
+		TimeStamp timeDiff = {};
+
+		if (now.tv_nsec < stamp.nsec) {
+			u64 nsecDiff = stamp.nsec - now.tv_nsec;
+
+			timeDiff.sec = now.tv_sec - stamp.sec - 1;
+			timeDiff.nsec = 1000000000 - nsecDiff;
+		} else {
+			timeDiff.nsec = now.tv_nsec - stamp.nsec;
+			timeDiff.sec = now.tv_sec - stamp.sec;
+		}
+
+		return timeDiff;
 }
 inline TimeStamp PrintTimeSince(TimeStamp stamp) {
 	TimeStamp diff = TimeSince(stamp);

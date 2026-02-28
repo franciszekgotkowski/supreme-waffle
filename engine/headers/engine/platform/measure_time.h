@@ -21,6 +21,7 @@ DoubleTimeStamp InitializeDoubleTimeStamp();
 void UpdateDoubleTimeStamp(DoubleTimeStamp* ptr);
 
 // returns time since timestamp
+// timestamp cannot point to future
 TimeStamp TimeSince(TimeStamp stamp);
 //same as TimeSince but also prints it
 TimeStamp PrintTimeSince(TimeStamp stamp);
