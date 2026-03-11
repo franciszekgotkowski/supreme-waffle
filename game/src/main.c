@@ -50,36 +50,6 @@ int main() {
     );
     assert(err == OK);
 
-
-    // DEBUG CODE
-   	SceneData* sceneData = (SceneData*)getRegion(LOADING_SCREEN_SCENE);
-
-   	printf("Loading screen scene has: %lluMB %lluKB %lluB\n", (llu)sceneData->capacity/MB, (llu)(sceneData->capacity%MB)/KB, (llu)(sceneData->capacity%KB));
-   	printf("Scene struct has: %lluMB %lluKB %lluB\n", (llu)sizeof(SceneData)/MB, (llu)(sizeof(SceneData)%MB)/KB, (llu)(sizeof(SceneData)%KB));
-   	u64 togetherSize = sceneData->capacity + sizeof(SceneData);
-   	printf("Together they have: %lluMB %lluKB %lluB\n", (llu)togetherSize/MB, (llu)(togetherSize%MB)/KB, (llu)(togetherSize%KB));
-
-   	u64 assetSize = KB/2;
-   	u64 asset1 = RegisterNewAsset(
-  		sceneData,
-  		assetSize,
-   	&err
-   	);
-   	assert(err == OK);
-   	memset(sceneData->asset[asset1].ptr, 0, assetSize);
-
-
-   	u64 gameObjectSize = KB/2;
-   	u64 gameObject1 = RegisterNewGameObject(
-  		sceneData,
-  		gameObjectSize,
-   	&err
-   	);
-   	assert(err == OK);
-   	memset(sceneData->gameObject[gameObject1].ptr, 1, gameObjectSize);
-    // END OF DEBUG CODE
-
-
     // err = LoadGameScene(
     // 	"stub",
     //  	"stub"
