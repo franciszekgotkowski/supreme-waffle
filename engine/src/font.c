@@ -778,7 +778,7 @@ void FillInVertexIndicies(
 
 	assert(out);
 
-	const u32 indexToAdd = amountOfExistingLetters * 6;
+	const u32 indexToAdd = amountOfExistingLetters * 4;
 
 	for range(i, stringLength) {
 		out[6 * i + 0] = i * 4 + 0 + indexToAdd;

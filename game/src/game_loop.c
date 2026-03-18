@@ -65,7 +65,6 @@ void GameLoop() {
 
 	TextData* textData = sceneData->gameObject[TextID].ptr;
 
-
 	str s = "......Jak Kuba Bogu tak Bog Kubie...";
 	err = AppendNewLine(
 		s,
@@ -105,6 +104,28 @@ void GameLoop() {
 		8
 	);
 	assert(err == OK);
+
+	str s3 = "Erysipelothrix!!!";
+	err = AppendNewLine(
+		s3,
+		strlen(s3),
+		sceneData->gameObject[TextID].ptr,
+		sceneData->asset[CherryFontID].ptr,
+		(v2){
+			.x = 1.0f,
+			.y = 0.0f,
+		},
+		(Color){
+			.r = 1.0f,
+			.g = 0.0f,
+			.b = 1.0f,
+			.a = 1.0f
+		},
+		2
+	);
+	assert(err == OK);
+
+
 
 	ShaderProgramID TextShader = CreateShaderProgram("../../engine/src/shaders/render_text.vert", "../../engine/src/shaders/render_text.frag");
 	// ShaderProgramID TextShader = CreateShaderProgram("../../engine/src/shaders/font.vert", "../../engine/src/shaders/font.frag");
@@ -146,7 +167,7 @@ void GameLoop() {
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void *) (2 * sizeof(f32)));
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void *) (4 * sizeof(f32)));
+	glVertexAttribIPointer(2, 1, GL_UNSIGNED_INT, 5 * sizeof(f32), (void *) (4 * sizeof(f32)));
 
 
 	UseShaderProgram(TextShader);
@@ -189,7 +210,7 @@ void GameLoop() {
 		glUniform2fv(uOffset, MAX_AMOUNT_OF_LINES_IN_SCENE, (const GLfloat*)(textData->linesData.offset));
 		glUniform1uiv(uScale, MAX_AMOUNT_OF_LINES_IN_SCENE, (const GLuint*)(textData->linesData.scale));
 		glUniform4fv(uColor, MAX_AMOUNT_OF_LINES_IN_SCENE, (const GLfloat*)(textData->linesData.color));
-		glUniform1iv(uShouldDraw, MAX_AMOUNT_OF_LINES_IN_SCENE/4, (const GLint*)(textData->linesData.offset));
+		glUniform1iv(uShouldDraw, MAX_AMOUNT_OF_LINES_IN_SCENE/4, (const GLint*)(textData->linesData.shouldDraw));
 		glUniform1i(uFontTexture, 0);
 
 		// glUniform2fv(loc, 1, offset);

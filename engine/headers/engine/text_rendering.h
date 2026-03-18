@@ -80,7 +80,7 @@ typedef struct {
 	v2 offset[MAX_AMOUNT_OF_LINES_IN_SCENE];
 	Color color[MAX_AMOUNT_OF_LINES_IN_SCENE];
 	u32 scale[MAX_AMOUNT_OF_LINES_IN_SCENE];
-	bool shouldDraw[MAX_AMOUNT_OF_LINES_IN_SCENE];
+	u32 shouldDraw[MAX_AMOUNT_OF_LINES_IN_SCENE];
 
 	mstr* textPtr[MAX_AMOUNT_OF_LINES_IN_SCENE];
 	void* verticiesPtr[MAX_AMOUNT_OF_LINES_IN_SCENE];
