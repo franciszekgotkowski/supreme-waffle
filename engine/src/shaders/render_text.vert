@@ -5,7 +5,7 @@ layout(location = 1) in vec2 aUvPosition;
 layout(location = 2) in uint aLineIdx;
 
 // this is defined in text_rendering.h on programs side
-const uint MAX_AMOUNT_OF_LINES_IN_SCENE = 1024;
+const int MAX_AMOUNT_OF_LINES_IN_SCENE = 1024;
 
 uniform vec2 uOffset[MAX_AMOUNT_OF_LINES_IN_SCENE];
 uniform uint uScale[MAX_AMOUNT_OF_LINES_IN_SCENE];

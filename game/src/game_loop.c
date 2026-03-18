@@ -65,26 +65,6 @@ void GameLoop() {
 
 	TextData* textData = sceneData->gameObject[TextID].ptr;
 
-	str s2 = "o-o-o-o";
-	err = AppendNewLine(
-		s2,
-		strlen(s2),
-		sceneData->gameObject[TextID].ptr,
-		sceneData->asset[CherryFontID].ptr,
-		(v2){
-			.x = 0.0f,
-			.y = 0.0f,
-		},
-		(Color){
-			.r = 1.0f,
-			.g = 0.7f,
-			.b = 0.1f,
-			.a = 1.0f
-		},
-		8
-	);
-	assert(err == OK);
-
 
 	str s = "......Jak Kuba Bogu tak Bog Kubie...";
 	err = AppendNewLine(
@@ -106,9 +86,28 @@ void GameLoop() {
 	);
 	assert(err == OK);
 
+	str s2 = "o-o-o-o";
+	err = AppendNewLine(
+		s2,
+		strlen(s2),
+		sceneData->gameObject[TextID].ptr,
+		sceneData->asset[CherryFontID].ptr,
+		(v2){
+			.x = 1.0f,
+			.y = -1.0f,
+		},
+		(Color){
+			.r = 1.0f,
+			.g = 0.7f,
+			.b = 0.1f,
+			.a = 1.0f
+		},
+		8
+	);
+	assert(err == OK);
 
-	ShaderProgramID FontShader = CreateShaderProgram("../../engine/src/shaders/font.vert",
-		"../../engine/src/shaders/font.frag");
+	ShaderProgramID TextShader = CreateShaderProgram("../../engine/src/shaders/render_text.vert", "../../engine/src/shaders/render_text.frag");
+	// ShaderProgramID TextShader = CreateShaderProgram("../../engine/src/shaders/font.vert", "../../engine/src/shaders/font.frag");
 
 	u32 textureID;
 	glGenTextures(1, &textureID);
@@ -146,19 +145,25 @@ void GameLoop() {
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void *) 0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void *) (2 * sizeof(f32)));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(f32), (void *) (4 * sizeof(f32)));
 
 
-	UseShaderProgram(FontShader);
+	UseShaderProgram(TextShader);
 
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	GLint TextureLocation = glGetUniformLocation(FontShader, "FontTexture");
-	glUniform1i(TextureLocation, 0);
-	GLint ColorLocation = glGetUniformLocation(FontShader, "fontColor");
-	glUniform3fv(TextureLocation, 1, textData->linesData.color[0].rgb);
+
+	// GLint TextureLocation = glGetUniformLocation(TextShader, "FontTexture");
+	// GLint ColorLocation = glGetUniformLocation(TextShader, "fontColor");
+	// GLint OffsetLocation = glGetUniformLocation(TextShader, "offset");
+
+	GLint uOffset = glGetUniformLocation(TextShader, "uOffset");
+	GLint uScale = glGetUniformLocation(TextShader, "uScale");
+	GLint uColor = glGetUniformLocation(TextShader, "uColor");
+	GLint uShouldDraw = glGetUniformLocation(TextShader, "uShouldDraw");
+	GLint uFontTexture = glGetUniformLocation(TextShader, "uFontTexture");
+
 	glBindVertexArray(VAO);
-
-
-	GLint OffsetLocation = glGetUniformLocation(FontShader, "offset");
 	printf("TOTAL_SIZE_FOR_TEXT_RENDERING = %lluMb %lluKb %llub\n", (llu)TOTAL_SIZE_FOR_TEXT_RENDERING/MB, (llu)((TOTAL_SIZE_FOR_TEXT_RENDERING%MB)/KB), (llu)(TOTAL_SIZE_FOR_TEXT_RENDERING%KB));
 
 	WindowData* windowData = getRegion(WINDOW_DATA);
@@ -174,9 +179,19 @@ void GameLoop() {
 
 		// textData->line[0].offset.y = -1.0f-sin(glfwGetTime());
 		textData->linesData.offset[0].y = -1.0f-sin(glfwGetTime());
-		glUniform2fv(OffsetLocation, 1, textData->linesData.offset[0].arr);
 		textData->linesData.color[0].g = 0.5f+0.5f*sin(10*glfwGetTime());
-		glUniform3fv(ColorLocation, 1, textData->linesData.color[0].rgb);
+
+		// glUniform2fv(OffsetLocation, 1, textData->linesData.offset[0].arr);
+		// glUniform3fv(ColorLocation, 1, textData->linesData.color[0].rgb);
+		// glUniform1i(TextureLocation, 0);
+		// glUniform3fv(TextureLocation, 1, textData->linesData.color[0].rgb);
+
+		glUniform2fv(uOffset, MAX_AMOUNT_OF_LINES_IN_SCENE, (const GLfloat*)(textData->linesData.offset));
+		glUniform1uiv(uScale, MAX_AMOUNT_OF_LINES_IN_SCENE, (const GLuint*)(textData->linesData.scale));
+		glUniform4fv(uColor, MAX_AMOUNT_OF_LINES_IN_SCENE, (const GLfloat*)(textData->linesData.color));
+		glUniform1iv(uShouldDraw, MAX_AMOUNT_OF_LINES_IN_SCENE/4, (const GLint*)(textData->linesData.offset));
+		glUniform1i(uFontTexture, 0);
+
 		// glUniform2fv(loc, 1, offset);
 		u32 m = textData->amountOfCharacters;
 		glDrawElements(GL_TRIANGLES, m*6, GL_UNSIGNED_INT, (void *) 0);
