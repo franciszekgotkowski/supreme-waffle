@@ -1,8 +1,8 @@
 #pragma once
 
 #include <assert.h>
-#include <engine/typedefs.h>
-#include <engine/errors.h>
+#include <primitives/typedefs.h>
+#include <primitives/errors.h>
 
 typedef struct {
 	u64 capacity;

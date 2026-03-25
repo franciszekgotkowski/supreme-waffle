@@ -3,9 +3,9 @@
 #define FONT_FILES_LOCATION "../../assets/fonts/bdf/"
 #define CHARACTER_SPACING 1
 
-#include <engine/typedefs.h>
-#include <engine/errors.h>
-#include <engine/platform/file_io.h>
+#include <primitives/typedefs.h>
+#include <primitives/errors.h>
+#include <platform/file_io.h>
 
 typedef enum {
 	CELL, 			// every character has the same width

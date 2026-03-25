@@ -1,16 +1,18 @@
 #include <assert.h>
+#include <stdio.h>
 
-#include <engine/platform/memory_allocations.h>
+#include <platform/memory_allocations.h>
+#include <platform/input.h>
+#include <platform/window_data.h>
 
 #include <engine/memory_pool.h>
 #include <engine/scene.h>
-#include <engine/errors.h>
-#include <engine/range.h>
-#include <engine/platform/input.h>
-#include <engine/platform/window_data.h>
-#include <engine/typedefs.h>
 
-#include <stdio.h>
+#include <primitives/errors.h>
+#include <primitives/range.h>
+#include <primitives/typedefs.h>
+
+extern PointerTable* GameMemory;
 
 static inline u64 totalMemoryFootprint() {
 	u64 sum = 0;

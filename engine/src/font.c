@@ -1,19 +1,19 @@
 #include <engine/memory_pool.h>
-#include <engine/platform/window_data.h>
+#include <platform/window_data.h>
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <engine/platform/graphics.h>
-#include <engine/platform/file_io.h>
-#include <engine/string_utils.h>
+#include <platform/graphics.h>
+#include <platform/file_io.h>
+#include <primitives/string_utils.h>
 #include <engine/font.h>
-#include <engine/typedefs.h>
-#include <engine/range.h>
-#include <engine/platform/memory_allocations.h>
-#include <engine/platform/crossplatform_alloca.h>
+#include <primitives/typedefs.h>
+#include <primitives/range.h>
+#include <platform/memory_allocations.h>
+#include <platform/crossplatform_alloca.h>
 
 extern PointerTable* GameMemory;
 

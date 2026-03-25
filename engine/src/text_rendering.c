@@ -1,8 +1,8 @@
-#include "engine/font.h"
-#include "engine/typedefs.h"
-#include <assert.h>
+#include <engine/font.h>
+#include <primitives/typedefs.h>
 #include <engine/text_rendering.h>
-#include <engine/errors.h>
+#include <assert.h>
+#include <primitives/errors.h>
 #include <string.h>
 
 Error InitializeTextRenderingObject(

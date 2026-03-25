@@ -1,12 +1,12 @@
 #pragma once
 
-#include <engine/errors.h>
+#include <primitives/errors.h>
 #include <engine/memory_pool.h>
 
 #include <engine/ui.h>
 #include <engine/area.h>
-#include <engine/typedefs.h>
-#include <engine/platform/memory_allocations.h>
+#include <primitives/typedefs.h>
+#include <platform/memory_allocations.h>
 
 // MEMORY REGION DEFINES
 #define SCENE_FILES_LOCATION "../../assets/scene/"

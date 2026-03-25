@@ -1,6 +1,6 @@
-#include <engine/typedefs.h>
-#include <engine/platform/memory_allocations.h>
-#include <engine/errors.h>
+#include <primitives/typedefs.h>
+#include <platform/memory_allocations.h>
+#include <primitives/errors.h>
 #include <engine/scene.h>
 #include <engine/font.h>
 #include <stdbool.h>

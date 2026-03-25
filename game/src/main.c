@@ -13,6 +13,7 @@
 #include <engine/string_utils.h>
 #include <engine/platform/crossplatform_alloca.h>
 #include <external/stb_image_write.h>
+#include <primitives/errors.h>
 
 #include <game/input_functions.h>
 
@@ -22,6 +23,8 @@
 #include <string.h>
 
 PointerTable* GameMemory = NULL;
+InputData* inputData = NULL;
+WindowData* windowData = NULL;
 
 int main() {
 	Error err;

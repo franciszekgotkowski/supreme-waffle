@@ -1,7 +1,7 @@
 #pragma once
 
-#include <engine/typedefs.h>
-#include <engine/errors.h>
+#include <primitives/typedefs.h>
+#include <primitives/errors.h>
 #include <stdbool.h>
 
 #define MAX_AMOUNT_OF_ARENA_CHECKPOINTS 100

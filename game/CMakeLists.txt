@@ -8,6 +8,7 @@ target_sources(game PRIVATE
 
 target_include_directories(game PRIVATE
 	${CMAKE_HOME_DIRECTORY}/engine/headers
+	${CMAKE_HOME_DIRECTORY}/primitives/headers
 	${CMAKE_CURRENT_SOURCE_DIR}/headers
 )
 

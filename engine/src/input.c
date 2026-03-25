@@ -1,13 +1,15 @@
 
-#include <engine/platform/window_data.h>
-#include <engine/memory_pool.h>
+
 #include <assert.h>
 #include <stdbool.h>
 
-#include <engine/errors.h>
-#include <engine/range.h>
-#include <engine/platform/input.h>
-#include <external/glfw3.h>
+#include <primitives/errors.h>
+#include <primitives/range.h>
+
+#include <engine/memory_pool.h>
+
+#include <platform/input.h>
+#include <platform/window_data.h>
 
 extern PointerTable* GameMemory;
 
