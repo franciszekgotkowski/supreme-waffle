@@ -1,25 +1,15 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include <export/platform/window_data.h>
-#include <export/platform/input.h>
-#include <export/platform/window_data.h>
+#include <export/platform/window.h>
 
-#include <primitives/errors.h>
-#include <primitives/typedefs.h>
+#include <common/typedefs.h>
 
 #include <external/glad/glad.h>
 #include <external/glfw3.h>
 
-extern WindowData* windowData;
 
-void inputCallback(
-	GLFWwindow* window,
-	i32 key,
-	i32 scancode,
-	i32 action,
-	i32 mods
-);
+extern WindowData* windowData;
 
 static void framebuffer_size_callback(
 	GLFWwindow *window,
@@ -48,18 +38,19 @@ static inline void window_should_close_callback(
 void InitializeWindow(
 	i32 windowWidth,
 	i32 windowHeight,
-	i32 fps,
 	bool vsync,
 	bool resizable,
 	v4 clearColor,
 	str title,
-	CursorMode cursorMode,
-	WindowData* windowData
+	CursorMode cursorMode
 ) {
+	// assert(windowData == NULL);
 	// WindowData* const windowData = getRegion(WINDOW_DATA);
-    assert(windowData);
+	assert(windowData);
     assert(title);
-    assert(windowWidth > 0 && windowHeight > 0 && fps > 0);
+    assert(windowWidth > 0 && windowHeight > 0);
+
+	// GLFWwindow* windowPtr = windowData->window;
 
     i32 cursorModeGlfw;
     switch (cursorMode) {
@@ -77,25 +68,6 @@ void InitializeWindow(
          	break;
     }
 
-    TimeStamp t = InitializeTimeStamp();
-
-    (*windowData) = (WindowData){
-        .window = NULL,
-        .windowHeight = windowHeight,
-        .windowWidth = windowWidth,
-        .fps = fps,
-        .frametime = CalculateFrametime(fps),
-        .cursorMode = cursorModeGlfw,
-        .vsync = vsync,
-        .resizable = resizable,
-        .windowShouldClose = false,
-        .clearColor = clearColor,
-        .framesElapsed = 0,
-        .bootTimeStamp = t,
-        .frametimeEveningTimeStamp = t,
-    };
-
-    // if (!glfwInit()) {return LIBRARY_FAIL;}
     assert(glfwInit());
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -104,7 +76,6 @@ void InitializeWindow(
     glfwWindowHint(GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
 
     windowData->window = glfwCreateWindow(windowWidth, windowHeight, title, NULL, NULL);
-    assert(windowData->window);
 
     glfwMakeContextCurrent(windowData->window);
     glfwSetInputMode(windowData->window, GLFW_CURSOR, cursorModeGlfw);
@@ -113,9 +84,9 @@ void InitializeWindow(
 
     assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));
 
-    glfwGetFramebufferSize(windowData->window, &(windowData->windowWidth), &(windowData->windowHeight));
-    glViewport(0, 0, windowData->windowWidth, windowData->windowHeight);
-    glClearColor(windowData->clearColor.arr[0],windowData->clearColor.arr[1], windowData->clearColor.arr[2], windowData->clearColor.arr[3]);
+    glfwGetFramebufferSize(windowData->window, &windowWidth, &windowHeight);
+    glViewport(0, 0, windowWidth, windowHeight);
+    glClearColor(clearColor.arr[0],clearColor.arr[1], clearColor.arr[2], clearColor.arr[3]);
 
     glfwSetFramebufferSizeCallback(windowData->window, framebuffer_size_callback);
     glfwSetWindowCloseCallback(windowData->window, window_should_close_callback);
@@ -123,11 +94,6 @@ void InitializeWindow(
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glfwPollEvents();
-}
-
-void SetWindowToClose() {
-	assert(windowData);
-	windowData->windowShouldClose = true;
 }
 
 void CloseWindow() {

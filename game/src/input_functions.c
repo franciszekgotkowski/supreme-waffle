@@ -1,7 +1,7 @@
 #include <engine/memory_pool.h>
-#include <engine/platform/window_data.h>
+#include <engine/window.h>
 #include <game/input_functions.h>
-#include <engine/platform/input.h>
+#include <engine/handle_input.h>
 
 #include <assert.h>
 #include <stdio.h>

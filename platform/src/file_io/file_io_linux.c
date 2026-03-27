@@ -1,5 +1,5 @@
 #include <export/platform/memory_allocations.h>
-#include <primitives/errors.h>
+#include <common/errors.h>
 #include <export/platform/file_io.h>
 
 #include <sys/mman.h>

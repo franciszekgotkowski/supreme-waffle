@@ -1,10 +1,7 @@
-#include <export/platform/input.h>
-#include <export/platform/window_data.h>
-#include <primitives/errors.h>
-#include <export/platform/window_data.h>
+#include <export/platform/collect_input.h>
+#include <export/platform/window.h>
 #include <assert.h>
 
-#include <glad/glad.h>
 #include <glfw3.h>
 
 extern WindowData* windowData;

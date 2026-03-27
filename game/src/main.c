@@ -1,30 +1,22 @@
 #include <assert.h>
 
+#include <common/typedefs.h>
+#include <common/crossplatform_alloca.h>
+#include <common/errors.h>
+
 #include <engine/scene.h>
-#include <engine/typedefs.h>
-#include <engine/font.h>
-#include <engine/range.h>
-#include <engine/memory_arena.h>
-#include <engine/platform/file_io.h>
-#include <engine/platform/memory_allocations.h>
 #include <engine/memory_pool.h>
-#include <engine/platform/window_data.h>
-#include <engine/platform/input.h>
-#include <engine/string_utils.h>
-#include <engine/platform/crossplatform_alloca.h>
-#include <external/stb_image_write.h>
-#include <primitives/errors.h>
-
+#include <engine/handle_input.h>
+#include <engine/game_loop.h>
+#include <engine/window.h>
 #include <game/input_functions.h>
+#include <common/cursor_modes.h>
 
-#include <inttypes.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
 PointerTable* GameMemory = NULL;
-InputData* inputData = NULL;
-WindowData* windowData = NULL;
 
 int main() {
 	Error err;
@@ -32,7 +24,7 @@ int main() {
 	GameMemory = InitializePool();
 	assert(GameMemory);
 
-    InitializeWindow(
+    InitializeEngineWindow(
      	800,
       	800,
        	60,

@@ -1,6 +1,7 @@
-#include <export/platform/window_data.h>
+#include <export/platform/window.h>
 
 #include <external/glad/glad.h>
+#include <common/typedefs.h>
 
 #include <assert.h>
 
@@ -11,7 +12,7 @@ void clearScreen() {
 }
 
 // function that gets v2u32 with pixel offsets and transforms them into screenspace v2 that starts at (0, 0)
-inline v2 PixelsToScreenspace(v2u32 px) {
+v2 PixelsToScreenspace(v2u32 px) {
 	assert(windowData);
 	assert(px.x < windowData->windowWidth);
 	assert(px.y < windowData->windowHeight);

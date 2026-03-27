@@ -1,18 +1,13 @@
-#include <engine/platform/measure_time.h>
-#include <engine/platform/shader.h>
-#include <external/glad/glad.h>
-#include <engine/platform/graphics.h>
+#include <platform/measure_time.h>
+#include <platform/shader.h>
+#include <platform/graphics.h>
 #include <game/input_functions.h>
 #include <engine/memory_pool.h>
-#include <engine/platform/window_data.h>
-#include <engine/platform/input.h>
+#include <engine/window.h>
 #include <game/game_loop.h>
-#include <engine/platform/game_loop.h>
+#include <engine/game_loop.h>
 
-#include <external/stb_image_write.h>
-
-#include <engine/platform/file_io.h>
-#include <engine/platform/crossplatform_alloca.h>
+#include <platform/file_io.h>
 #include <engine/font.h>
 #include <engine/scene.h>
 #include <stdio.h>
@@ -20,9 +15,11 @@
 #include <string.h>
 
 #include <engine/text_rendering.h>
+#include <common/errors.h>
+#include <platform/window.h>
 
 #include <math.h>
-#include <external/glfw3.h>
+#include <glfw3.h>
 
 extern PointerTable *GameMemory;
 Error err;

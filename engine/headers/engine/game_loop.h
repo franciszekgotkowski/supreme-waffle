@@ -14,3 +14,7 @@ void updateBuffer();
 
 // polls events (like input, resizing window etc.)
 void handleEngineEvents();
+
+// This function is empty
+// It has to be filled in in game
+void GameLoop();

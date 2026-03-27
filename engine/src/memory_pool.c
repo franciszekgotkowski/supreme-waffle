@@ -2,15 +2,15 @@
 #include <stdio.h>
 
 #include <platform/memory_allocations.h>
-#include <platform/input.h>
-#include <platform/window_data.h>
+#include <../headers/engine/handle_input.h>
+#include <platform/window.h>
 
 #include <engine/memory_pool.h>
 #include <engine/scene.h>
 
-#include <primitives/errors.h>
-#include <primitives/range.h>
-#include <primitives/typedefs.h>
+#include <common/errors.h>
+#include <common/range.h>
+#include <common/typedefs.h>
 
 extern PointerTable* GameMemory;
 

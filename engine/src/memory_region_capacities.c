@@ -1,9 +1,9 @@
-#include <primitives/typedefs.h>
+#include <common/typedefs.h>
 
-#include <primitives/typedefs.h>
-#include <primitives/errors.h>
-#include <platform/window_data.h>
-#include <platform/input.h>
+#include <common/typedefs.h>
+#include <common/errors.h>
+#include <platform/window.h>
+#include <../headers/engine/handle_input.h>
 #include <engine/memory_pool.h>
 #include <engine/scene.h>
 #include <platform/memory_allocations.h>

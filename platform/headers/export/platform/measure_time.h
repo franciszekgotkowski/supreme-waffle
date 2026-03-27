@@ -1,6 +1,6 @@
 #pragma once
 
-#include <primitives/typedefs.h>
+#include <common/typedefs.h>
 
 // universal type for point in time
 typedef struct {

@@ -1,6 +1,6 @@
 // #include "engine/platform/input.h"
-#include <platform/input.h>
-#include <primitives/errors.h>
+#include <../headers/engine/handle_input.h>
+#include <common/errors.h>
 #include <assert.h>
 #include <engine/memory_pool.h>
 #include <engine/scene.h>

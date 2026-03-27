@@ -1,6 +1,6 @@
 #pragma once
 
-#include <primitives/typedefs.h>
+#include <common/typedefs.h>
 
 #define KB ((u64)1024)
 #define MB ((u64)KB*1024)

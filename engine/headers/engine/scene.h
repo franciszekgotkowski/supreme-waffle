@@ -1,11 +1,8 @@
 #pragma once
 
-#include <primitives/errors.h>
-#include <engine/memory_pool.h>
+#include <common/errors.h>
+#include <common/typedefs.h>
 
-#include <engine/ui.h>
-#include <engine/area.h>
-#include <primitives/typedefs.h>
 #include <platform/memory_allocations.h>
 
 // MEMORY REGION DEFINES

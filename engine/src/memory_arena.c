@@ -1,6 +1,6 @@
-#include <primitives/typedefs.h>
+#include <common/typedefs.h>
 #include <engine/memory_pool.h>
-#include <primitives/errors.h>
+#include <common/errors.h>
 #include <assert.h>
 #include <engine/memory_arena.h>
 #include <string.h>

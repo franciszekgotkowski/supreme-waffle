@@ -1,17 +1,16 @@
-
-
 #include <assert.h>
 #include <stdbool.h>
 
-#include <primitives/errors.h>
-#include <primitives/range.h>
+#include <common/errors.h>
+#include <common/range.h>
 
 #include <engine/memory_pool.h>
 
-#include <platform/input.h>
-#include <platform/window_data.h>
+#include <../headers/engine/handle_input.h>
+#include <platform/window.h>
 
 extern PointerTable* GameMemory;
+InputData* inputData = NULL;
 
 void InitializeInputFunctions() {
 	InputFunctions* const input = getRegion(INPUT_FUNCTIONS);
@@ -55,20 +54,19 @@ void ClearInputFunction() {
 }
 
 inline void RunAllInputFunctions() {
-	InputFunctions* const input = getRegion(INPUT_FUNCTIONS);
-	assert(input);
-	assert(input->amountOfFunctions >= 0);
-	assert(input->amountOfFunctions < MAXIMUM_INPUT_FUNCTIONS_AMOUNT);
+	InputFunctions* const inputFunctions = getRegion(INPUT_FUNCTIONS);
+	assert(inputFunctions);
+	assert(inputFunctions->amountOfFunctions >= 0);
+	assert(inputFunctions->amountOfFunctions < MAXIMUM_INPUT_FUNCTIONS_AMOUNT);
 
-	for range(i, input->amountOfFunctions) {
-		input->function[i]();
+	for range(i, inputFunctions->amountOfFunctions) {
+		inputFunctions->function[i]();
 	}
 }
 
 inline bool KeyJustPressed(
 	KeyboardKeys key
 ) {
-	InputData* const inputData = getRegion(INPUT_DATA);
 	assert(inputData);
 
 	if (
@@ -84,7 +82,6 @@ inline bool KeyJustPressed(
 inline bool KeyLongPressed(
 	KeyboardKeys key
 ) {
-	InputData* const inputData = getRegion(INPUT_DATA);
 	assert(inputData);
 
 	if (
@@ -100,7 +97,6 @@ inline bool KeyLongPressed(
 bool KeyIsPressed(
 	KeyboardKeys key
 ) {
-	InputData* const inputData = getRegion(INPUT_DATA);
 	assert(inputData);
 
 	if (
@@ -115,7 +111,6 @@ bool KeyIsPressed(
 inline bool KeyJustReleased(
 	KeyboardKeys key
 ) {
-	InputData* const inputData = getRegion(INPUT_DATA);
 	assert(inputData);
 
 	if (
@@ -126,4 +121,12 @@ inline bool KeyJustReleased(
 	} else {
 		return false;
 	}
+}
+void InitializeInputData() {
+
+	assert(inputData == NULL);
+	inputData = (InputData*)getRegion(INPUT_DATA);
+	assert(inputData);
+
+	InitializeInputCallbacks();
 }

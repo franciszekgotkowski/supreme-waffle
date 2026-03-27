@@ -25,7 +25,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 option(ENGINE_ENABLE_ASSERTS "Enable engine asserts" ON)
 option(GAME_ENABLE_ASSERTS "Enable engine asserts" ON)
 
-add_subdirectory(primitives)
+add_subdirectory(common)
 add_subdirectory(platform)
 add_subdirectory(engine)
 add_subdirectory(game)

@@ -2,7 +2,7 @@
 #include <sys/mman.h>
 
 #include <export/platform/memory_allocations.h>
-#include <primitives/typedefs.h>
+#include <common/typedefs.h>
 #include <stddef.h>
 #include <assert.h>
 

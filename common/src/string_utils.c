@@ -1,5 +1,5 @@
-#include <primitives/string_utils.h>
-#include <primitives/errors.h>
+#include <common/string_utils.h>
+#include <common/errors.h>
 
 #include <assert.h>
 #include <stddef.h>

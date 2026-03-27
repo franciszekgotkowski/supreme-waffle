@@ -1,8 +1,8 @@
 #pragma once
 
 #include <stdbool.h>
-#include <primitives/typedefs.h>
-#include <primitives/errors.h>
+#include <common/typedefs.h>
+#include <common/errors.h>
 
 mstr stickToWord(mstr s);
 

@@ -1,18 +1,9 @@
 #pragma once
 
-// #include <export/platform/measure_time.h>
+#include <common/typedefs.h>
+#include <common/cursor_modes.h>
 #include "measure_time.h"
-
-#include <primitives/typedefs.h>
-#include <primitives/errors.h>
-
 #include <stdbool.h>
-
-typedef enum {
-	CURSOR_NORMAL,
-	CURSOR_HIDDEN,
-	CURSOR_DISABLED
-} CursorMode;
 
 typedef struct {
     void* window;
@@ -31,21 +22,15 @@ typedef struct {
     TimeStamp frametimeEveningTimeStamp;
 } WindowData ;
 
+
 void InitializeWindow(
-	i32 windowWidth,
+    i32 windowWidth,
     i32 windowHeight,
-	i32 fps,
-	bool vsync,
-	bool resizable,
-	v4 clearColor,
-	str title,
-	CursorMode cursorMode,
-	WindowData* windowData
+    bool vsync,
+    bool resizable,
+    v4 clearColor,
+    str title,
+    CursorMode cursorMode
 );
 
-// Sets windowShouldClose parameter to true
-void SetWindowToClose();
-
 void CloseWindow();
-
-void GameLoop();

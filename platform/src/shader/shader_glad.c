@@ -2,8 +2,8 @@
 #include <assert.h>
 #include <export/platform/shader.h>
 #include <export/platform/file_io.h>
-#include <primitives/typedefs.h>
-#include <primitives/errors.h>
+#include <common/typedefs.h>
+#include <common/errors.h>
 #include <stdio.h>
 #include <unistd.h>
 
