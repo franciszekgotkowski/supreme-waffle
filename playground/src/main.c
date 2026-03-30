@@ -27,8 +27,8 @@ int main() {
     InitializeEngineWindow(
      	800,
       	800,
-       	60,
-        false,
+       	100,
+        true,
         false,
         (v4){
             .arr = {0.18f, 0.20f, 0.25f, 1.0f}
