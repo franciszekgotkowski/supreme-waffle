@@ -28,7 +28,7 @@ int main() {
      	800,
       	800,
        	100,
-        true,
+        false,
         false,
         (v4){
             .arr = {0.18f, 0.20f, 0.25f, 1.0f}

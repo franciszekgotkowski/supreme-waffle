@@ -15,42 +15,7 @@ inline TimeStamp InitializeTimeStamp() {
 		.nsec = spec.tv_nsec
 	};
 }
-//
-// inline DoubleTimeStamp InitializeDoubleTimeStamp(){
-// 	return (DoubleTimeStamp){
-// 		.then = InitializeTimeStamp(),
-// 		.now = {}
-// 	};
-// }
-//
-// inline void UpdateDoubleTimeStamp(DoubleTimeStamp *ptr) {
-// 	assert(ptr);
-//
-// 	struct timespec spec;
-// 	i32 errno = clock_gettime(CLOCK_MONOTONIC, &spec);
-// 	assert(errno == 0);
-//
-// 	ptr->then = ptr->now;
-// 	ptr->now = (TimeStamp) {
-// 		.sec = spec.tv_sec,
-// 		.nsec = spec.tv_nsec
-// 	};
-//
-// 	return;
-// }
-//
-// inline TimeStamp TimeSince(TimeStamp stamp) {
-// 		struct timespec now;
-// 		i32 errno = clock_gettime(CLOCK_MONOTONIC, &now);
-// 		assert(errno == 0);
-// 		TimeStamp nowTimeStamp = {
-// 			.sec = now.tv_sec,
-// 			.nsec = now.tv_nsec
-// 		};
-// 		// checking if stamp is not from future
-// 		return TimeDiff(nowTimeStamp, stamp);
-// }
-//
+
 inline void SleepTime(TimeStamp amount) {
 	TimeStamp errorMargin = {
 		.sec = 0,

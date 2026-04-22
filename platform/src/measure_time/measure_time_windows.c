@@ -20,15 +20,28 @@ inline static void MinimizeLatency() {
     }
 }
 
+bool frequencyAcquired = false;
+LARGE_INTEGER performanceFrequency;
+inline static LARGE_INTEGER GetPerformanceFrequency() {
+    if (!frequencyAcquired) {
+        bool ok = QueryPerformanceFrequency(&performanceFrequency);
+        assert( ok );
+        frequencyAcquired = true;
+        return performanceFrequency;
+    } else {
+        return performanceFrequency;
+    }
+}
+
 TimeStamp InitializeTimeStamp() {
 
     MinimizeLatency();
 
-    LARGE_INTEGER freq, ticks;
+    LARGE_INTEGER freq;
+    LARGE_INTEGER ticks;
 
+    freq = GetPerformanceFrequency();
     bool ok = QueryPerformanceCounter( (LARGE_INTEGER*)&ticks );
-    assert( ok );
-    ok = QueryPerformanceFrequency( (LARGE_INTEGER*)&freq );
     assert( ok );
 
     TimeStamp ret = {
@@ -56,7 +69,7 @@ void SleepTime(TimeStamp amount) {
     if (SmallerTimeStamp(amount, errorMargin) == 1) {
         newTime.nsec -= errorMargin.nsec;
         assert(newTime.nsec + newTime.sec * 1000000000 < UINT32_MAX);
-        DWORD msToSleep = newTime.nsec + newTime.sec * 1000000000;
+        DWORD msToSleep = newTime.nsec / 1000000 + newTime.sec * 1000;
         Sleep(msToSleep);
     }
 
