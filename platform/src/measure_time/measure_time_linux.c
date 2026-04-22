@@ -2,6 +2,7 @@
 #include <export/platform/measure_time.h>
 
 #include <assert.h>
+#include <stdbool.h>
 #include <time.h>
 
 inline TimeStamp InitializeTimeStamp() {
