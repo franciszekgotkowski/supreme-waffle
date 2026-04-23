@@ -36,21 +36,24 @@ void GameLoop() {
 
 	SceneData* sceneData = (SceneData*)getRegion(LOADING_SCREEN_SCENE);
 	Font font = InitializeFont(file);
-	// registering font and loading it into memory
-	AssetID CherryFontID = RegisterNewAsset(
+
+	// VERY TEMP CODE!!!
+	// PUSHING THINGS TO STACK WITHOUT INDEXER SHOULD NOT NOTMALLY HAPPEN
+	void* fontPtr = PushNewResource(
 		sceneData,
 		GetSizeForEntireFont(&font),
 		&err
 	);
+
 	assert(err == OK);
-	Font* FontLocation = sceneData->asset[CherryFontID].ptr;
+	Font* FontLocation = fontPtr;
 	*FontLocation = font;
 	InitializeCharacterDataOntoFont(FontLocation, file);
 	freeEntireTextFile(file);
 	// printf("Font size in bytes: %llu\n", (llu)GetSizeForEntireFont(font));
 
 
-	GameObjectID TextID = RegisterNewGameObject(
+	void* textPtr = PushNewResource(
 		sceneData,
 		MAX_SIZE_FOR_CHARACTER_RENDER_DATA,
 		&err
@@ -58,19 +61,18 @@ void GameLoop() {
 	assert(err == OK);
 
 	err = InitializeTextRenderingObject(
-		TextID,
-		sceneData
+		textPtr
 	);
 	assert(err == OK);
 
-	TextData* textData = sceneData->gameObject[TextID].ptr;
+	TextData* textData = textPtr;
 
 	str s = "......Jak Kuba Bogu tak Bog Kubie...";
 	err = AppendNewLine(
 		s,
 		strlen(s),
-		sceneData->gameObject[TextID].ptr,
-		sceneData->asset[CherryFontID].ptr,
+		textPtr,
+		fontPtr,
 		(v2){
 			.x = 0.0f,
 			.y = 0.0f,
@@ -84,47 +86,6 @@ void GameLoop() {
 		3
 	);
 	assert(err == OK);
-
-	str s2 = "o-o-o-o";
-	err = AppendNewLine(
-		s2,
-		strlen(s2),
-		sceneData->gameObject[TextID].ptr,
-		sceneData->asset[CherryFontID].ptr,
-		(v2){
-			.x = 1.0f,
-			.y = -1.0f,
-		},
-		(Color){
-			.r = 1.0f,
-			.g = 0.7f,
-			.b = 0.1f,
-			.a = 1.0f
-		},
-		8
-	);
-	assert(err == OK);
-
-	str s3 = "Erysipelothrix!!!";
-	err = AppendNewLine(
-		s3,
-		strlen(s3),
-		sceneData->gameObject[TextID].ptr,
-		sceneData->asset[CherryFontID].ptr,
-		(v2){
-			.x = 1.0f,
-			.y = 0.0f,
-		},
-		(Color){
-			.r = 1.0f,
-			.g = 0.0f,
-			.b = 1.0f,
-			.a = 1.0f
-		},
-		2
-	);
-	assert(err == OK);
-
 
 
 	ShaderProgramID TextShader = CreateShaderProgram("../../engine/src/shaders/render_text.vert", "../../engine/src/shaders/render_text.frag");

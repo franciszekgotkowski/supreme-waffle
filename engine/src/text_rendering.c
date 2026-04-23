@@ -6,15 +6,12 @@
 #include <string.h>
 
 Error InitializeTextRenderingObject(
-	u32 gameObjectIdx,
-	SceneData* sceneData
+	void* ptr
 ) {
 
-	assert(sceneData);
-	assert(gameObjectIdx < sceneData->amountOfGameObjects);
+	assert(ptr);
 
-	void* base = sceneData->gameObject[gameObjectIdx].ptr;
-	TextData* textData = sceneData->gameObject[gameObjectIdx].ptr;
+	TextData* textData = (TextData*)ptr;
 
 	*textData = (TextData){
 		.totalCapacity = TOTAL_SIZE_FOR_TEXT_RENDERING - sizeof(TextData),
@@ -22,16 +19,16 @@ Error InitializeTextRenderingObject(
 		.amountOfCharacters = 0,
 
 		.textCapacity = MAX_SIZE_FOR_TEXT,
-		.textStart = base + sizeof(TextData),
-		.textTop = base + sizeof(TextData),
+		.textStart = ptr + sizeof(TextData),
+		.textTop = ptr + sizeof(TextData),
 
 		.verticiesCapacity = MAX_AMOUNT_OF_CHARS_PER_SCENE * SIZEOF_ONE_LETTER_VERTICIES,
-		.verticiesStart = base + sizeof(TextData) + MAX_SIZE_FOR_TEXT,
-		.verticiesTop = base + sizeof(TextData) + MAX_SIZE_FOR_TEXT,
+		.verticiesStart = ptr + sizeof(TextData) + MAX_SIZE_FOR_TEXT,
+		.verticiesTop = ptr + sizeof(TextData) + MAX_SIZE_FOR_TEXT,
 
 		.indiciesCapacity = MAX_AMOUNT_OF_CHARS_PER_SCENE * SIZEOF_ONE_LETTER_INDEXES,
-		.indiciesStart = base + sizeof(TextData) + MAX_SIZE_FOR_TEXT + MAX_AMOUNT_OF_CHARS_PER_SCENE * SIZEOF_ONE_LETTER_VERTICIES,
-		.indiciesTop = base + sizeof(TextData) + MAX_SIZE_FOR_TEXT + MAX_AMOUNT_OF_CHARS_PER_SCENE * SIZEOF_ONE_LETTER_VERTICIES,
+		.indiciesStart = ptr + sizeof(TextData) + MAX_SIZE_FOR_TEXT + MAX_AMOUNT_OF_CHARS_PER_SCENE * SIZEOF_ONE_LETTER_VERTICIES,
+		.indiciesTop = ptr + sizeof(TextData) + MAX_SIZE_FOR_TEXT + MAX_AMOUNT_OF_CHARS_PER_SCENE * SIZEOF_ONE_LETTER_VERTICIES,
 	};
 
 	return OK;

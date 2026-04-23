@@ -1,7 +1,8 @@
+#pragma once
+
 #include <common/typedefs.h>
 #include <platform/memory_allocations.h>
 #include <common/errors.h>
-#include <engine/scene.h>
 #include <engine/font.h>
 #include <stdbool.h>
 
@@ -63,20 +64,6 @@ typedef union {
 	f32 rgb[3];
 } Color ;
 
-// // contains data for each line
-// typedef struct {
-// 	v2 offset;
-// 	Color color;
-// 	u32 scale;
-
-// 	mstr* textPtr;
-// 	void* verticiesPtr;
-// 	void* indiciesPtr;
-// 	u32 letterCount;
-
-// 	bool shouldDraw;
-// } Line ;
-
 typedef struct {
 	v2 offset[MAX_AMOUNT_OF_LINES_IN_SCENE];
 	Color color[MAX_AMOUNT_OF_LINES_IN_SCENE];
@@ -112,8 +99,7 @@ typedef struct {
 
 // Initializes memory regions (asset and gameObject) for text rendering
 Error InitializeTextRenderingObject(
-	u32 gameObjectIdx,
-	SceneData* sceneData
+	void* ptr
 );
 
 // function appends new line into text game object

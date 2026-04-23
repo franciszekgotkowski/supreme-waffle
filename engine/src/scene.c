@@ -1,4 +1,3 @@
-// #include "engine/platform/input.h"
 #include <../headers/engine/handle_input.h>
 #include <common/errors.h>
 #include <assert.h>
@@ -9,6 +8,8 @@
 #include <engine/static_resources.h>
 
 extern PointerTable* GameMemory;
+
+extern const u32 SizesForEachIndexer[AMOUNT_OF_STATIC_SCENE_RESOURCES];
 
 static void InitializeStaticResourceIndexer(
 	SceneData* sceneData,
@@ -44,7 +45,7 @@ Error InitializeScene(
 	u64 size,
 	str uiPath,
 	str areaPath,
-	bool exist[AMOUNT_OF_STATIC_SCENE_RESOURCES]
+	bool StaticResourcesExist[AMOUNT_OF_STATIC_SCENE_RESOURCES]
 ) {
 	assert(sceneData);
 	assert(uiPath);
@@ -57,6 +58,12 @@ Error InitializeScene(
 		.stackTop = (void*)(sceneData + 1),
 		.staticResourcesIndexer = {}
 	};
+
+	InitializeStaticResourceIndexer(
+		sceneData,
+		StaticResourcesExist
+	);
+
 	// TODO
 	// loadUi()
 	// loadArea()
@@ -64,6 +71,8 @@ Error InitializeScene(
 	return OK;
 }
 
+// Last parameter is temporary!!!
+// It will be autodetermined by the scene fiele when the time is right
 Error LoadGameScene(
 	str uiPath,
 	str areaPath
@@ -75,12 +84,19 @@ Error LoadGameScene(
 		getRegion(GAME_SCENE),
 		getRegionCapacity(GameMemory, GAME_SCENE),
 		uiPath,
-		areaPath
+		areaPath,
+		(bool[]){
+			true,
+			true,
+			true
+		}
 	);
 
 	return OK;
 }
 
+// Last parameter is temporary!!!
+// It will be autodetermined by the scene fiele when the time is right
 Error LoadLoadingScreenScene(
 	str uiPath,
 	str areaPath
@@ -92,7 +108,12 @@ Error LoadLoadingScreenScene(
 		getRegion(LOADING_SCREEN_SCENE),
 		getRegionCapacity(GameMemory, LOADING_SCREEN_SCENE),
 		uiPath,
-		areaPath
+		areaPath,
+		(bool[]){
+			true,
+			true,
+			true
+		}
 	);
 
 	return OK;

@@ -8,9 +8,11 @@ set(ENGINE_SOURCES
 		${CMAKE_CURRENT_SOURCE_DIR}/src/ui.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/area.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/memory_region_capacities.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/handle_input.c
+		${CMAKE_CURRENT_SOURCE_DIR}/src/handle_input.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/text_rendering.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/window.c
+		${CMAKE_CURRENT_SOURCE_DIR}/src/static_resources.c
+		${CMAKE_CURRENT_SOURCE_DIR}/src/static_resources_constants.c
 )
 
 target_sources(engine PRIVATE ${ENGINE_SOURCES})
