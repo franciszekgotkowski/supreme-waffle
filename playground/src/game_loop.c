@@ -88,6 +88,49 @@ void GameLoop() {
 	assert(err == OK);
 
 
+	str s2 = "o-o-o-o";
+	err = AppendNewLine(
+		s2,
+		strlen(s2),
+		textPtr,
+		fontPtr,
+		(v2){
+			.x = 1.0f,
+			.y = -1.0f,
+		},
+		(Color){
+			.r = 1.0f,
+			.g = 0.7f,
+			.b = 0.1f,
+			.a = 1.0f
+		},
+		8
+	);
+	assert(err == OK);
+
+	str s3 = "Erysipelothrix!!!";
+	err = AppendNewLine(
+		s3,
+		strlen(s3),
+		textPtr,
+		fontPtr,
+		(v2){
+			.x = 1.0f,
+			.y = 0.0f,
+		},
+		(Color){
+			.r = 1.0f,
+			.g = 0.0f,
+			.b = 1.0f,
+			.a = 1.0f
+		},
+		2
+	);
+	assert(err == OK);
+
+
+
+
 	ShaderProgramID TextShader = CreateShaderProgram("../../engine/src/shaders/render_text.vert", "../../engine/src/shaders/render_text.frag");
 	// ShaderProgramID TextShader = CreateShaderProgram("../../engine/src/shaders/font.vert", "../../engine/src/shaders/font.frag");
 
