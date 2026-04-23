@@ -13,6 +13,7 @@ typedef enum {
     IO_ERROR,
     INVALID_INPUT,
     OUT_OF_INDEXES,
+    DOES_NOT_EXIST,
 
     AMOUNT_OF_ERRORS
 } Error ;

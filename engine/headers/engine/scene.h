@@ -1,7 +1,9 @@
 #pragma once
 
+#include <engine/static_resources.h>
 #include <common/errors.h>
 #include <common/typedefs.h>
+#include <stdbool.h>
 
 #include <platform/memory_allocations.h>
 
@@ -16,34 +18,17 @@
 #define SIZEOF_LARGEST_SCENE SIZEOF_XL_SCENE
 #define SIZEOF_LOADING_SCREEN_SCENE SIZEOF_S_SCENE
 
-// Assets are meant for storing asset data like textures, meshes, font data etc.
-// They are not meant to store any data about objects in current scene
-typedef struct {
-	u64 size;
-	void* ptr;
-} Asset;
+// Each scene has its own static resources.
+// Static resources are basically any resources that are loaded in at scene startup.
+// They are not assets for the game, they can be for example: TextRenderingObject or ResourceIndexer's
+// Resource indexers are a way to manage resources. They serve a way to allocate, read/write data for resources and to modify them. For example all NPC resources could have update position function
 
-// GameObjects store info about instances of game objects in the scene.
-// For example they don't store info about how a game entity looks but store where it is, what animation state it is etc.
-typedef struct {
-	u64 size;
-	void* ptr;
-} GameObject;
-
-#define MAXIMUM_AMOUNT_OF_ASSETS_IN_SCENE 1000
-#define MAXIMUM_AMOUNT_OF_GAME_OBJECTS_IN_SCENE 1000
 typedef struct {
 	u64 maximumCapacity;
 	void* data; // pointer to where data storage starts (should be address after address of this struct)
 	void* stackTop;
-	u64 amountOfAssets;
-	u64 amountOfGameObjects;
-	Asset asset[MAXIMUM_AMOUNT_OF_ASSETS_IN_SCENE];
-	GameObject gameObject[MAXIMUM_AMOUNT_OF_GAME_OBJECTS_IN_SCENE];
+	StaticResourcesIndexer staticResourcesIndexer;
 } SceneData ;
-
-typedef u64 AssetID;
-typedef u64 GameObjectID;
 
 // There are 2 types of files: .scene and .ui.
 // They contain elements that will be loaded into scene
@@ -53,7 +38,8 @@ Error InitializeScene(
 	SceneData* sceneData, // where function should start initializing data
 	u64 size,
 	str uiPath,
-	str areaPath
+	str areaPath,
+	bool exist[AMOUNT_OF_STATIC_SCENE_RESOURCES]
 );
 
 Error LoadGameScene(
@@ -71,21 +57,18 @@ Error LoadLoadingScreenScene(
 // It can return in err:
 // 	- OK 					if everything went fine
 // 	- OUT_OF_MEMORY			if there was to little memory
-// 	- OUT_OF_INDEXES		if there was no index left
-AssetID RegisterNewAsset(
+void* PushNewResource(
 	SceneData* sceneData,
 	u64 size,
 	Error* err
 );
 
-// Function will reserve space for gameObject if it is possible.
-// Function will return index of gameObject placed
-// It can return in err:
-// 	- OK 					if everything went fine
-// 	- OUT_OF_MEMORY			if there was to little memory
-// 	- OUT_OF_INDEXES		if there was no index left
-GameObjectID RegisterNewGameObject(
+// Gets a StaticResourceIndexer pointer from scene
+// error can be:
+//	- OK
+//	- DOES_NOT_EXIST
+StaticResourcesIndexer* GetStaticResourceIndexer(
 	SceneData* sceneData,
-	u64 size,
+	StaticResources staticResources,
 	Error* err
 );

@@ -4,14 +4,47 @@
 #include <assert.h>
 #include <engine/memory_pool.h>
 #include <engine/scene.h>
+#include <string.h>
+#include <common/range.h>
+#include <engine/static_resources.h>
 
 extern PointerTable* GameMemory;
+
+static void InitializeStaticResourceIndexer(
+	SceneData* sceneData,
+	bool exist[AMOUNT_OF_STATIC_SCENE_RESOURCES]
+) {
+	assert(sceneData);
+	assert(exist);
+
+	memcpy(
+		&(sceneData->staticResourcesIndexer.exist),
+		&exist,
+		(AMOUNT_OF_STATIC_SCENE_RESOURCES * sizeof(bool))
+	);
+
+	Error err;
+	for range(i, AMOUNT_OF_STATIC_SCENE_RESOURCES) {
+		if (sceneData->staticResourcesIndexer.exist[i]) {
+			assert(SizesForEachIndexer[i] != 0);
+			void* t = PushNewResource(
+				sceneData,
+				SizesForEachIndexer[i],
+				&err
+			);
+			assert(err == OK);
+			assert(t);
+			sceneData->staticResourcesIndexer.ptr[i] = t;
+		}
+	}
+}
 
 Error InitializeScene(
 	SceneData* sceneData,
 	u64 size,
 	str uiPath,
-	str areaPath
+	str areaPath,
+	bool exist[AMOUNT_OF_STATIC_SCENE_RESOURCES]
 ) {
 	assert(sceneData);
 	assert(uiPath);
@@ -22,10 +55,8 @@ Error InitializeScene(
 		.maximumCapacity = size - sizeof(SceneData),
 		.data = (void*)(sceneData + 1),
 		.stackTop = (void*)(sceneData + 1),
-		.amountOfAssets = 0,
-		.amountOfGameObjects = 0
+		.staticResourcesIndexer = {}
 	};
-
 	// TODO
 	// loadUi()
 	// loadArea()
@@ -67,7 +98,7 @@ Error LoadLoadingScreenScene(
 	return OK;
 }
 
-AssetID RegisterNewAsset(
+void* PushNewResource(
 	SceneData *sceneData,
 	u64 size,
 	Error *err
@@ -75,54 +106,13 @@ AssetID RegisterNewAsset(
 	assert(sceneData);
 	assert(err);
 
-	if (sceneData->amountOfAssets >= MAXIMUM_AMOUNT_OF_ASSETS_IN_SCENE) {
-		*err = OUT_OF_INDEXES;
-		return 0;
-	}
-
-	if (sceneData->stackTop > sceneData->data + sceneData->maximumCapacity) {
+	if ( sceneData->stackTop + size > sceneData->data + sceneData ->maximumCapacity) {
 		*err = OUT_OF_MEMORY;
-		return 0;
+		return NULL;
 	}
 
-	sceneData->asset[sceneData->amountOfAssets] = (Asset){
-		.ptr = sceneData->stackTop,
-		.size = size
-	};
-
-	sceneData->amountOfAssets += 1;
+	void* oldTop = sceneData->stackTop;
 	sceneData->stackTop += size;
-
 	*err = OK;
-	return sceneData->amountOfAssets - 1;
-}
-
-GameObjectID RegisterNewGameObject(
-	SceneData *sceneData,
-	u64 size,
-	Error *err
-) {
-	assert(sceneData);
-	assert(err);
-
-	if (sceneData->amountOfGameObjects >= MAXIMUM_AMOUNT_OF_GAME_OBJECTS_IN_SCENE) {
-		*err = OUT_OF_INDEXES;
-		return 0;
-	}
-
-	if (sceneData->stackTop > sceneData->data + sceneData->maximumCapacity) {
-		*err = OUT_OF_MEMORY;
-		return 0;
-	}
-
-	sceneData->gameObject[sceneData->amountOfGameObjects] = (GameObject){
-		.ptr = sceneData->stackTop,
-		.size = size
-	};
-
-	sceneData->amountOfGameObjects += 1;
-	sceneData->stackTop += size;
-
-	*err = OK;
-	return sceneData->amountOfGameObjects - 1;
+	return oldTop;
 }
