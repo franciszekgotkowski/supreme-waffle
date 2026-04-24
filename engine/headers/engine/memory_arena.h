@@ -15,7 +15,7 @@ typedef struct {
 } MemoryArena ;
 
 // Initializes memory arena on base pointer.
-// Arena will occupy cap amount of bytes, but usable space will be a littple bit loweb because of MemoryArena struct
+// Arena will occupy cap amount of bytes, but usable space will be a little bit lower because of MemoryArena struct
 Error InitializeMemoryArena(
 	void* base,
 	u64 cap
