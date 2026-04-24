@@ -6,22 +6,21 @@
 #include <string.h>
 
 Error InitializeMemoryArena(
-	void* base,
+	void* ptr,
 	u64 cap
 ){
-	assert(base);
+	assert(ptr);
 
-	// assert(!(cap < sizeof(MemoryArena)));
 	if (cap < sizeof(MemoryArena)) {
 		return OUT_OF_MEMORY;
 	}
 
-	MemoryArena* arena = base;
+	MemoryArena* arena = ptr;
 
 	*arena = (MemoryArena) {
 		.amountOfCheckpoints = 0,
-		.base = base + sizeof(MemoryArena),
-		.top = base + sizeof(MemoryArena),
+		.base = ptr + sizeof(MemoryArena),
+		.top = ptr + sizeof(MemoryArena),
 		.capacity = cap - sizeof(MemoryArena),
 		.locked = false
 	};
@@ -143,7 +142,7 @@ Error resetToCheckpoint_MemoryArena(
 		return LOCKED;
 	}
 
-	if (id > arena->amountOfCheckpoints) {
+	if (id >= arena->amountOfCheckpoints) {
 		return OUT_OF_RANGE;
 	}
 

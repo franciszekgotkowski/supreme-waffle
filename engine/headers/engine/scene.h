@@ -1,5 +1,6 @@
 #pragma once
 
+#include <engine/memory_arena.h>
 #include <engine/static_resources.h>
 #include <common/errors.h>
 #include <common/typedefs.h>
@@ -24,10 +25,8 @@
 // Resource indexers are a way to manage resources. They serve a way to allocate, read/write data for resources and to modify them. For example all NPC resources could have update position function
 
 typedef struct {
-	u64 maximumCapacity;
-	void* data; // pointer to where data storage starts (should be address after address of this struct)
-	void* stackTop;
 	StaticResourcesIndexer staticResourcesIndexer;
+	MemoryArena* arena; // arena lives right after SceneData struct
 } SceneData ;
 
 // There are 2 types of files: .scene and .ui.

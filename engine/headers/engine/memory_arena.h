@@ -16,13 +16,13 @@ typedef struct {
 	bool locked; // if memory arena is locked, pushing or reseting memory is illegal and functions should return an error
 } MemoryArena ;
 
-// Initializes memory arena on base pointer.
+// Initializes memory arena on ptr pointer.
 // Arena will occupy cap amount of bytes, but usable space will be a little bit lower because of MemoryArena struct
 // Can return errors:
 // 	- OK
 // 	- OUT_OF_MEMORY		if memory given for the arena is smaller that MemoryArena struct
 Error InitializeMemoryArena(
-	void* base,
+	void* ptr,
 	u64 cap
 );
 
