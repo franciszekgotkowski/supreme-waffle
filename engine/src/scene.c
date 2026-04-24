@@ -1,3 +1,4 @@
+#include <engine/memory_arena.h>
 #include <../headers/engine/handle_input.h>
 #include <common/errors.h>
 #include <assert.h>
@@ -22,16 +23,17 @@ static void InitializeStaticResourceIndexer(
 
 	memcpy(
 		&(sceneData->staticResourcesIndexer.exist),
-		&exist,
+		exist,
 		(AMOUNT_OF_STATIC_RESOURCES * sizeof(bool))
 	);
 
 	Error err;
+	MemoryArena* const arenaPtr = sceneData->arena;
 	for range(i, AMOUNT_OF_STATIC_RESOURCES) {
 		if (sceneData->staticResourcesIndexer.exist[i]) {
 			assert(SizesForEachStaticResource[i] != 0);
-			void* t = PushNewResource(
-				sceneData,
+			void* t = registerMemory_MemoryArena(
+				arenaPtr,
 				SizesForEachStaticResource[i],
 				&err
 			);
@@ -48,7 +50,7 @@ static void InitializeStaticResourceIndexer(
 }
 
 Error InitializeScene(
-	SceneData* sceneData,
+	void* sceneData,
 	u64 size,
 	str uiPath,
 	str areaPath,
@@ -59,15 +61,23 @@ Error InitializeScene(
 	assert(areaPath);
 	assert(sizeof(SceneData) <= size);
 
-	*sceneData = (SceneData){
-		.maximumCapacity = size - sizeof(SceneData),
-		.data = (void*)(sceneData + 1),
-		.stackTop = (void*)(sceneData + 1),
-		.staticResourcesIndexer = {}
+	Error err;
+
+	SceneData* const scenePtr = sceneData;
+
+	*scenePtr = (SceneData){
+		.staticResourcesIndexer = {},
+		.arena = (MemoryArena*)(sceneData + sizeof(SceneData))
 	};
 
+	err = InitializeMemoryArena(
+		(void*)scenePtr->arena,
+		size - sizeof(SceneData)
+	);
+	assert(err == OK);
+
 	InitializeStaticResourceIndexer(
-		sceneData,
+		scenePtr,
 		StaticResourcesExist
 	);
 
@@ -126,21 +136,15 @@ Error LoadLoadingScreenScene(
 	return OK;
 }
 
-void* PushNewResource(
-	SceneData *sceneData,
-	u64 size,
-	Error *err
+void* GetStaticResource_SceneData(
+	SceneData* sceneData,
+	StaticResources staticResource
 ) {
 	assert(sceneData);
-	assert(err);
+	assert(staticResource < AMOUNT_OF_STATIC_RESOURCES);
 
-	if ( sceneData->stackTop + size > sceneData->data + sceneData ->maximumCapacity) {
-		*err = OUT_OF_MEMORY;
+	if (!sceneData->staticResourcesIndexer.exist[staticResource]) {
 		return NULL;
 	}
-
-	void* oldTop = sceneData->stackTop;
-	sceneData->stackTop += size;
-	*err = OK;
-	return oldTop;
+	return sceneData->staticResourcesIndexer.ptr[staticResource];
 }

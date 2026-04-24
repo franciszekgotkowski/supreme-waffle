@@ -1,3 +1,4 @@
+#include <engine/memory_arena.h>
 #include <platform/measure_time.h>
 #include <platform/shader.h>
 #include <platform/graphics.h>
@@ -37,10 +38,12 @@ void GameLoop() {
 	SceneData* sceneData = (SceneData*)getRegion(LOADING_SCREEN_SCENE);
 	Font font = InitializeFont(file);
 
+	MemoryArena* const arenaPtr = sceneData->arena;
+
 	// VERY TEMP CODE!!!
 	// PUSHING THINGS TO STACK WITHOUT INDEXER SHOULD NOT NOTMALLY HAPPEN
-	void* fontPtr = PushNewResource(
-		sceneData,
+	void* fontPtr = registerMemory_MemoryArena(
+		arenaPtr,
 		GetSizeForEntireFont(&font),
 		&err
 	);
@@ -53,8 +56,8 @@ void GameLoop() {
 	// printf("Font size in bytes: %llu\n", (llu)GetSizeForEntireFont(font));
 
 
-	void* textPtr = PushNewResource(
-		sceneData,
+	void* textPtr = registerMemory_MemoryArena(
+		arenaPtr,
 		MAX_SIZE_FOR_CHARACTER_RENDER_DATA,
 		&err
 	);

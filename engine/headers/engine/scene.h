@@ -34,7 +34,7 @@ typedef struct {
 // First contents of .ui are loaded and then .scene
 // There is separation to make it easy to load in the same ui into 2 scenes
 Error InitializeScene(
-	SceneData* sceneData, // where function should start initializing data
+	void* sceneData, // where function should start initializing data
 	u64 size,
 	str uiPath,
 	str areaPath,
@@ -51,23 +51,9 @@ Error LoadLoadingScreenScene(
 	str areaPath
 );
 
-// Function will reserve space for asset if it is possible.
-// Function will return index of asset placed
-// It can return in err:
-// 	- OK 					if everything went fine
-// 	- OUT_OF_MEMORY			if there was to little memory
-void* PushNewResource(
+// Gets a pointer to static resource
+// will return NULL if static resource does not exist in this scene
+void* GetStaticResource_SceneData(
 	SceneData* sceneData,
-	u64 size,
-	Error* err
-);
-
-// Gets a StaticResourceIndexer pointer from scene
-// error can be:
-//	- OK
-//	- DOES_NOT_EXIST
-StaticResourcesIndexer* GetStaticResourceIndexer(
-	SceneData* sceneData,
-	StaticResources staticResources,
-	Error* err
+	StaticResources staticResource
 );

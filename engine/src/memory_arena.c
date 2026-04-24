@@ -38,12 +38,12 @@ void* registerMemory_MemoryArena(
 
 		if (arena->locked) {
 			*err = LOCKED;
-			return nullptr;
+			return NULL;
 		}
 
-		if (size + arena->top > arena->base) {
+		if (size + arena->top > arena->base + arena->capacity) {
 			*err = OUT_OF_MEMORY;
-			return nullptr;
+			return NULL;
 		}
 
 		void* ptr = arena->top;
