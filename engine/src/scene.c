@@ -40,9 +40,10 @@ static void InitializeStaticResourceIndexer(
 			);
 			assert(err == OK);
 			assert(t);
-			InitializeResourceIndexer(
+			InitializeStaticResource(
 				t,
-				i
+				i,
+				&sceneData->arena
 			);
 			sceneData->staticResourcesIndexer.ptr[i] = t;
 		}

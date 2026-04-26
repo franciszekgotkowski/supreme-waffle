@@ -29,10 +29,12 @@ void* GetStaticResource(
 // This is function that will select correct initalizer based on enum of static resource
 void InitializeStaticResource(
 	void* ptr, //where to initialize
-	StaticResources staticResources
+	StaticResources staticResources,
+	MemoryArena* arena
 ) {
 	assert(ptr);
 	assert(staticResources < AMOUNT_OF_STATIC_RESOURCES);
+	assert(arena);
 
 	switch (staticResources) {
 		case TEXT_RENDERING_OBJECT:
@@ -43,13 +45,15 @@ void InitializeStaticResource(
 		case FONT_INDEXER:
 			InitializeResourceIndexer(
 				ptr,
-				DefaultAmountsOfIndexes[FONT_INDEXER]
+				DefaultAmountsOfIndexes[FONT_INDEXER],
+				arena
 			);
 			break;
 		case OBJECT_3D_INDEXER:
 			InitializeResourceIndexer(
 				ptr,
-				DefaultAmountsOfIndexes[OBJECT_3D_INDEXER]
+				DefaultAmountsOfIndexes[OBJECT_3D_INDEXER],
+				arena
 			);
 			break;
 		default:
