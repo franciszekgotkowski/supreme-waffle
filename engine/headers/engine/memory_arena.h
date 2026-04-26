@@ -16,14 +16,11 @@ typedef struct {
 	bool locked; // if memory arena is locked, pushing or reseting memory is illegal and functions should return an error
 } MemoryArena ;
 
-// Initializes memory arena on ptr pointer.
-// Arena will occupy cap amount of bytes, but usable space will be a little bit lower because of MemoryArena struct
-// Can return errors:
-// 	- OK
-// 	- OUT_OF_MEMORY		if memory given for the arena is smaller that MemoryArena struct
-Error InitializeMemoryArena(
-	void* ptr,
-	u64 cap
+// Returns memory arena struct prepared for adding memory
+// ptr is starting address of allocation memory space, it can be in arbitrary place relative to the returned struct
+MemoryArena InitializeMemoryArena(
+	void* ptr,	// starting adress
+	u64 cap		// amount of space in arena
 );
 
 // Allocates space for memory but not put any data in allocated memory region
@@ -61,7 +58,7 @@ Error reset_MemoryArena(
 );
 
 // Adds checkpoint if possible and return its ID for later reference
-// Also each sequentially added checkpoint has to have higher address than the last one. This is because when you reset to checkpoint memory checkpoints above the selected checkpoint have to be removed. If checkpoints did't have increasing adresses after reseting arena, there could be risk that existing chekcpoints point to non-existant memory
+// Also each sequentially added checkpoint has to have higher address than the last one. This is because when you reset to checkpoint memory checkpoints above the selected checkpoint have to be removed. If checkpoints did't have increasing adresses after reseting arena, there could be risk that existing checkpoint would point to non-allocated memory
 // Can return errors:
 // 	- OK
 // 	- LOCKED			if memory arena is locked

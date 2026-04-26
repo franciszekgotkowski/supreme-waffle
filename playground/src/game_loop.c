@@ -38,7 +38,7 @@ void GameLoop() {
 	SceneData* sceneData = (SceneData*)getRegion(LOADING_SCREEN_SCENE);
 	Font font = InitializeFont(file);
 
-	MemoryArena* const arenaPtr = sceneData->arena;
+	MemoryArena* const arenaPtr = &sceneData->arena;
 
 	// VERY TEMP CODE!!!
 	// PUSHING THINGS TO STACK WITHOUT INDEXER SHOULD NOT NOTMALLY HAPPEN

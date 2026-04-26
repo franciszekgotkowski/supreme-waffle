@@ -26,15 +26,18 @@
 
 typedef struct {
 	StaticResourcesIndexer staticResourcesIndexer;
-	MemoryArena* arena; // arena lives right after SceneData struct
+	MemoryArena arena; // arena lives right after SceneData struct
 } SceneData ;
 
 // There are 2 types of files: .scene and .ui.
 // They contain elements that will be loaded into scene
 // First contents of .ui are loaded and then .scene
 // There is separation to make it easy to load in the same ui into 2 scenes
-Error InitializeScene(
-	void* sceneData, // where function should start initializing data
+//
+// sceneData - where function should start initializing data
+// size - whole size for scene including its own struct for managing itself. Thats why the capacity of the scene will be a little bit smaller
+void InitializeScene(
+	void* sceneData,
 	u64 size,
 	str uiPath,
 	str areaPath,

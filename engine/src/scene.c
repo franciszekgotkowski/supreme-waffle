@@ -28,7 +28,8 @@ static void InitializeStaticResourceIndexer(
 	);
 
 	Error err;
-	MemoryArena* const arenaPtr = sceneData->arena;
+	MemoryArena* arenaPtr = &sceneData->arena;
+
 	for range(i, AMOUNT_OF_STATIC_RESOURCES) {
 		if (sceneData->staticResourcesIndexer.exist[i]) {
 			assert(SizesForEachStaticResource[i] != 0);
@@ -44,12 +45,11 @@ static void InitializeStaticResourceIndexer(
 				i
 			);
 			sceneData->staticResourcesIndexer.ptr[i] = t;
-			sceneData->staticResourcesIndexer.exist[i] = true;
 		}
 	}
 }
 
-Error InitializeScene(
+void InitializeScene(
 	void* sceneData,
 	u64 size,
 	str uiPath,
@@ -61,20 +61,15 @@ Error InitializeScene(
 	assert(areaPath);
 	assert(sizeof(SceneData) <= size);
 
-	Error err;
-
 	SceneData* const scenePtr = sceneData;
 
 	*scenePtr = (SceneData){
 		.staticResourcesIndexer = {},
-		.arena = (MemoryArena*)(sceneData + sizeof(SceneData))
+		.arena = InitializeMemoryArena(
+			sceneData + sizeof(SceneData),
+			size - sizeof(SceneData)
+		)
 	};
-
-	err = InitializeMemoryArena(
-		(void*)scenePtr->arena,
-		size - sizeof(SceneData)
-	);
-	assert(err == OK);
 
 	InitializeStaticResourceIndexer(
 		scenePtr,
@@ -85,7 +80,6 @@ Error InitializeScene(
 	// loadUi()
 	// loadArea()
 
-	return OK;
 }
 
 // Last parameter is temporary!!!
@@ -97,7 +91,7 @@ Error LoadGameScene(
 	assert(uiPath);
 	assert(areaPath);
 
-	return InitializeScene(
+	InitializeScene(
 		getRegion(GAME_SCENE),
 		getRegionCapacity(GameMemory, GAME_SCENE),
 		uiPath,
@@ -121,7 +115,7 @@ Error LoadLoadingScreenScene(
 	assert(uiPath);
 	assert(areaPath);
 
-	return InitializeScene(
+	InitializeScene(
 		getRegion(LOADING_SCREEN_SCENE),
 		getRegionCapacity(GameMemory, LOADING_SCREEN_SCENE),
 		uiPath,

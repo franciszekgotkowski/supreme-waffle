@@ -5,27 +5,21 @@
 #include <engine/memory_arena.h>
 #include <string.h>
 
-Error InitializeMemoryArena(
+MemoryArena InitializeMemoryArena(
 	void* ptr,
 	u64 cap
 ){
 	assert(ptr);
 
-	if (cap < sizeof(MemoryArena)) {
-		return OUT_OF_MEMORY;
-	}
-
-	MemoryArena* arena = ptr;
-
-	*arena = (MemoryArena) {
+	 MemoryArena arena = (MemoryArena) {
 		.amountOfCheckpoints = 0,
-		.base = ptr + sizeof(MemoryArena),
-		.top = ptr + sizeof(MemoryArena),
-		.capacity = cap - sizeof(MemoryArena),
+		.base = ptr,
+		.top = ptr,
+		.capacity = cap,
 		.locked = false
 	};
 
-	return OK;
+	return arena;
 }
 
 void* registerMemory_MemoryArena(
@@ -34,23 +28,23 @@ void* registerMemory_MemoryArena(
 	Error* err
 ){
 	assert(arena);
-		assert(err);
+	assert(err);
 
-		if (arena->locked) {
-			*err = LOCKED;
-			return NULL;
-		}
+	if (arena->locked) {
+		*err = LOCKED;
+		return NULL;
+	}
 
-		if (size + arena->top > arena->base + arena->capacity) {
-			*err = OUT_OF_MEMORY;
-			return NULL;
-		}
+	if (size + arena->top > arena->base + arena->capacity) {
+		*err = OUT_OF_MEMORY;
+		return NULL;
+	}
 
-		void* ptr = arena->top;
-		arena->top += size;
+	void* ptr = arena->top;
+	arena->top += size;
 
-		*err = OK;
-		return ptr;
+	*err = OK;
+	return ptr;
 }
 
 void* registerAndInitializeMemory_MemoryArena(
@@ -120,7 +114,7 @@ CheckpointID addCheckpoint_MemoryArena(
 	}
 
 	if (arena->amountOfCheckpoints > 0) {
-		if (ptr < arena->checkpoint[arena->amountOfCheckpoints-1]) {
+		if (ptr <= arena->checkpoint[arena->amountOfCheckpoints-1]) {
 			*err = INVALID_INPUT;
 			return 0;
 		}
