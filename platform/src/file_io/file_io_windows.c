@@ -49,8 +49,6 @@ static FileData copyAndPrepare(str file, i64 fileSize) {
 Error readEntireTextFile(str path, FileData *fileDataOut) {
     assert(path);
     assert(fileDataOut);
-    assert(fileDataOut->ptr);
-    assert(fileDataOut->fileSize > 0);
 
     HANDLE fileHandle = CreateFileA(
         path,

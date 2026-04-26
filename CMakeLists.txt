@@ -22,9 +22,6 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-option(ENGINE_ENABLE_ASSERTS "Enable engine asserts" ON)
-option(GAME_ENABLE_ASSERTS "Enable engine asserts" ON)
-
 add_subdirectory(common)
 add_subdirectory(platform)
 add_subdirectory(engine)

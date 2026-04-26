@@ -42,7 +42,7 @@ target_include_directories(platform PRIVATE
 target_link_libraries(platform
 		PUBLIC
 		glad
-#		glfw3
+		glfw3
 		common
 )
 
@@ -69,15 +69,6 @@ add_library(glad STATIC
 target_include_directories(glad PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
 )
-
-# add_library(stb STATIC
-# 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/stb/stb_image.c
-# 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/stb/stb_image_write.c
-# )
-
-# target_include_directories(stb PRIVATE
-# 	${CMAKE_CURRENT_SOURCE_DIR}/headers/external
-# )
 
 add_subdirectory(
 	${CMAKE_CURRENT_SOURCE_DIR}/libs/src/cglm
