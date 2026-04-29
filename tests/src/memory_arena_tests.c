@@ -167,6 +167,11 @@ static void reset_memory_arena(void **state) {
 		KB,
 		&err
 	);
+	CheckpointID id = addCheckpoint_MemoryArena(
+		&arena,
+		arena.top-1,
+		&err
+	);
 	assert_non_null(m);
 	assert_true(err == OK);
 	assert_ptr_equal(arena.top, arena.base + KB);
@@ -193,6 +198,7 @@ static void reset_memory_arena(void **state) {
 	err = reset_MemoryArena(&arena);
 	assert_true(err == OK);
 	assert_ptr_equal(arena.base, arena.top);
+	assert_true(arena.amountOfCheckpoints == 0);
 
 }
 
@@ -326,6 +332,245 @@ static void adding_checkpoint_with_pointer_outside_allocated_memory(void **state
 	assert_true(err == OUT_OF_RANGE);
 }
 
+static void adding_too_many_checkpoints(void **state) {
+	TestMemory* memory = *state;
+
+	MemoryArena arena = InitializeMemoryArena(memory->ptr, memory->size);
+	Error err;
+	void* m;
+
+	CheckpointID id;
+
+	assert_true(arena.amountOfCheckpoints == 0);
+
+	for range(i, MAX_AMOUNT_OF_ARENA_CHECKPOINTS) {
+		m = registerMemory_MemoryArena(
+			&arena,
+			KB,
+			&err
+		);
+		assert_ptr_not_equal(m, NULL);
+		id = addCheckpoint_MemoryArena(
+			&arena,
+			arena.top-1,
+			&err
+		);
+		assert_true(err == OK);
+		assert_true(id == i);
+	}
+
+	m = registerMemory_MemoryArena(
+		&arena,
+		KB,
+		&err
+	);
+	assert_ptr_not_equal(m, NULL);
+	id = addCheckpoint_MemoryArena(
+		&arena,
+		arena.base,
+		&err
+	);
+	assert_true(err == OUT_OF_INDEXES);
+	assert_true(id == 0);
+
+}
+
+static void adding_non_sequentially_increasing_checkpoints(void **state) {
+	TestMemory* memory = *state;
+
+	MemoryArena arena = InitializeMemoryArena(memory->ptr, memory->size);
+	Error err;
+	void* m;
+
+	CheckpointID id;
+
+	assert_true(arena.amountOfCheckpoints == 0);
+
+	for range(i, 5) {
+		m = registerMemory_MemoryArena(
+			&arena,
+			KB,
+			&err
+		);
+		assert_ptr_not_equal(m, NULL);
+		id = addCheckpoint_MemoryArena(
+			&arena,
+			arena.top-1,
+			&err
+		);
+		assert_true(err == OK);
+		assert_true(id == i);
+	}
+	assert_true(arena.amountOfCheckpoints == 5);
+
+	assert_ptr_not_equal(m, NULL);
+	id = addCheckpoint_MemoryArena(
+		&arena,
+		arena.base,
+		&err
+	);
+	assert_true(err == INVALID_INPUT);
+	assert_true(id == 0);
+	assert_true(arena.amountOfCheckpoints == 5);
+
+	assert_ptr_not_equal(m, NULL);
+	id = addCheckpoint_MemoryArena(
+		&arena,
+		arena.top-2,
+		&err
+	);
+	assert_true(err == INVALID_INPUT);
+	assert_true(id == 0);
+	assert_true(arena.amountOfCheckpoints == 5);
+}
+
+static void reseting_to_checkpoint_in_fine_conditions(void **state) {
+	TestMemory* memory = *state;
+
+	MemoryArena arena = InitializeMemoryArena(memory->ptr, memory->size);
+	Error err;
+	void* m;
+
+	CheckpointID id;
+
+	assert_true(arena.amountOfCheckpoints == 0);
+
+	for range(i, 5) {
+		m = registerMemory_MemoryArena(
+			&arena,
+			KB,
+			&err
+		);
+		assert_ptr_not_equal(m, NULL);
+		id = addCheckpoint_MemoryArena(
+			&arena,
+			m,
+			&err
+		);
+		assert_true(err == OK);
+		assert_true(id == i);
+	}
+	assert_true(arena.amountOfCheckpoints == 5);
+
+	for range(i, 5) {
+		err = resetToCheckpoint_MemoryArena(
+			&arena,
+			5-i-1
+		);
+		assert_true(arena.amountOfCheckpoints == 5-i);
+		assert_true(err == OK);
+
+		assert_ptr_equal(arena.checkpoint[5-i-1], arena.top);
+	}
+
+	assert_ptr_equal(arena.checkpoint[0], arena.base);
+
+}
+
+static void reseting_to_checkpoint_when_arena_is_locked(void **state) {
+	TestMemory* memory = *state;
+
+	MemoryArena arena = InitializeMemoryArena(memory->ptr, memory->size);
+	Error err;
+	void* m;
+
+	CheckpointID id;
+
+	assert_true(arena.amountOfCheckpoints == 0);
+
+	for range(i, 5) {
+		m = registerMemory_MemoryArena(
+			&arena,
+			KB,
+			&err
+		);
+		assert_ptr_not_equal(m, NULL);
+		id = addCheckpoint_MemoryArena(
+			&arena,
+			m,
+			&err
+		);
+		assert_true(err == OK);
+		assert_true(id == i);
+	}
+	assert_true(arena.amountOfCheckpoints == 5);
+
+	lock_MemoryArena(&arena);
+	for range(i, 5) {
+		err = resetToCheckpoint_MemoryArena(
+			&arena,
+			5-i-1
+		);
+		assert_true(arena.amountOfCheckpoints == 5);
+		assert_true(err == LOCKED);
+	}
+
+	unlock_MemoryArena(&arena);
+	for range(i, 5) {
+		err = resetToCheckpoint_MemoryArena(
+			&arena,
+			5-i-1
+		);
+		assert_true(arena.amountOfCheckpoints == 5-i);
+		assert_true(err == OK);
+
+		assert_ptr_equal(arena.checkpoint[5-i-1], arena.top);
+	}
+
+	assert_ptr_equal(arena.checkpoint[0], arena.base);
+
+}
+
+static void reseting_to_checkpoint_checkpoint_does_not_exist(void **state) {
+	TestMemory* memory = *state;
+
+	MemoryArena arena = InitializeMemoryArena(memory->ptr, memory->size);
+	Error err;
+	void* m;
+
+	CheckpointID id;
+
+	assert_true(arena.amountOfCheckpoints == 0);
+
+	for range(i, 5) {
+		m = registerMemory_MemoryArena(
+			&arena,
+			KB,
+			&err
+		);
+		assert_ptr_not_equal(m, NULL);
+		id = addCheckpoint_MemoryArena(
+			&arena,
+			m,
+			&err
+		);
+		assert_true(err == OK);
+		assert_true(id == i);
+	}
+	assert_true(arena.amountOfCheckpoints == 5);
+
+	err = resetToCheckpoint_MemoryArena(
+		&arena,
+		2
+	);
+	assert_true(err == OK);
+	assert_true(arena.amountOfCheckpoints == 3);
+
+	err = resetToCheckpoint_MemoryArena(
+		&arena,
+		2
+	);
+	assert_true(err == OK);
+	assert_true(arena.amountOfCheckpoints == 3);
+
+	err = resetToCheckpoint_MemoryArena(
+		&arena,
+		3
+	);
+	assert_true(arena.amountOfCheckpoints == 3);
+	assert_true(err == OUT_OF_RANGE);
+}
+
 i32 run_memory_arena_test() {
 	i32 success = 0;
 
@@ -377,6 +622,31 @@ i32 run_memory_arena_test() {
 		),
 		cmocka_unit_test_setup_teardown(
 			adding_checkpoint_with_pointer_outside_allocated_memory,
+			allocate_1MB_of_memory_for_arena_setup,
+			deallocate_allocated_memory_teardown
+		),
+		cmocka_unit_test_setup_teardown(
+			adding_too_many_checkpoints,
+			allocate_1MB_of_memory_for_arena_setup,
+			deallocate_allocated_memory_teardown
+		),
+		cmocka_unit_test_setup_teardown(
+			adding_non_sequentially_increasing_checkpoints,
+			allocate_1MB_of_memory_for_arena_setup,
+			deallocate_allocated_memory_teardown
+		),
+		cmocka_unit_test_setup_teardown(
+			reseting_to_checkpoint_in_fine_conditions,
+			allocate_1MB_of_memory_for_arena_setup,
+			deallocate_allocated_memory_teardown
+		),
+		cmocka_unit_test_setup_teardown(
+			reseting_to_checkpoint_when_arena_is_locked,
+			allocate_1MB_of_memory_for_arena_setup,
+			deallocate_allocated_memory_teardown
+		),
+		cmocka_unit_test_setup_teardown(
+			reseting_to_checkpoint_checkpoint_does_not_exist,
 			allocate_1MB_of_memory_for_arena_setup,
 			deallocate_allocated_memory_teardown
 		),
