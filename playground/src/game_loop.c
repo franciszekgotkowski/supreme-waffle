@@ -1,4 +1,4 @@
-#include "engine/static_resources.h"
+#include <engine/static_resources.h>
 #include <common/memory_arena.h>
 #include <platform/measure_time.h>
 #include <platform/shader.h>
@@ -40,14 +40,6 @@ void GameLoop() {
 	Font font = InitializeFont(file);
 
 	MemoryArena* const arenaPtr = &sceneData->arena;
-
-	// VERY TEMP CODE!!!
-	// PUSHING THINGS TO STACK WITHOUT INDEXER SHOULD NOT NOTMALLY HAPPEN
-	// void* fontPtr = registerMemory_MemoryArena(
-	// 	arenaPtr,
-	// 	GetSizeForEntireFont(&font),
-	// 	&err
-	// );
 
 	ID FontID = RegisterNewResource_SceneData(
 		sceneData,
