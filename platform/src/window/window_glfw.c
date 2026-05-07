@@ -68,7 +68,10 @@ void InitializeWindow(
          	break;
     }
 
-    assert(glfwInit());
+    if (!glfwInit()) {
+    	printf("COULT NOT INITIALIZE GLFW\n");
+     	return;
+    }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -81,8 +84,7 @@ void InitializeWindow(
     glfwSetInputMode(windowData->window, GLFW_CURSOR, cursorModeGlfw);
 
     glfwSwapInterval(vsync);
-
-    assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress));
+    gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
     glfwGetFramebufferSize(windowData->window, &windowWidth, &windowHeight);
     glViewport(0, 0, windowWidth, windowHeight);
@@ -99,4 +101,3 @@ void InitializeWindow(
 void CloseWindow() {
     glfwTerminate();
 }
-

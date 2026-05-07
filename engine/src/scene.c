@@ -1,4 +1,3 @@
-#include "glad/glad.h"
 #include <common/memory_arena.h>
 #include <engine/handle_input.h>
 #include <common/errors.h>

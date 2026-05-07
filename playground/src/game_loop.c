@@ -252,7 +252,7 @@ void GameLoop() {
 	f64 fsince = fsec + fnsectosec;
 	f64 fps = (f64)frames/fsince;
 	printf("Amount of frames: %llu\n", (llu)frames);
-	printf("Average fps: %f\n", fps);
+	printf("Average fps: %f (%.4f%% of desired framerate)\n", fps, 100.0f*fps/windowData->fps);
 	TimeStamp loadTime = TimeDiff(startDrawingStamp, windowData->bootTimeStamp);
 	u64 loadTimeMs = loadTime.sec*1000000000 + loadTime.nsec;
 	printf("Initialization time: %llums %lluns\n", (llu)loadTimeMs/1000000, (llu)loadTimeMs%1000000);

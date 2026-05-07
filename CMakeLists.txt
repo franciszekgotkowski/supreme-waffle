@@ -17,11 +17,11 @@ set(CMAKE_CONFIGURATION_TYPES
 
 set(COMMON_FLAGS -Wall -Werror)
 set(DEBUG_FLAGS -g -O0)
-#set(DEBUG_FLAGS -g -O0 -pg)
-set(RELEASE_FLAGS -O3 -Wno-unused-but-set-variable -Wno-unused-variable)
+# set(DEBUG_FLAGS -g -O0 -pg)
+set(RELEASE_FLAGS -g -O3 -Wno-unused-but-set-variable -Wno-unused-variable)
 
-set(CMAKE_BUILD_TYPE Debug)
-# set(CMAKE_BUILD_TYPE Release)
+# set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 
 set(CMAKE_C_STANDARD 11)
