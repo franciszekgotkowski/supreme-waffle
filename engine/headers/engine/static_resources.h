@@ -8,10 +8,13 @@
 
 // DefaultAmountsOfIndexes and SizesForEachStaticResource are in static_resources_constants.c file
 typedef enum {
-	TEXT_RENDERING_OBJECT,
-	FONT_INDEXER,
-	OBJECT_3D_INDEXER,
-	SHADER_PROGRAM_INDEXER,
+	TEXT_RENDERING_OBJECT,			// this is text rendering object, it stores text data alongside with its verticies
+	FONT_INDEXER,					// font data
+	SHADER_PROGRAM_INDEXER,			// stores shader id's
+	BUFFER_DATA_INDEXER,			// this is buffer data for models loaded in
+	BUFFER_SHADER_BINDING_INDEXER,	// each buffer is make to be displayes in
+	TEXTURE_ID_INDEXER,				// stores texture id's loaded to renderer (probably opengl)
+	TEXTURE_BITMAP_INDEXER,			// stores texture bitmaps
 
 	AMOUNT_OF_STATIC_RESOURCES
 } StaticResources;

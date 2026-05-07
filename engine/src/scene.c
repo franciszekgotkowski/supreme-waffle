@@ -101,6 +101,9 @@ Error LoadGameScene(
 			true,
 			true,
 			true,
+			true,
+			true,
+			true,
 			true
 		}
 	);
@@ -123,6 +126,9 @@ Error LoadLoadingScreenScene(
 		uiPath,
 		areaPath,
 		(bool[]){
+			true,
+			true,
+			true,
 			true,
 			true,
 			true,

@@ -7,6 +7,7 @@
 
 #include <external/glad/glad.h>
 #include <external/glfw3.h>
+#include <stdlib.h>
 
 
 extern WindowData* windowData;
@@ -35,6 +36,14 @@ static inline void window_should_close_callback(
 	windowData->windowShouldClose = true;
 }
 
+static inline void glfw_error_callback(
+	i32 errorCode,
+	str message
+) {
+	printf("GLFW ERROR!\t Error code: %d\t %s", errorCode, message);
+	exit(1);
+}
+
 void InitializeWindow(
 	i32 windowWidth,
 	i32 windowHeight,
@@ -51,6 +60,8 @@ void InitializeWindow(
     assert(windowWidth > 0 && windowHeight > 0);
 
 	// GLFWwindow* windowPtr = windowData->window;
+	glfwSetErrorCallback(glfw_error_callback);
+
 
     i32 cursorModeGlfw;
     switch (cursorMode) {
@@ -69,7 +80,6 @@ void InitializeWindow(
     }
 
     if (!glfwInit()) {
-    	printf("COULT NOT INITIALIZE GLFW\n");
      	return;
     }
 

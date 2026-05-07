@@ -61,10 +61,9 @@ void GameLoop() {
 	freeEntireTextFile(file);
 	// printf("Font size in bytes: %llu\n", (llu)GetSizeForEntireFont(font));
 
-
-	void* textPtr = registerMemory_MemoryArena(
-		arenaPtr,
-		MAX_SIZE_FOR_CHARACTER_RENDER_DATA,
+	void* textPtr = GetStaticResource_StaticResourceIndexer(
+		&sceneData->staticResourcesIndexer,
+		TEXT_RENDERING_OBJECT,
 		&err
 	);
 	assert(err == OK);
@@ -139,7 +138,6 @@ void GameLoop() {
 
 
 	ShaderProgramID TextShader = CreateShaderProgram("../../engine/src/shaders/render_text.vert", "../../engine/src/shaders/render_text.frag");
-	// ShaderProgramID TextShader = CreateShaderProgram("../../engine/src/shaders/font.vert", "../../engine/src/shaders/font.frag");
 
 	u32 textureID;
 	glGenTextures(1, &textureID);
@@ -212,11 +210,6 @@ void GameLoop() {
 		// textData->line[0].offset.y = -1.0f-sin(glfwGetTime());
 		textData->linesData.offset[0].y = -1.0f-sin(glfwGetTime());
 		textData->linesData.color[0].g = 0.5f+0.5f*sin(10*glfwGetTime());
-
-		// glUniform2fv(OffsetLocation, 1, textData->linesData.offset[0].arr);
-		// glUniform3fv(ColorLocation, 1, textData->linesData.color[0].rgb);
-		// glUniform1i(TextureLocation, 0);
-		// glUniform3fv(TextureLocation, 1, textData->linesData.color[0].rgb);
 
 		glUniform2fv(uOffset, MAX_AMOUNT_OF_LINES_IN_SCENE, (const GLfloat*)(textData->linesData.offset));
 		glUniform1uiv(uScale, MAX_AMOUNT_OF_LINES_IN_SCENE, (const GLuint*)(textData->linesData.scale));

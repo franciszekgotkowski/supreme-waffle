@@ -50,10 +50,10 @@ void InitializeStaticResource(
 				arena
 			);
 			break;
-		case OBJECT_3D_INDEXER:
+		case BUFFER_DATA_INDEXER:
 			InitializeResourceIndexer(
 				ptr,
-				DefaultAmountsOfIndexes[OBJECT_3D_INDEXER],
+				DefaultAmountsOfIndexes[BUFFER_DATA_INDEXER],
 				arena
 			);
 			break;
