@@ -3,6 +3,7 @@
 #include <engine/text_rendering.h>
 #include <assert.h>
 #include <common/errors.h>
+#include <common/range.h>
 #include <string.h>
 
 void InitializeTextRenderingObject(
@@ -121,5 +122,50 @@ Error AppendNewLine_TextData(
 	textData->indiciesTop += SpaceNeededForEBO(letterCount);
 
 	// assert(NOT_COMPLETED);
+	return OK;
+}
+
+Error DeleteLine_TextData(
+	u32 lineIdx,
+	TextData* textData
+) {
+	assert(textData);
+
+	// _Static_assert(0, "have to correct this function!");
+	assert(false);
+
+	if (lineIdx >= textData->amountOfLines) {
+		return OUT_OF_RANGE;
+	}
+
+	u32 sizeOfDeletedCharacters = textData->linesData.letterCount[lineIdx] * sizeof(char);
+	u32 sizeOfDeletedVerticies = textData->linesData.letterCount[lineIdx] * SIZEOF_ONE_LETTER_VERTICIES;
+	u32 sizeOfDeletedIndicies = textData->linesData.letterCount[lineIdx] * SIZEOF_ONE_LETTER_INDEXES;
+
+	u32 sizeOfMovedCharacters = textData->textTop - (void*)textData->linesData.textPtr[lineIdx] - sizeOfDeletedCharacters;
+	u32 sizeOfMovedVerticies = textData->verticiesTop - (void*)textData->linesData.verticiesPtr[lineIdx] - sizeOfDeletedVerticies;
+	u32 sizeOfMovedIndicies = textData->indiciesTop - (void*)textData->linesData.indiciesPtr[lineIdx] - sizeOfDeletedIndicies;
+
+	void* characterDestination = (void*)textData->linesData.textPtr[lineIdx];
+	void* charactersSource = characterDestination + sizeOfDeletedCharacters;
+
+	void* verticiesDestination = (void*)textData->linesData.verticiesPtr[lineIdx];
+	void* verticiesSource = verticiesDestination + sizeOfDeletedVerticies;
+
+	void* indiciesDestination = (void*)textData->linesData.indiciesPtr[lineIdx];
+	void* indiciesSource = indiciesDestination + sizeOfDeletedIndicies;
+
+	memmove(characterDestination, charactersSource, sizeOfMovedCharacters);
+	memmove(characterDestination, verticiesSource, sizeOfMovedVerticies);
+	memmove(characterDestination, indiciesSource, sizeOfMovedIndicies);
+
+	// subtracting indicies values by amount of deleted characters
+	u32* ptr = indiciesDestination;
+	for range(i, sizeOfMovedCharacters / sizeof(char)) {
+		*ptr -= sizeOfDeletedCharacters / sizeof(char);
+		ptr += 1;
+	}
+
+	assert(false);
 	return OK;
 }

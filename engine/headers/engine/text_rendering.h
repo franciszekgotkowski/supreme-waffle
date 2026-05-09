@@ -6,8 +6,8 @@
 #include <engine/font.h>
 #include <stdbool.h>
 
-#define MAX_AMOUNT_OF_CHARS_PER_SCENE (10*KB)
-#define MAX_AMOUNT_OF_LINES_IN_SCENE (1*KB)
+#define MAX_AMOUNT_OF_CHARS_PER_SCENE (KB)
+#define MAX_AMOUNT_OF_LINES_IN_SCENE (MAX_AMOUNT_OF_CHARS_PER_SCENE / 10)
 
 #define MAX_AMOUNT_OF_FONTS_PER_SCENE 10
 #define MAX_SIZE_FOR_SINGLE_FONT (KB*50)
@@ -121,6 +121,11 @@ Error AppendNewLine_TextData(
 	u32 scale
 );
 
-void DeleteLine(
-	u32 lineIdx
+// This function will delete one line and "pull back" data of other lines and modify their render data to be correct. It will also update
+// Can return errors:
+// 	- OUT_OF_RANGE		if there is no line of such index
+// 	- OK
+Error DeleteLine_TextData(
+	u32 lineIdx,
+	TextData* textData
 );
