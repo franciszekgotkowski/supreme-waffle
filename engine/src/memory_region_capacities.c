@@ -18,5 +18,6 @@ u64 RegionCapacity[] = {
 	[GAME_SCENE] = SIZEOF_LARGEST_SCENE,
 };
 _Static_assert(
-	(sizeof(RegionCapacity)/sizeof(u64)) == AMOUNT_OF_ENGINE_MEMORY_REGIONS
+	(sizeof(RegionCapacity)/sizeof(u64)) == AMOUNT_OF_ENGINE_MEMORY_REGIONS,
+	""
 );

@@ -39,7 +39,7 @@ void GameLoop() {
 	SceneData* sceneData = (SceneData*)getRegion(LOADING_SCREEN_SCENE);
 	Font font = InitializeFont(file);
 
-	MemoryArena* const arenaPtr = &sceneData->arena;
+	// MemoryArena* const arenaPtr = &sceneData->arena;
 
 	ID FontID = RegisterNewResource_SceneData(
 		sceneData,
@@ -76,7 +76,7 @@ void GameLoop() {
 	TextData* textData = textPtr;
 
 	str s = "......Jak Kuba Bogu tak Bog Kubie...";
-	err = AppendNewLine(
+	err = AppendNewLine_TextData(
 		s,
 		strlen(s),
 		textPtr,
@@ -97,7 +97,7 @@ void GameLoop() {
 
 
 	str s2 = "o-o-o-o";
-	err = AppendNewLine(
+	err = AppendNewLine_TextData(
 		s2,
 		strlen(s2),
 		textPtr,
@@ -117,7 +117,7 @@ void GameLoop() {
 	assert(err == OK);
 
 	str s3 = "Erysipelothrix!!!";
-	err = AppendNewLine(
+	err = AppendNewLine_TextData(
 		s3,
 		strlen(s3),
 		textPtr,

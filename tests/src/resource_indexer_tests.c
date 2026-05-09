@@ -48,7 +48,7 @@ static void create_empty_indexer_into_arena(void **state) {
 	const u32 amountOfResources = 10;
 
 	Error err;
-	ResourceIndexer* indexer = InitializeResourceIntoArena(
+	ResourceIndexer* indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err
@@ -74,7 +74,7 @@ static void create_empty_indexer_into_locked_arena(void **state) {
 	const u32 amountOfResources = 10;
 
 	Error err;
-	ResourceIndexer* indexer = InitializeResourceIntoArena(
+	ResourceIndexer* indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err
@@ -95,7 +95,7 @@ static void create_empty_indexer_into_arena_with_no_memory_left(void **state) {
 	);
 
 	Error err;
-	ResourceIndexer* indexer = InitializeResourceIntoArena(
+	ResourceIndexer* indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err
@@ -103,7 +103,7 @@ static void create_empty_indexer_into_arena_with_no_memory_left(void **state) {
 	assert_true(err == OK);
 	assert_ptr_not_equal(indexer, NULL);
 
-	indexer = InitializeResourceIntoArena(
+	indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err
@@ -111,7 +111,7 @@ static void create_empty_indexer_into_arena_with_no_memory_left(void **state) {
 	assert_true(err == OK);
 	assert_ptr_not_equal(indexer, NULL);
 
-	indexer = InitializeResourceIntoArena(
+	indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err
@@ -131,7 +131,7 @@ static void register_resource_with_insufficient_memory_in_arena(void **state) {
 	);
 
 	Error err;
-	ResourceIndexer* indexer = InitializeResourceIntoArena(
+	ResourceIndexer* indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err
@@ -174,7 +174,7 @@ static void register_resource_with_insufficient_amount_of_indexes(void **state) 
 	);
 
 	Error err;
-	ResourceIndexer* indexer = InitializeResourceIntoArena(
+	ResourceIndexer* indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err
@@ -225,7 +225,7 @@ static void register_resource_when_arena_is_locked(void **state) {
 	);
 
 	Error err;
-	ResourceIndexer* indexer = InitializeResourceIntoArena(
+	ResourceIndexer* indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err
@@ -270,7 +270,7 @@ static void get_existing_resource(void **state) {
 	);
 
 	Error err;
-	ResourceIndexer* indexer = InitializeResourceIntoArena(
+	ResourceIndexer* indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err
@@ -325,7 +325,7 @@ static void get_not_existing_resource(void **state) {
 	);
 
 	Error err;
-	ResourceIndexer* indexer = InitializeResourceIntoArena(
+	ResourceIndexer* indexer = InitializeResourceIntoArena_ResourceIndexer(
 		&arena,
 		amountOfResources,
 		&err

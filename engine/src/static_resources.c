@@ -38,6 +38,9 @@ void InitializeStaticResource(
 	assert(arena);
 
 	switch (staticResources) {
+		case AMOUNT_OF_STATIC_RESOURCES:
+			assert(false);
+			break;
 		case TEXT_RENDERING_OBJECT:
 			InitializeTextRenderingObject(
 				ptr
@@ -50,22 +53,19 @@ void InitializeStaticResource(
 				arena
 			);
 			break;
-		case BUFFER_DATA_INDEXER:
+		case DATA_BUFFER_INDEXER:
 			InitializeResourceIndexer(
 				ptr,
-				DefaultAmountsOfIndexes[BUFFER_DATA_INDEXER],
+				DefaultAmountsOfIndexes[DATA_BUFFER_INDEXER],
 				arena
 			);
 			break;
-		case SHADER_PROGRAM_INDEXER:
+		case RENDER_PROGRAM_INDEXER:
 			InitializeResourceIndexer(
 				ptr,
-				DefaultAmountsOfIndexes[SHADER_PROGRAM_INDEXER],
+				DefaultAmountsOfIndexes[RENDER_PROGRAM_INDEXER],
 				arena
 			);
-			break;
-		default:
-			assert(false);
 			break;
 	}
 }

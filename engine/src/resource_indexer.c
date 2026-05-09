@@ -24,7 +24,7 @@ void InitializeResourceIndexer(
 	};
 }
 
-ResourceIndexer* InitializeResourceIntoArena(
+ResourceIndexer* InitializeResourceIntoArena_ResourceIndexer(
 	MemoryArena* arena,
 	u32 maxAmountOfResources,
 	Error* err

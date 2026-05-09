@@ -10,7 +10,10 @@ typedef struct {
     LARGE_INTEGER performanceCounts;
 } WinStamp;
 
-_Static_assert(sizeof(WinStamp)==sizeof(TimeStamp), "lin_stamp has different size from timestamp");
+_Static_assert(
+	sizeof(WinStamp)==sizeof(TimeStamp), "lin_stamp has different size from timestamp",
+	""
+);
 
 bool latencyMinimized = false;
 inline static void MinimizeLatency() {

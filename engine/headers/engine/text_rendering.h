@@ -11,7 +11,7 @@
 
 #define MAX_AMOUNT_OF_FONTS_PER_SCENE 10
 #define MAX_SIZE_FOR_SINGLE_FONT (KB*50)
-#define SIZEOF_MEMORY_FOR_FONTS (MAX_AMOUNT_OF_FONTS_PER_SCENE*MAX_SIZE_FOR_SINGLE_FONT)
+// #define SIZEOF_MEMORY_FOR_FONTS (MAX_AMOUNT_OF_FONTS_PER_SCENE*MAX_SIZE_FOR_SINGLE_FONT)
 
 // TEXT DEFINES
 #define MAX_SIZE_FOR_TEXT (MAX_AMOUNT_OF_CHARS_PER_SCENE*sizeof(char))
@@ -84,9 +84,11 @@ typedef struct {
 	u32 amountOfLines;
 	u32 amountOfCharacters;
 
+	// stores chars
 	u64 textCapacity;
 	void* textStart;
 	void* textTop;
+
 
 	u64 verticiesCapacity;
 	void* verticiesStart;
@@ -108,7 +110,7 @@ void InitializeTextRenderingObject(
 // 		OUT_OF_MEMORY - if scene cannot accomodate those characters
 // 		OUT_OF_INDEXES - if scene cannot accomodate this line
 // 		OK
-Error AppendNewLine(
+Error AppendNewLine_TextData(
 	str line,
 	u32 letterCount,
 	TextData* textData,

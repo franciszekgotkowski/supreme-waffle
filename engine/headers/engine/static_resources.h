@@ -10,11 +10,11 @@
 typedef enum {
 	TEXT_RENDERING_OBJECT,			// this is text rendering object, it stores text data alongside with its verticies
 	FONT_INDEXER,					// font data
-	SHADER_PROGRAM_INDEXER,			// stores shader id's
-	BUFFER_DATA_INDEXER,			// this is buffer data for models loaded in
-	BUFFER_SHADER_BINDING_INDEXER,	// each buffer is make to be displayes in
-	TEXTURE_ID_INDEXER,				// stores texture id's loaded to renderer (probably opengl)
-	TEXTURE_BITMAP_INDEXER,			// stores texture bitmaps
+
+	DATA_BUFFER_INDEXER,			// general purpose container for vertex data, textures, data for game logic etc.
+	RENDER_PROGRAM_INDEXER,			// stores render program data. Render program might be a glsl shader or something else - it might be as well a software rendering function. When program uses opengl RENDER_PROGRAM would be just id to opengl shader program
+	// GAME_OBJECT_INDEXER,
+	// RENDER_OBJECT_INDEXER,
 
 	AMOUNT_OF_STATIC_RESOURCES
 } StaticResources;

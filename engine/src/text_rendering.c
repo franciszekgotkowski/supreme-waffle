@@ -32,7 +32,7 @@ void InitializeTextRenderingObject(
 	};
 }
 
-Error AppendNewLine(
+Error AppendNewLine_TextData(
 	str sourceString,
 	u32 letterCount,
 	TextData* textData,
@@ -116,7 +116,7 @@ Error AppendNewLine(
 
 	textData->amountOfLines += 1;
 	textData->amountOfCharacters += letterCount;
-	textData->textTop += letterCount;
+	textData->textTop += letterCount*sizeof(char);
 	textData->verticiesTop += SpaceNeededForVBO(letterCount);
 	textData->indiciesTop += SpaceNeededForEBO(letterCount);
 

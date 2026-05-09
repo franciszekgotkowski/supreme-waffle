@@ -33,7 +33,7 @@ void InitializeResourceIndexer(
 //	- OK 				if everything went well
 //	- OUT_OF_MEMORY		if there is no memory in arena to accomodate this indexer
 //	- LOCKED			if memory arena is locked
-ResourceIndexer* InitializeResourceIntoArena(
+ResourceIndexer* InitializeResourceIntoArena_ResourceIndexer(
 	MemoryArena* arena,
 	u32 maxAmountOfResources,
 	Error* err

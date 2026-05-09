@@ -8,7 +8,6 @@ target_compile_options(engine PRIVATE
 
 set(ENGINE_SOURCES
 		${CMAKE_CURRENT_SOURCE_DIR}/src/memory_pool.c
-		# ${CMAKE_CURRENT_SOURCE_DIR}/src/memory_arena.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/font.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/scene.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/ui.c
@@ -20,6 +19,7 @@ set(ENGINE_SOURCES
 		${CMAKE_CURRENT_SOURCE_DIR}/src/static_resources.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/static_resources_constants.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/resource_indexer.c
+		${CMAKE_CURRENT_SOURCE_DIR}/src/data_buffer.c
 )
 
 target_sources(engine PRIVATE ${ENGINE_SOURCES})
