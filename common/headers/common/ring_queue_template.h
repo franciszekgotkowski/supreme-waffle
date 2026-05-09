@@ -8,9 +8,13 @@
 #define TYPE u32
 #endif
 
+
+#ifndef CONCATS
+#define CONCATS
 #define CONCAT(a, b) a##b
 #define RING_QUEUE RingQueue_##TYPE
 #define METHOD_RING_QUEUE(a) RingQueue_##TYPE##_##a
+#endif
 
 typedef struct {
 	u32 maxCapacity;			// maximum amount of elements that can be stored

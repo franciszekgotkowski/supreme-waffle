@@ -5,6 +5,8 @@ target_sources(tests PRIVATE
 		src/memory_arena_tests.c
 		src/resource_indexer_tests.c
 		src/setup_and_teardown_functions.c
+		src/setup_and_teardown_functions.c
+		src/ring_queue_implementations.c
 )
 
 target_compile_options(playground PRIVATE
