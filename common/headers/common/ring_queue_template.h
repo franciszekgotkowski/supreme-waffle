@@ -1,8 +1,6 @@
 #include <common/typedefs.h>
 #include <common/errors.h>
 #include <assert.h>
-// #include "typedefs.h"
-// #include "errors.h"
 
 #ifndef TYPE
 #define TYPE u32
@@ -10,10 +8,16 @@
 
 
 #ifndef CONCATS
-#define CONCATS
-#define CONCAT(a, b) a##b
-#define RING_QUEUE RingQueue_##TYPE
-#define METHOD_RING_QUEUE(a) RingQueue_##TYPE##_##a
+
+#define CONCAT2(a, b) a##b
+#define CONCAT(a, b) CONCAT2(a, b)
+
+#define CONCAT3_2(a, b, c) a##b##c
+#define CONCAT3(a, b, c) CONCAT3_2(a, b, c)
+
+#define RING_QUEUE CONCAT(RingQueue_, TYPE)
+#define METHOD_RING_QUEUE(a) CONCAT3(RingQueue_, TYPE, _##a)
+
 #endif
 
 typedef struct {
@@ -42,6 +46,7 @@ Error METHOD_RING_QUEUE(Enqueue)(
 // 	- EMPTY				if there is nothing inside queue
 // 	- OK
 TYPE METHOD_RING_QUEUE(Dequeue)(
+	RING_QUEUE* queue,
 	Error* err
 );
 
@@ -84,6 +89,7 @@ Error METHOD_RING_QUEUE(Enqueue)(
 
 
 TYPE METHOD_RING_QUEUE(Dequeue)(
+	RING_QUEUE* queue,
 	Error* err
 ) {
 	assert(err);
