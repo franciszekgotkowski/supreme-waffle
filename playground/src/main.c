@@ -19,32 +19,32 @@
 PointerTable* GameMemory = NULL;
 
 int main() {
-	Error err;
+    Error err;
 
-	GameMemory = InitializePool();
-	assert(GameMemory);
+    GameMemory = InitializePool();
+    assert(GameMemory);
 
     InitializeEngineWindow(
-     	800,
-      	800,
-       	60,
-        false,
-        false,
-        (v4){
+            800,
+            800,
+            60,
+            false,
+            false,
+            (v4){
             .arr = {0.18f, 0.20f, 0.25f, 1.0f}
-        },
-        "Der Spiel!",
-        CURSOR_NORMAL
-    );
+            },
+            "Der Spiel!",
+            CURSOR_NORMAL
+            );
 
     InitializeInputData();
     InitializeInputFunctions();
     InsertInputFunctions();
 
     err = LoadLoadingScreenScene(
-     	"stub",
-      	"stub"
-    );
+            "stub",
+            "stub"
+            );
     assert(err == OK);
 
     // err = LoadGameScene(
